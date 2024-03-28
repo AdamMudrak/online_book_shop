@@ -22,6 +22,7 @@ public class Book {
     private String isbn;
     @NotNull(message = "Price may not be null")
     private BigDecimal price;
+    @Column(length = 3000)
     private String description;
     private String coverImage;
 
@@ -83,14 +84,14 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{"
-                + "id=" + id
-                + ", title='" + title + '\''
-                + ", author='" + author + '\''
-                + ", isbn='" + isbn + '\''
-                + ", price=" + price
-                + ", description='" + description + '\''
-                + ", coverImage='" + coverImage + '\''
+        return "Book{" + System.lineSeparator()
+                + "id=" + id + ';' + System.lineSeparator()
+                + "title='" + title + "';" + System.lineSeparator()
+                + "author='" + author + "';" + System.lineSeparator()
+                + "isbn='" + isbn + "';" + System.lineSeparator()
+                + "price=" + price + ';' + System.lineSeparator()
+                + "description='" + description + "';" + System.lineSeparator()
+                + "coverImage='" + coverImage + "';" + System.lineSeparator()
                 + '}';
     }
 }
