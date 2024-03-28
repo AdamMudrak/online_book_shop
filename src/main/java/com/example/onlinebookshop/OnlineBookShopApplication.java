@@ -2,13 +2,12 @@ package com.example.onlinebookshop;
 
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.services.BookService;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.math.BigDecimal;
 
 @SpringBootApplication
 public class OnlineBookShopApplication {
@@ -29,6 +28,7 @@ public class OnlineBookShopApplication {
             parents, but failed to kill Harry when he was just 15 months old.
             """;
     private final String coverImage = "https://content2.rozetka.com.ua/goods/images/original/72555843.jpg";
+
     public static void main(String[] args) {
         SpringApplication.run(OnlineBookShopApplication.class, args);
     }

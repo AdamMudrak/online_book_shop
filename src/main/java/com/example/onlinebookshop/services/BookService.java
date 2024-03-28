@@ -1,7 +1,6 @@
 package com.example.onlinebookshop.services;
 
 import com.example.onlinebookshop.entities.Book;
-
 import java.util.List;
 
 public interface BookService {
