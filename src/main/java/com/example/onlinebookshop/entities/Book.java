@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -13,14 +12,13 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull(message = "Title may not be null")
+    @Column(nullable = false)
     private String title;
-    @NotNull(message = "Author may not be null")
+    @Column(nullable = false)
     private String author;
-    @NotNull(message = "isbn may not be null")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String isbn;
-    @NotNull(message = "Price may not be null")
+    @Column(nullable = false)
     private BigDecimal price;
     @Column(length = 3000)
     private String description;
