@@ -1,4 +1,4 @@
-package com.example.onlinebookshop;
+package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.dto.BookDto;
 import com.example.onlinebookshop.dto.CreateBookRequestDto;
