@@ -7,7 +7,7 @@ import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.BookMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
-import com.example.onlinebookshop.repositories.book.BookSpecificationBuilder;
+import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
 import com.example.onlinebookshop.services.BookService;
 import java.util.List;
 import java.util.Optional;
