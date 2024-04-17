@@ -1,9 +1,9 @@
-package com.example.onlinebookshop.repositories.book;
+package com.example.onlinebookshop.repositories.book.bookspecs;
 
 import com.example.onlinebookshop.dto.BookSearchParametersDto;
 import com.example.onlinebookshop.entities.Book;
-import com.example.onlinebookshop.repositories.SpecificationBuilder;
-import com.example.onlinebookshop.repositories.SpecificationProviderManager;
+import com.example.onlinebookshop.repositories.specifications.SpecificationBuilder;
+import com.example.onlinebookshop.repositories.specifications.SpecificationProviderManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

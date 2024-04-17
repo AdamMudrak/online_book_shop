@@ -1,9 +1,9 @@
-package com.example.onlinebookshop.repositories.book;
+package com.example.onlinebookshop.repositories.book.bookspecs;
 
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.exceptions.SpecificationProviderNotFoundException;
-import com.example.onlinebookshop.repositories.SpecificationProvider;
-import com.example.onlinebookshop.repositories.SpecificationProviderManager;
+import com.example.onlinebookshop.repositories.specifications.SpecificationProvider;
+import com.example.onlinebookshop.repositories.specifications.SpecificationProviderManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
