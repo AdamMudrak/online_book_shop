@@ -8,6 +8,7 @@ import com.example.onlinebookshop.mapper.BookMapper;
 import com.example.onlinebookshop.repositories.BookRepository;
 import com.example.onlinebookshop.services.BookService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,26 @@ public class BookServiceImpl implements BookService {
                 () -> new EntityNotFoundException("Can't find book by id " + id)
         );
         return bookMapper.toDto(book);
+    }
+
+    @Override
+    public BookDto update(CreateBookRequestDto requestDto, Long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            Book updatedBook = bookMapper.toModel(requestDto);
+            updatedBook.setId(id);
+            return bookMapper.toDto(bookRepository.save(updatedBook));
+        }
+        throw new EntityNotFoundException("Can't find and update book by id " + id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            bookRepository.deleteById(id);
+            return;
+        }
+        throw new EntityNotFoundException("Can't find and delete book by id " + id);
     }
 }
