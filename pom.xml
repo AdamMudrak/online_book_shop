@@ -23,6 +23,7 @@
 		<maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 		<maven.checkstyle.plugin.configLocation>checkstyle.xml</maven.checkstyle.plugin.configLocation>
+		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 		<liquibase.version>4.27.0</liquibase.version>
 	</properties>
 	<dependencies>
@@ -77,6 +78,11 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>${liquibase.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
 		</dependency>
 	</dependencies>
 
