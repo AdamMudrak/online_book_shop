@@ -31,12 +31,14 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
         if (bookSearchParametersDto.fromPrice() != null) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("fromPrice")
-                    .getSpecification(new String[]{bookSearchParametersDto.fromPrice()}));
+                    .getSpecification(new String[]{String
+                            .valueOf(bookSearchParametersDto.fromPrice())}));
         }
         if (bookSearchParametersDto.toPrice() != null) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("toPrice")
-                    .getSpecification(new String[]{bookSearchParametersDto.toPrice()}));
+                    .getSpecification(new String[]{String
+                            .valueOf(bookSearchParametersDto.toPrice())}));
         }
         return specification;
     }
