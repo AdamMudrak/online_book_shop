@@ -27,56 +27,53 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Books API",
-        description = "Here you'll find a comprehensive overview of functions of this app.")
+@Tag(name = Constants.BOOK_API_NAME,
+        description = Constants.BOOK_API_DESCRIPTION)
 @RequestMapping(value = "/books")
 public class BookController {
-    private static final String SUCCESS_DESCRIPTION = "Successfully retrieved";
-    private static final String VALID_ID_DESCRIPTION = "Book id, must exist in DB and"
-            + " be greater than 0";
-    private static final String INVALID_ID_DESCRIPTION = "Either a negative or non-existing id "
-            + "provided. API will tell which one";
-    private static final String INVALID_ENTITY_VALUE =
-            "One of the parameters is invalid. API will show which one";
+
     private final BookService bookService;
 
-    @Operation(summary = "Get all products optionally with pagination and sorting",
-            description = "Returns all products if not provided with"
-                    + " page number(page), page size(size) sort parameter(sort)")
-    @ApiResponse(responseCode = "200", description = SUCCESS_DESCRIPTION)
+    @Operation(summary = Constants.GET_ALL_SUMMARY,
+            description = Constants.GET_ALL_DESCRIPTION)
+    @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookDto> getAll(
+            @Parameter(example = Constants.PAGEABLE_EXAMPLE) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
-    @Operation(summary = "Get a book by id", description = "Returns a book as per the id")
+    @Operation(summary = Constants.GET_BY_ID_SUMMARY, description = Constants.GET_BY_ID_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SUCCESS_DESCRIPTION),
-            @ApiResponse(responseCode = "400",
-                    description = INVALID_ID_DESCRIPTION)
+            @ApiResponse(responseCode = Constants.CODE_200,
+                    description = Constants.SUCCESSFULLY_RETRIEVED),
+            @ApiResponse(responseCode = Constants.CODE_400,
+                    description = Constants.INVALID_ID_DESCRIPTION)
     })
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable @Parameter(name = "id",
-            description = VALID_ID_DESCRIPTION, example = "1") Long id) {
+    public BookDto getBookById(@PathVariable @Parameter(name = Constants.ID,
+            description = Constants.VALID_ID_DESCRIPTION, example = Constants.ID_EXAMPLE) Long id) {
         return bookService.findById(id);
     }
 
-    @Operation(summary = "Search book by params",
-            description = "Returns a book with params sent if any")
+    @Operation(summary = Constants.SEARCH_BOOKS_SUMMARY,
+            description = Constants.SEARCH_BOOKS_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SUCCESS_DESCRIPTION),
+            @ApiResponse(responseCode = Constants.CODE_200,
+                    description = Constants.SUCCESSFULLY_RETRIEVED),
     })
     @GetMapping("/search")
     public List<BookDto> searchBooks(@Valid BookSearchParametersDto searchParameters) {
         return bookService.search(searchParameters);
     }
 
-    @Operation(summary = "Create a new book", description = "Creates a new book according to the "
-            + "entity provided")
+    @Operation(summary = Constants.CREATE_BOOK_SUMMARY,
+            description = Constants.CREATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Successfully created"),
-            @ApiResponse(responseCode = "400",
-                    description = INVALID_ENTITY_VALUE)
+            @ApiResponse(responseCode = Constants.CODE_201,
+                    description = Constants.SUCCESSFULLY_CREATED),
+            @ApiResponse(responseCode = Constants.CODE_400,
+                    description = Constants.INVALID_ENTITY_VALUE)
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -84,32 +81,35 @@ public class BookController {
         return bookService.save(bookRequestDto);
     }
 
-    @Operation(summary = "Update an existing book",
-            description = "Updates an existing book according to the entity provided")
+    @Operation(summary = Constants.UPDATE_BOOK_SUMMARY,
+            description = Constants.UPDATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully updated"),
-            @ApiResponse(responseCode = "400",
-                    description = INVALID_ID_DESCRIPTION + ". Or " + INVALID_ENTITY_VALUE)
+            @ApiResponse(responseCode = Constants.CODE_200,
+                    description = Constants.SUCCESSFULLY_UPDATED),
+            @ApiResponse(responseCode = Constants.CODE_400,
+                    description = Constants.INVALID_ID_DESCRIPTION
+                            + ". Or " + Constants.INVALID_ENTITY_VALUE)
     })
     @PutMapping("/{id}")
     public BookDto updateBook(@RequestBody @Valid UpdateBookRequestDto bookRequestDto,
-                              @PathVariable @Parameter(name = "id",
-                                      description = VALID_ID_DESCRIPTION,
-                                      example = "1") Long id) {
+                              @PathVariable @Parameter(name = Constants.ID,
+                                      description = Constants.VALID_ID_DESCRIPTION,
+                                      example = Constants.ID_EXAMPLE) Long id) {
         return bookService.update(bookRequestDto, id);
     }
 
-    @Operation(summary = "Delete an existing book",
-            description = "Deletes an existing book according to the id provided")
+    @Operation(summary = Constants.DELETE_BOOK_SUMMARY,
+            description = Constants.DELETE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "No content"),
-            @ApiResponse(responseCode = "400",
-                    description = INVALID_ID_DESCRIPTION)
+            @ApiResponse(responseCode = Constants.CODE_204,
+                    description = Constants.CODE_204_DESCRIPTION),
+            @ApiResponse(responseCode = Constants.CODE_400,
+                    description = Constants.INVALID_ID_DESCRIPTION)
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Parameter(name = "id", description = VALID_ID_DESCRIPTION,
-            example = "1") Long id) {
+    public void delete(@PathVariable @Parameter(name = Constants.ID,
+            description = Constants.VALID_ID_DESCRIPTION, example = Constants.ID_EXAMPLE) Long id) {
         bookService.delete(id);
     }
 }
