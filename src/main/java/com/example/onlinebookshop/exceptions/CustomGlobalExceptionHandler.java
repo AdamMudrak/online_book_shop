@@ -46,9 +46,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return e.getDefaultMessage();
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, EntityNotFoundException.class})
     protected ResponseEntity<Object> handleConflict(
-            IllegalArgumentException ex, WebRequest request) {
+            RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(
                 ex,
                 ex.getMessage(),
