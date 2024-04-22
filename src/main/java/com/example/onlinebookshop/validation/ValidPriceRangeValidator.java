@@ -13,6 +13,6 @@ public class ValidPriceRangeValidator
         if (searchParametersDto.fromPrice() == null || searchParametersDto.toPrice() == null) {
             return true;
         }
-        return searchParametersDto.fromPrice().compareTo(searchParametersDto.toPrice()) > 0;
+        return searchParametersDto.fromPrice().compareTo(searchParametersDto.toPrice()) < 0;
     }
 }
