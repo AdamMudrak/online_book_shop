@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -22,12 +23,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             MethodArgumentNotValidException ex,
             HttpHeaders headers,
             HttpStatusCode statusCode,
-            WebRequest request
-    ) {
+            WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.BAD_REQUEST);
-        List<String> errors = ex.getBindingResult().getAllErrors().stream()
+        List<String> errors = ex
+                .getBindingResult()
+                .getAllErrors()
+                .stream()
                 .map(this::getErrorMessage)
                 .toList();
         body.put("errors", errors);
@@ -41,5 +44,16 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             return field + " " + message;
         }
         return e.getDefaultMessage();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<Object> handleConflict(
+            IllegalArgumentException ex, WebRequest request) {
+        return handleExceptionInternal(
+                ex,
+                ex.getMessage(),
+                new HttpHeaders(),
+                HttpStatus.BAD_REQUEST,
+                request);
     }
 }

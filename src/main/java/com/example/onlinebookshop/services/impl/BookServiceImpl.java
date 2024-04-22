@@ -36,6 +36,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findById(Long id) {
+        validateId(id);
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id " + id)
         );
@@ -44,6 +45,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(UpdateBookRequestDto requestDto, Long id) {
+        validateId(id);
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             Book updatedBook = bookMapper.toUpdateModel(requestDto);
@@ -55,6 +57,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void delete(Long id) {
+        validateId(id);
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             bookRepository.deleteById(id);
@@ -70,5 +73,12 @@ public class BookServiceImpl implements BookService {
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    private void validateId(Long id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Field id is expected to be"
+                    + " greater than 0 but was " + id);
+        }
     }
 }
