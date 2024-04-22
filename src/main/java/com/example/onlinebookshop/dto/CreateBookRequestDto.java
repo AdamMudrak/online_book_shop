@@ -25,7 +25,7 @@ public class CreateBookRequestDto {
     @Schema(name = "Book isbn", example = "1234567890", description = "Length must be at least 10",
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
-    @Size(min = 10)
+    @Size(min = 10, max = 17)
     private String isbn;
     @Schema(name = "Book price", example = "999.99",
             description = "Price must contain 17 integers and 2 fractions maximum",
