@@ -22,7 +22,7 @@ public class CreateBookRequestDto {
     private String isbn;
     @NotNull
     @Min(value = 0)
-    @Digits(integer = 19, fraction = 2)
+    @Digits(integer = 17, fraction = 2)
     private BigDecimal price;
     @Size(max = 3000)
     private String description;

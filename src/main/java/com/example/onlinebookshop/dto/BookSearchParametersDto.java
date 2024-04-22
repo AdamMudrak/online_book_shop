@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 @ValidPriceRange
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record BookSearchParametersDto(
-        @Min(0) @Digits(integer = 19, fraction = 2)
+        @Min(0) @Digits(integer = 17, fraction = 2)
         BigDecimal fromPrice,
-        @Min(1) @Digits(integer = 19, fraction = 2)
+        @Min(0) @Digits(integer = 17, fraction = 2)
         BigDecimal toPrice,
         String[] titles,
         String[] authors
