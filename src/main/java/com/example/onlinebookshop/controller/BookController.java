@@ -89,7 +89,7 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully updated"),
             @ApiResponse(responseCode = "400",
-                    description = INVALID_ID_DESCRIPTION + " or " + INVALID_ENTITY_VALUE)
+                    description = INVALID_ID_DESCRIPTION + ". Or " + INVALID_ENTITY_VALUE)
     })
     @PutMapping("/{id}")
     public BookDto updateBook(@RequestBody @Valid UpdateBookRequestDto bookRequestDto,
