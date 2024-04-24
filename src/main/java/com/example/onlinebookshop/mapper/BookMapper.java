@@ -3,6 +3,7 @@ package com.example.onlinebookshop.mapper;
 import com.example.onlinebookshop.config.MapperConfig;
 import com.example.onlinebookshop.dto.BookDto;
 import com.example.onlinebookshop.dto.CreateBookRequestDto;
+import com.example.onlinebookshop.dto.UpdateBookRequestDto;
 import com.example.onlinebookshop.entities.Book;
 import java.util.List;
 import org.mapstruct.Mapper;
@@ -11,7 +12,9 @@ import org.mapstruct.Mapper;
 public interface BookMapper {
     BookDto toDto(Book book);
 
-    Book toModel(CreateBookRequestDto requestDto);
+    Book toCreateModel(CreateBookRequestDto requestDto);
+
+    Book toUpdateModel(UpdateBookRequestDto requestDto);
 
     List<BookDto> toDtoList(List<Book> books);
 }

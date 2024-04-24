@@ -3,6 +3,7 @@ package com.example.onlinebookshop.services;
 import com.example.onlinebookshop.dto.BookDto;
 import com.example.onlinebookshop.dto.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.CreateBookRequestDto;
+import com.example.onlinebookshop.dto.UpdateBookRequestDto;
 import java.util.List;
 
 public interface BookService {
@@ -12,7 +13,7 @@ public interface BookService {
 
     BookDto findById(Long id);
 
-    BookDto update(CreateBookRequestDto requestDto, Long id);
+    BookDto update(UpdateBookRequestDto requestDto, Long id);
 
     void delete(Long id);
 
