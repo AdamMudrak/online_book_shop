@@ -55,7 +55,8 @@ public class BookController {
     })
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable @Parameter(name = Constants.ID,
-            description = Constants.VALID_ID_DESCRIPTION, example = Constants.ID_EXAMPLE) @Positive Long id) {
+            description = Constants.VALID_ID_DESCRIPTION,
+            example = Constants.ID_EXAMPLE) @Positive Long id) {
         return bookService.findById(id);
     }
 
@@ -112,7 +113,8 @@ public class BookController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Parameter(name = Constants.ID,
-            description = Constants.VALID_ID_DESCRIPTION, example = Constants.ID_EXAMPLE) @Positive Long id) {
+            description = Constants.VALID_ID_DESCRIPTION,
+            example = Constants.ID_EXAMPLE) @Positive Long id) {
         bookService.delete(id);
     }
 }
