@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.dto;
+package com.example.onlinebookshop.dto.book;
 
 import com.example.onlinebookshop.validation.ValidPriceRange;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

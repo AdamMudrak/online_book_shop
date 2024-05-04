@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.dto;
+package com.example.onlinebookshop.dto.book;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
