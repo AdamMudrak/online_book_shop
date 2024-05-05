@@ -4,6 +4,7 @@ public class Constants {
     static final String SUCCESSFULLY_RETRIEVED = "Successfully retrieved";
     static final String SUCCESSFULLY_CREATED = "Successfully created";
     static final String SUCCESSFULLY_UPDATED = "Successfully updated";
+    static final String SUCCESSFULLY_REGISTERED = "Successfully registered";
     static final String INVALID_ID_DESCRIPTION = "Either a negative or non-existing id "
             + "provided. API will tell which one";
     static final String INVALID_ENTITY_VALUE =
