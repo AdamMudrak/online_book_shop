@@ -1,9 +1,6 @@
 package com.example.onlinebookshop.constants;
 
 public class BookDtoConstants {
-    public static final String ID = "id";
-    public static final String ID_EXAMPLE = "1";
-
     public static final String TITLE = "title";
     public static final String TITLE_EXAMPLE = "Harry Potter";
     public static final String TITLE_DESCRIPTION =
