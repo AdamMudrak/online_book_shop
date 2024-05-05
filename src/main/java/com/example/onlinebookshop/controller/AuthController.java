@@ -26,6 +26,7 @@ public class AuthController {
 
     @Operation(summary = AuthConstants.REGISTER_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_REGISTERED)
+    @ApiResponse(responseCode = Constants.CODE_400, description = Constants.INVALID_ENTITY_VALUE)
     @PostMapping("/registration")
     public UserResponseDto registerUser(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
