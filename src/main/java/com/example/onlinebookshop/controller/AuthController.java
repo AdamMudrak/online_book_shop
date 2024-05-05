@@ -3,7 +3,7 @@ package com.example.onlinebookshop.controller;
 import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.UserResponseDto;
 import com.example.onlinebookshop.exceptions.RegistrationException;
-import com.example.onlinebookshop.services.impl.UserService;
+import com.example.onlinebookshop.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
