@@ -1,5 +1,7 @@
 package com.example.onlinebookshop.dto.user;
 
+import com.example.onlinebookshop.constants.Constants;
+import com.example.onlinebookshop.constants.UserDtoConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -7,14 +9,15 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResponseDto {
-    @Schema(name = "id", example = "1")
+    @Schema(name = Constants.ID, example = Constants.ID_EXAMPLE)
     private Long id;
-    @Schema(name = "email", example = "example@gmail.com")
+    @Schema(name = UserDtoConstants.EMAIL, example = UserDtoConstants.EMAIL_EXAMPLE)
     private String email;
-    @Schema(name = "firstName", example = "John")
+    @Schema(name = UserDtoConstants.FIRST_NAME, example = UserDtoConstants.FIRST_NAME_EXAMPLE)
     private String firstName;
-    @Schema(name = "lastName", example = "Wick")
+    @Schema(name = UserDtoConstants.LAST_NAME, example = UserDtoConstants.LAST_NAME_EXAMPLE)
     private String lastName;
-    @Schema(name = "shippingAddress", example = "132, My Street, Kingston, New York 12401")
+    @Schema(name = UserDtoConstants.SHIPPING_ADDRESS,
+            example = UserDtoConstants.SHIPPING_ADDRESS_EXAMPLE)
     private String shippingAddress;
 }

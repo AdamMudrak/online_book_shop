@@ -1,5 +1,6 @@
 package com.example.onlinebookshop.dto.user;
 
+import com.example.onlinebookshop.constants.UserDtoConstants;
 import com.example.onlinebookshop.validation.Email;
 import com.example.onlinebookshop.validation.FieldMatch;
 import com.example.onlinebookshop.validation.Password;
@@ -13,37 +14,32 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldMatch
 public class UserRegistrationRequestDto {
-    @Schema(name = "email", example = "example@gmail.com",
+    @Schema(name = UserDtoConstants.EMAIL, example = UserDtoConstants.EMAIL_EXAMPLE,
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     @Email
     private String email;
-    @Schema(name = "password", example = "Best_Password1@3$",
-            description = """
-                    Your password should contain:
-                    1) at least one lowercase letter, like 'a';
-                    2) at least one uppercase letter, like 'A';
-                    3) at least one number, like '0';
-                    4) at least one special character, like '?!@#$%^&*~';
-                    5) from 8 to 32 characters.""",
+    @Schema(name = UserDtoConstants.PASSWORD, example = UserDtoConstants.PASSWORD_EXAMPLE,
+            description = UserDtoConstants.PASSWORD_DESCRIPTION,
             requiredMode = Schema.RequiredMode.REQUIRED)
     @Size(min = 8, max = 32)
     @NotBlank
     @Password
     private String password;
-    @Schema(name = "repeatPassword", example = "Best_Password1@3$",
-            description = "This field must be the same as password!",
+    @Schema(name = UserDtoConstants.REPEAT_PASSWORD, example = UserDtoConstants.REPEAT_PASSWORD_EXAMPLE,
+            description = UserDtoConstants.REPEAT_PASSWORD_DESCRIPTION,
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String repeatPassword;
-    @Schema(name = "firstName", example = "John",
+    @Schema(name = UserDtoConstants.FIRST_NAME, example = UserDtoConstants.FIRST_NAME_EXAMPLE,
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String firstName;
-    @Schema(name = "lastName", example = "Wick",
+    @Schema(name = UserDtoConstants.LAST_NAME, example = UserDtoConstants.LAST_NAME_EXAMPLE,
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String lastName;
-    @Schema(name = "shippingAddress", example = "132, My Street, Kingston, New York 12401")
+    @Schema(name = UserDtoConstants.SHIPPING_ADDRESS,
+            example = UserDtoConstants.SHIPPING_ADDRESS_EXAMPLE)
     private String shippingAddress;
 }
