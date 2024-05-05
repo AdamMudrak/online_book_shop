@@ -6,13 +6,13 @@ public class BookDtoConstants {
 
     public static final String TITLE = "title";
     public static final String TITLE_EXAMPLE = "Harry Potter";
-    public static final String TITLE_DESCRIPTION = "Must be exactly equal to the title in DB. "
-            + "You can specify many titles";
+    public static final String TITLE_DESCRIPTION =
+            "Must be exactly equal to the title in DB. You can specify many titles";
 
     public static final String AUTHOR = "author";
     public static final String AUTHOR_EXAMPLE = "J.K. Rowling";
-    public static final String AUTHOR_DESCRIPTION = "Must be exactly equal to the author in DB. "
-            + "You can specify many authors";
+    public static final String AUTHOR_DESCRIPTION =
+            "Must be exactly equal to the author in DB. You can specify many authors";
 
     public static final String ISBN = "isbn";
     public static final String ISBN_EXAMPLE = "1234567890";
@@ -25,8 +25,8 @@ public class BookDtoConstants {
     public static final String FLOOR_PRICE = "799.99";
     public static final String FLOOR_PRICE_DESCRIPTION = "Defines floor price";
     public static final String CEILING_PRICE = "1999.99";
-    public static final String CEILING_PRICE_DESCRIPTION = "Defines ceiling price. Must always"
-            + " be greater than floor price";
+    public static final String CEILING_PRICE_DESCRIPTION =
+            "Defines ceiling price. Must always be greater than floor price";
 
     public static final String DESCRIPTION = "description";
     public static final String DESCRIPTION_EXAMPLE =
