@@ -1,5 +1,7 @@
 package com.example.onlinebookshop.controller;
 
+import com.example.onlinebookshop.constants.AuthConstants;
+import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.UserResponseDto;
 import com.example.onlinebookshop.exceptions.RegistrationException;
