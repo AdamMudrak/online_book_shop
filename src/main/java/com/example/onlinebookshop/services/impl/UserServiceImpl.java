@@ -6,6 +6,7 @@ import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
 import com.example.onlinebookshop.mapper.UserMapper;
 import com.example.onlinebookshop.repositories.user.UserRepository;
+import com.example.onlinebookshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
