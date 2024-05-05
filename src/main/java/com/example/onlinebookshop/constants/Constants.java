@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.controller.constants;
+package com.example.onlinebookshop.constants;
 
 public class Constants {
     public static final String SUCCESSFULLY_RETRIEVED = "Successfully retrieved";

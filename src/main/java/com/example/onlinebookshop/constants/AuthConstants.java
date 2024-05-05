@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.controller.constants;
+package com.example.onlinebookshop.constants;
 
 public class AuthConstants {
     public static final String AUTH_API_NAME = "Authentication API";
