@@ -65,7 +65,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(RegistrationException.class)
     protected ResponseEntity<Object> handleRegistrationException(
-            RuntimeException ex, WebRequest request) {
+            Exception ex, WebRequest request) {
         return handleExceptionInternal(
                 ex,
                 ex.getMessage(),
