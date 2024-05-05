@@ -1,5 +1,6 @@
 package com.example.onlinebookshop.dto.book;
 
+import com.example.onlinebookshop.constants.BookDtoConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -9,19 +10,19 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BookDto {
-    @Schema(name = "id", example = "1")
+    @Schema(name = BookDtoConstants.ID, example = BookDtoConstants.ID_EXAMPLE)
     private Long id;
-    @Schema(name = "title", example = "Harry Potter")
+    @Schema(name = BookDtoConstants.TITLE, example = BookDtoConstants.TITLE_EXAMPLE)
     private String title;
-    @Schema(name = "author", example = "J.K. Rowling")
+    @Schema(name = BookDtoConstants.AUTHOR, example = BookDtoConstants.AUTHOR_EXAMPLE)
     private String author;
-    @Schema(name = "isbn", example = "1234567890")
+    @Schema(name = BookDtoConstants.ISBN, example = BookDtoConstants.ISBN_EXAMPLE)
     private String isbn;
-    @Schema(name = "price", example = "999.99")
+    @Schema(name = BookDtoConstants.PRICE, example = BookDtoConstants.PRICE_EXAMPLE)
     @Min(value = 0)
     private BigDecimal price;
-    @Schema(name = "description", example = "Any text up to 3000 chars including whitespaces")
+    @Schema(name = BookDtoConstants.DESCRIPTION, example = BookDtoConstants.DESCRIPTION_EXAMPLE)
     private String description;
-    @Schema(name = "coverImage", example = "https://example.com/updated-cover-image.jpg")
+    @Schema(name = BookDtoConstants.COVER_IMAGE, example = BookDtoConstants.COVER_IMAGE_EXAMPLE)
     private String coverImage;
 }
