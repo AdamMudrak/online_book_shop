@@ -26,7 +26,8 @@ public class UserRegistrationRequestDto {
     @NotBlank
     @Password
     private String password;
-    @Schema(name = UserDtoConstants.REPEAT_PASSWORD, example = UserDtoConstants.REPEAT_PASSWORD_EXAMPLE,
+    @Schema(name = UserDtoConstants.REPEAT_PASSWORD,
+            example = UserDtoConstants.REPEAT_PASSWORD_EXAMPLE,
             description = UserDtoConstants.REPEAT_PASSWORD_DESCRIPTION,
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
