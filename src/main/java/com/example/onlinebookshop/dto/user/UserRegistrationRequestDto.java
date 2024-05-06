@@ -1,6 +1,21 @@
 package com.example.onlinebookshop.dto.user;
 
-import com.example.onlinebookshop.constants.UserDtoConstants;
+import static com.example.onlinebookshop.constants.UserDtoConstants.EMAIL;
+import static com.example.onlinebookshop.constants.UserDtoConstants.EMAIL_EXAMPLE;
+import static com.example.onlinebookshop.constants.UserDtoConstants.FIRST_NAME;
+import static com.example.onlinebookshop.constants.UserDtoConstants.FIRST_NAME_EXAMPLE;
+import static com.example.onlinebookshop.constants.UserDtoConstants.LAST_NAME;
+import static com.example.onlinebookshop.constants.UserDtoConstants.LAST_NAME_EXAMPLE;
+import static com.example.onlinebookshop.constants.UserDtoConstants.PASSWORD;
+import static com.example.onlinebookshop.constants.UserDtoConstants.PASSWORD_DESCRIPTION;
+import static com.example.onlinebookshop.constants.UserDtoConstants.PASSWORD_EXAMPLE;
+import static com.example.onlinebookshop.constants.UserDtoConstants.REPEAT_PASSWORD;
+import static com.example.onlinebookshop.constants.UserDtoConstants.REPEAT_PASSWORD_DESCRIPTION;
+import static com.example.onlinebookshop.constants.UserDtoConstants.REPEAT_PASSWORD_EXAMPLE;
+import static com.example.onlinebookshop.constants.UserDtoConstants.SHIPPING_ADDRESS;
+import static com.example.onlinebookshop.constants.UserDtoConstants.SHIPPING_ADDRESS_EXAMPLE;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.example.onlinebookshop.validation.Email;
 import com.example.onlinebookshop.validation.FieldMatch;
 import com.example.onlinebookshop.validation.Password;
@@ -14,33 +29,29 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldMatch
 public class UserRegistrationRequestDto {
-    @Schema(name = UserDtoConstants.EMAIL, example = UserDtoConstants.EMAIL_EXAMPLE,
-            requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(name = EMAIL, example = EMAIL_EXAMPLE, requiredMode = REQUIRED)
     @NotBlank
     @Email
     private String email;
-    @Schema(name = UserDtoConstants.PASSWORD, example = UserDtoConstants.PASSWORD_EXAMPLE,
-            description = UserDtoConstants.PASSWORD_DESCRIPTION,
-            requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(name = PASSWORD, example = PASSWORD_EXAMPLE, description = PASSWORD_DESCRIPTION,
+            requiredMode = REQUIRED)
     @Size(min = 8, max = 32)
     @NotBlank
     @Password
     private String password;
-    @Schema(name = UserDtoConstants.REPEAT_PASSWORD,
-            example = UserDtoConstants.REPEAT_PASSWORD_EXAMPLE,
-            description = UserDtoConstants.REPEAT_PASSWORD_DESCRIPTION,
-            requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(name = REPEAT_PASSWORD, example = REPEAT_PASSWORD_EXAMPLE,
+            description = REPEAT_PASSWORD_DESCRIPTION,
+            requiredMode = REQUIRED)
     @NotBlank
     private String repeatPassword;
-    @Schema(name = UserDtoConstants.FIRST_NAME, example = UserDtoConstants.FIRST_NAME_EXAMPLE,
-            requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(name = FIRST_NAME, example = FIRST_NAME_EXAMPLE,
+            requiredMode = REQUIRED)
     @NotBlank
     private String firstName;
-    @Schema(name = UserDtoConstants.LAST_NAME, example = UserDtoConstants.LAST_NAME_EXAMPLE,
-            requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(name = LAST_NAME, example = LAST_NAME_EXAMPLE,
+            requiredMode = REQUIRED)
     @NotBlank
     private String lastName;
-    @Schema(name = UserDtoConstants.SHIPPING_ADDRESS,
-            example = UserDtoConstants.SHIPPING_ADDRESS_EXAMPLE)
+    @Schema(name = SHIPPING_ADDRESS, example = SHIPPING_ADDRESS_EXAMPLE)
     private String shippingAddress;
 }
