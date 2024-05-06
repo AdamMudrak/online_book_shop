@@ -16,29 +16,29 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     @Override
     public Specification<Book> build(BookSearchParametersDto bookSearchParametersDto) {
         Specification<Book> specification = Specification.where(null);
-        if (bookSearchParametersDto.titles() != null
-                && bookSearchParametersDto.titles().length > 0) {
+        if (bookSearchParametersDto.getTitles() != null
+                && bookSearchParametersDto.getTitles().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("title")
-                    .getSpecification(bookSearchParametersDto.titles()));
+                    .getSpecification(bookSearchParametersDto.getTitles()));
         }
-        if (bookSearchParametersDto.authors() != null
-                && bookSearchParametersDto.authors().length > 0) {
+        if (bookSearchParametersDto.getAuthors() != null
+                && bookSearchParametersDto.getAuthors().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("author")
-                    .getSpecification(bookSearchParametersDto.authors()));
+                    .getSpecification(bookSearchParametersDto.getAuthors()));
         }
-        if (bookSearchParametersDto.fromPrice() != null) {
+        if (bookSearchParametersDto.getFromPrice() != null) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("fromPrice")
                     .getSpecification(new String[]{String
-                            .valueOf(bookSearchParametersDto.fromPrice())}));
+                            .valueOf(bookSearchParametersDto.getFromPrice())}));
         }
-        if (bookSearchParametersDto.toPrice() != null) {
+        if (bookSearchParametersDto.getToPrice() != null) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("toPrice")
                     .getSpecification(new String[]{String
-                            .valueOf(bookSearchParametersDto.toPrice())}));
+                            .valueOf(bookSearchParametersDto.getToPrice())}));
         }
         return specification;
     }
