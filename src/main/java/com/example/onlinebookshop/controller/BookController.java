@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@Tag(name = BookConstants.BOOK_API_NAME,
+@Tag(name = BOOK_API_NAME,
         description = BookConstants.BOOK_API_DESCRIPTION)
 @RequestMapping(value = "/books")
 public class BookController {
