@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.validation;
 
-import com.example.onlinebookshop.dto.BookSearchParametersDto;
+import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -10,9 +10,10 @@ public class ValidPriceRangeValidator
     @Override
     public boolean isValid(BookSearchParametersDto searchParametersDto,
                            ConstraintValidatorContext context) {
-        if (searchParametersDto.fromPrice() == null || searchParametersDto.toPrice() == null) {
+        if (searchParametersDto.getFromPrice() == null
+                || searchParametersDto.getToPrice() == null) {
             return true;
         }
-        return searchParametersDto.fromPrice().compareTo(searchParametersDto.toPrice()) < 0;
+        return searchParametersDto.getFromPrice().compareTo(searchParametersDto.getToPrice()) < 0;
     }
 }

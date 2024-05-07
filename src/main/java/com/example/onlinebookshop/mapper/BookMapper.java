@@ -1,9 +1,9 @@
 package com.example.onlinebookshop.mapper;
 
 import com.example.onlinebookshop.config.MapperConfig;
-import com.example.onlinebookshop.dto.BookDto;
-import com.example.onlinebookshop.dto.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.BookDto;
+import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
+import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
 import com.example.onlinebookshop.entities.Book;
 import org.mapstruct.Mapper;
 

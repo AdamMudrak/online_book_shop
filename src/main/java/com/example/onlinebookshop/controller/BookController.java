@@ -1,9 +1,38 @@
 package com.example.onlinebookshop.controller;
 
-import com.example.onlinebookshop.dto.BookDto;
-import com.example.onlinebookshop.dto.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.UpdateBookRequestDto;
+import static com.example.onlinebookshop.constants.BookConstants.BOOK_API_DESCRIPTION;
+import static com.example.onlinebookshop.constants.BookConstants.BOOK_API_NAME;
+import static com.example.onlinebookshop.constants.BookConstants.CREATE_BOOK_DESCRIPTION;
+import static com.example.onlinebookshop.constants.BookConstants.CREATE_BOOK_SUMMARY;
+import static com.example.onlinebookshop.constants.BookConstants.DELETE_BOOK_DESCRIPTION;
+import static com.example.onlinebookshop.constants.BookConstants.DELETE_BOOK_SUMMARY;
+import static com.example.onlinebookshop.constants.BookConstants.GET_ALL_DESCRIPTION;
+import static com.example.onlinebookshop.constants.BookConstants.GET_ALL_SUMMARY;
+import static com.example.onlinebookshop.constants.BookConstants.GET_BY_ID_DESCRIPTION;
+import static com.example.onlinebookshop.constants.BookConstants.GET_BY_ID_SUMMARY;
+import static com.example.onlinebookshop.constants.BookConstants.PAGEABLE_EXAMPLE;
+import static com.example.onlinebookshop.constants.BookConstants.SEARCH_BOOKS_DESCRIPTION;
+import static com.example.onlinebookshop.constants.BookConstants.SEARCH_BOOKS_SUMMARY;
+import static com.example.onlinebookshop.constants.BookConstants.UPDATE_BOOK_DESCRIPTION;
+import static com.example.onlinebookshop.constants.BookConstants.UPDATE_BOOK_SUMMARY;
+import static com.example.onlinebookshop.constants.BookConstants.VALID_ID_DESCRIPTION;
+import static com.example.onlinebookshop.constants.Constants.CODE_200;
+import static com.example.onlinebookshop.constants.Constants.CODE_201;
+import static com.example.onlinebookshop.constants.Constants.CODE_204;
+import static com.example.onlinebookshop.constants.Constants.CODE_204_DESCRIPTION;
+import static com.example.onlinebookshop.constants.Constants.CODE_400;
+import static com.example.onlinebookshop.constants.Constants.ID;
+import static com.example.onlinebookshop.constants.Constants.ID_EXAMPLE;
+import static com.example.onlinebookshop.constants.Constants.INVALID_ENTITY_VALUE;
+import static com.example.onlinebookshop.constants.Constants.INVALID_ID_DESCRIPTION;
+import static com.example.onlinebookshop.constants.Constants.SUCCESSFULLY_CREATED;
+import static com.example.onlinebookshop.constants.Constants.SUCCESSFULLY_RETRIEVED;
+import static com.example.onlinebookshop.constants.Constants.SUCCESSFULLY_UPDATED;
+
+import com.example.onlinebookshop.dto.book.BookDto;
+import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
+import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
+import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
 import com.example.onlinebookshop.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,54 +59,55 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@Tag(name = Constants.BOOK_API_NAME,
-        description = Constants.BOOK_API_DESCRIPTION)
+@Tag(name = BOOK_API_NAME,
+        description = BOOK_API_DESCRIPTION)
 @RequestMapping(value = "/books")
 public class BookController {
 
     private final BookService bookService;
 
-    @Operation(summary = Constants.GET_ALL_SUMMARY,
-            description = Constants.GET_ALL_DESCRIPTION)
-    @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
+    @Operation(summary = GET_ALL_SUMMARY,
+            description = GET_ALL_DESCRIPTION)
+    @ApiResponse(responseCode = CODE_200, description = SUCCESSFULLY_RETRIEVED)
     @GetMapping
     public List<BookDto> getAll(
-            @Parameter(example = Constants.PAGEABLE_EXAMPLE) Pageable pageable) {
+            @Parameter(example = PAGEABLE_EXAMPLE) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
-    @Operation(summary = Constants.GET_BY_ID_SUMMARY, description = Constants.GET_BY_ID_DESCRIPTION)
+    @Operation(summary = GET_BY_ID_SUMMARY,
+            description = GET_BY_ID_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = Constants.CODE_200,
-                    description = Constants.SUCCESSFULLY_RETRIEVED),
-            @ApiResponse(responseCode = Constants.CODE_400,
-                    description = Constants.INVALID_ID_DESCRIPTION)
+            @ApiResponse(responseCode = CODE_200,
+                    description = SUCCESSFULLY_RETRIEVED),
+            @ApiResponse(responseCode = CODE_400,
+                    description = INVALID_ID_DESCRIPTION)
     })
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable @Parameter(name = Constants.ID,
-            description = Constants.VALID_ID_DESCRIPTION,
-            example = Constants.ID_EXAMPLE) @Positive Long id) {
+    public BookDto getBookById(@PathVariable @Parameter(name = ID,
+            description = VALID_ID_DESCRIPTION,
+            example = ID_EXAMPLE) @Positive Long id) {
         return bookService.findById(id);
     }
 
-    @Operation(summary = Constants.SEARCH_BOOKS_SUMMARY,
-            description = Constants.SEARCH_BOOKS_DESCRIPTION)
+    @Operation(summary = SEARCH_BOOKS_SUMMARY,
+            description = SEARCH_BOOKS_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = Constants.CODE_200,
-                    description = Constants.SUCCESSFULLY_RETRIEVED),
+            @ApiResponse(responseCode = CODE_200,
+                    description = SUCCESSFULLY_RETRIEVED),
     })
     @GetMapping("/search")
     public List<BookDto> searchBooks(@Valid BookSearchParametersDto searchParameters) {
         return bookService.search(searchParameters);
     }
 
-    @Operation(summary = Constants.CREATE_BOOK_SUMMARY,
-            description = Constants.CREATE_BOOK_DESCRIPTION)
+    @Operation(summary = CREATE_BOOK_SUMMARY,
+            description = CREATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = Constants.CODE_201,
-                    description = Constants.SUCCESSFULLY_CREATED),
-            @ApiResponse(responseCode = Constants.CODE_400,
-                    description = Constants.INVALID_ENTITY_VALUE)
+            @ApiResponse(responseCode = CODE_201,
+                    description = SUCCESSFULLY_CREATED),
+            @ApiResponse(responseCode = CODE_400,
+                    description = INVALID_ENTITY_VALUE)
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -85,36 +115,36 @@ public class BookController {
         return bookService.save(bookRequestDto);
     }
 
-    @Operation(summary = Constants.UPDATE_BOOK_SUMMARY,
-            description = Constants.UPDATE_BOOK_DESCRIPTION)
+    @Operation(summary = UPDATE_BOOK_SUMMARY,
+            description = UPDATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = Constants.CODE_200,
-                    description = Constants.SUCCESSFULLY_UPDATED),
-            @ApiResponse(responseCode = Constants.CODE_400,
-                    description = Constants.INVALID_ID_DESCRIPTION
-                            + ". Or " + Constants.INVALID_ENTITY_VALUE)
+            @ApiResponse(responseCode = CODE_200,
+                    description = SUCCESSFULLY_UPDATED),
+            @ApiResponse(responseCode = CODE_400,
+                    description = INVALID_ID_DESCRIPTION
+                            + ". Or " + INVALID_ENTITY_VALUE)
     })
     @PutMapping("/{id}")
     public BookDto updateBook(@RequestBody @Valid UpdateBookRequestDto bookRequestDto,
-                              @PathVariable @Parameter(name = Constants.ID,
-                                      description = Constants.VALID_ID_DESCRIPTION,
-                                      example = Constants.ID_EXAMPLE) @Positive Long id) {
+                              @PathVariable @Parameter(name = ID,
+                                      description = VALID_ID_DESCRIPTION,
+                                      example = ID_EXAMPLE) @Positive Long id) {
         return bookService.update(bookRequestDto, id);
     }
 
-    @Operation(summary = Constants.DELETE_BOOK_SUMMARY,
-            description = Constants.DELETE_BOOK_DESCRIPTION)
+    @Operation(summary = DELETE_BOOK_SUMMARY,
+            description = DELETE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = Constants.CODE_204,
-                    description = Constants.CODE_204_DESCRIPTION),
-            @ApiResponse(responseCode = Constants.CODE_400,
-                    description = Constants.INVALID_ID_DESCRIPTION)
+            @ApiResponse(responseCode = CODE_204,
+                    description = CODE_204_DESCRIPTION),
+            @ApiResponse(responseCode = CODE_400,
+                    description = INVALID_ID_DESCRIPTION)
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Parameter(name = Constants.ID,
-            description = Constants.VALID_ID_DESCRIPTION,
-            example = Constants.ID_EXAMPLE) @Positive Long id) {
+    public void delete(@PathVariable @Parameter(name = ID,
+            description = VALID_ID_DESCRIPTION,
+            example = ID_EXAMPLE) @Positive Long id) {
         bookService.delete(id);
     }
 }
