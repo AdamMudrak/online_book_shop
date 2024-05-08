@@ -45,6 +45,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,6 +67,7 @@ public class BookController {
 
     private final BookService bookService;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = GET_ALL_SUMMARY,
             description = GET_ALL_DESCRIPTION)
     @ApiResponse(responseCode = CODE_200, description = SUCCESSFULLY_RETRIEVED)
@@ -75,6 +77,7 @@ public class BookController {
         return bookService.findAll(pageable);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = GET_BY_ID_SUMMARY,
             description = GET_BY_ID_DESCRIPTION)
     @ApiResponses(value = {
@@ -90,6 +93,7 @@ public class BookController {
         return bookService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = SEARCH_BOOKS_SUMMARY,
             description = SEARCH_BOOKS_DESCRIPTION)
     @ApiResponses(value = {
@@ -101,6 +105,7 @@ public class BookController {
         return bookService.search(searchParameters);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = CREATE_BOOK_SUMMARY,
             description = CREATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
@@ -115,6 +120,7 @@ public class BookController {
         return bookService.save(bookRequestDto);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = UPDATE_BOOK_SUMMARY,
             description = UPDATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
@@ -132,6 +138,7 @@ public class BookController {
         return bookService.update(bookRequestDto, id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = DELETE_BOOK_SUMMARY,
             description = DELETE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
