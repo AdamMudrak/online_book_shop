@@ -19,11 +19,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+    private static final int STRENGTH = 10;
     private final UserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(STRENGTH);
     }
 
     @Bean
