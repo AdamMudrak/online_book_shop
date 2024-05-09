@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.security;
+package com.example.onlinebookshop.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
