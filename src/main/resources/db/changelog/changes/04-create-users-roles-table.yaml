@@ -13,9 +13,12 @@ databaseChangeLog:
                     nullable: true
                     foreignKeyName: fk_user_id
                     references: users(id)
-                  primaryKey: true
+                    primaryKey: true
             - column:
                 name: role_id
                 type: bigint
                 constraints:
+                  nullable: true
+                  foreignKeyName: fk_role_id
+                  references: roles(id)
                   primaryKey: true
