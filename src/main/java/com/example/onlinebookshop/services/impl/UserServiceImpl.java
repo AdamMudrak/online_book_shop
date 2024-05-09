@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.security;
+package com.example.onlinebookshop.services.impl;
 
 import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.UserResponseDto;

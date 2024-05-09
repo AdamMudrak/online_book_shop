@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.services.impl;
+package com.example.onlinebookshop.security;
 
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.repositories.user.UserRepository;
