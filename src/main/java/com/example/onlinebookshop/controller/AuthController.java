@@ -35,6 +35,9 @@ public class AuthController {
         return userService.register(requestDto);
     }
 
+    @Operation(summary = AuthConstants.LOGIN_SUMMARY)
+    @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_LOGGED_IN)
+    @ApiResponse(responseCode = Constants.CODE_400, description = Constants.INVALID_ENTITY_VALUE)
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
         return userService.authenticate(request);
