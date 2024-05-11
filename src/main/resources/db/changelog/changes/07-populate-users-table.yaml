@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate-users-table
+      author: AdamMudrak
+      changes:
+      - sql:
+          sql: |
+            INSERT INTO users (email, password, first_name, last_name, shipping_address)
+            VALUES('user1@example.com',
+            '$2a$10$KdJAk.P2y31ejmh1kckhB.ROzERcbDxWi0orHUNTXiTVQC1S/ma9.',
+            'John',
+            'Doe',
+            '123 Main St, Anytown, USA'),
+            ('user2@example.com',
+            '$2a$10$nTDiF6jJlYx/nKdU.CtNyeI75D/R6aXAryc55J2bgd086JDwB22f.',
+            'Jane',
+            'Smith',
+            '456 Elm St, Othertown, USA'),
+            ('admin@example.com',
+            '$2a$10$ltn6yO5CngLYgNFpvlXNCOXwvLAACa5Bz8yTo1JkjOVKOJ4LPEHfe',
+            'Admin',
+            'Adminson',
+            '789 Oak St, Adminville, USA');
