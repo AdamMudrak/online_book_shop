@@ -4,7 +4,6 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 import com.example.onlinebookshop.constants.UserDtoConstants;
 import com.example.onlinebookshop.validation.Email;
-import com.example.onlinebookshop.validation.Password;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -19,5 +18,5 @@ public record UserLoginRequestDto(
                 requiredMode = REQUIRED)
         @Size(min = 8, max = 32)
         @NotBlank
-        @Password String password) {
+        String password) {
 }
