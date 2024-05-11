@@ -2,6 +2,8 @@ package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.constants.AuthConstants;
 import com.example.onlinebookshop.constants.Constants;
+import com.example.onlinebookshop.dto.user.UserLoginRequestDto;
+import com.example.onlinebookshop.dto.user.UserLoginResponseDto;
 import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.UserResponseDto;
 import com.example.onlinebookshop.exceptions.RegistrationException;
@@ -31,5 +33,10 @@ public class AuthController {
     public UserResponseDto registerUser(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         return userService.register(requestDto);
+    }
+
+    @PostMapping("/login")
+    public UserLoginResponseDto login(UserLoginRequestDto request) {
+        return userService.authenticate(request);
     }
 }
