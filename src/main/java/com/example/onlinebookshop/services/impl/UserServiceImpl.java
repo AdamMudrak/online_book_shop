@@ -45,6 +45,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserLoginResponseDto authenticate(UserLoginRequestDto requestDto) {
+        final Authentication authentication = manager
+                .authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                requestDto.email(), requestDto.password()));
+        String token = jwtUtil.generateToken(authentication.getName());
+        return new UserLoginResponseDto(token);
+    }
         Optional<User> user = userRepository.findByEmail(requestDto.email());
         if (user.isEmpty()) {
             throw new AuthenticationException(AUTH_EXCEPTION_MESSAGE);
