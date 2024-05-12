@@ -7,7 +7,6 @@ import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
 import com.example.onlinebookshop.mapper.UserMapper;
 import com.example.onlinebookshop.repositories.user.UserRepository;
-import com.example.onlinebookshop.security.JwtUtil;
 import com.example.onlinebookshop.services.UserService;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +20,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
