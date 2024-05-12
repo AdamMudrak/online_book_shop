@@ -8,4 +8,5 @@ public class AuthConstants {
     public static final String LOGIN_SUMMARY = "Log in using existing account";
     public static final String AUTH_EXCEPTION_MESSAGE =
             "Can't authenticate user: wrong username or password";
+    public static final String BEARER = "Bearer ";
 }
