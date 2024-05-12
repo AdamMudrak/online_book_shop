@@ -1,19 +1,16 @@
 package com.example.onlinebookshop.services.impl;
 
-import static com.example.onlinebookshop.constants.AuthConstants.AUTH_EXCEPTION_MESSAGE;
-
-import com.example.onlinebookshop.dto.user.UserLoginRequestDto;
-import com.example.onlinebookshop.dto.user.UserLoginResponseDto;
 import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.UserResponseDto;
+import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
-import com.example.onlinebookshop.exceptions.AuthenticationException;
 import com.example.onlinebookshop.exceptions.RegistrationException;
 import com.example.onlinebookshop.mapper.UserMapper;
 import com.example.onlinebookshop.repositories.user.UserRepository;
 import com.example.onlinebookshop.security.JwtUtil;
 import com.example.onlinebookshop.services.UserService;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,33 +31,17 @@ public class UserServiceImpl implements UserService {
                     + requestDto.getEmail() + " already exists");
         }
         User user = userMapper.toUser(requestDto);
-        user.setRoles( // set USER role
-        user.setPassword(passwordEncoder.encode(request.password()));
+        assignUserRole(user);
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         userRepository.save(user);
         return userMapper.toUserResponseDto(user);
-        User userWithEncodedPassword = userMapper.toUser(requestDto);
-        User savedUser = userRepository.save(userWithEncodedPassword);
-        return userMapper.toUserResponseDto(savedUser);
     }
 
-    @Override
-    public UserLoginResponseDto authenticate(UserLoginRequestDto requestDto) {
-        final Authentication authentication = manager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                requestDto.email(), requestDto.password()));
-        String token = jwtUtil.generateToken(authentication.getName());
-        return new UserLoginResponseDto(token);
-    }
-        Optional<User> user = userRepository.findByEmail(requestDto.email());
-        if (user.isEmpty()) {
-            throw new AuthenticationException(AUTH_EXCEPTION_MESSAGE);
-        }
-        String rawPassword = requestDto.password();
-        String userPasswordFromDb = user.get().getPassword();
-        if (!passwordEncoder.matches(rawPassword, userPasswordFromDb)) {
-            throw new AuthenticationException(AUTH_EXCEPTION_MESSAGE);
-        }
-        return new UserLoginResponseDto(jwtUtil.generateToken(requestDto.email()));
+    private void assignUserRole(User user) {
+        Role userRole = new Role();
+        userRole.setName(Role.RoleName.USER);
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
+        user.setRoles(roles);
     }
 }
