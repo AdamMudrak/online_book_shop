@@ -6,9 +6,9 @@ import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
 import com.example.onlinebookshop.mapper.UserMapper;
+import com.example.onlinebookshop.repositories.role.RoleRepository;
 import com.example.onlinebookshop.repositories.user.UserRepository;
 import com.example.onlinebookshop.services.UserService;
-import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -36,9 +37,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private void assignUserRole(User user) {
-        Role userRole = new Role();
-        userRole.setName(Role.RoleName.USER);
-        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepository.findByName(Role.RoleName.USER);
+        Set<Role> roles = user.getRoles();
         roles.add(userRole);
         user.setRoles(roles);
     }
