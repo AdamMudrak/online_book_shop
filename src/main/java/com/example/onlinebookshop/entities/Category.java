@@ -8,10 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
 @Entity
+@SQLDelete(sql = "UPDATE categories SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 @Table(name = "categories")
 public class Category {
     @Id
@@ -20,4 +24,6 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
     private String description;
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 }
