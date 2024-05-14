@@ -3,7 +3,8 @@ package com.example.onlinebookshop.constants;
 public class BookConstants {
     public static final String BOOK_API_NAME = "Books API";
     public static final String BOOK_API_DESCRIPTION =
-            "Here you'll find a comprehensive overview of functions of this app.";
+            "Here you'll find a comprehensive overview of how to create, read, update and delete "
+                    + "books in this app.";
     public static final String GET_ALL_SUMMARY =
             "Get all books optionally with pagination and sorting";
     public static final String GET_ALL_DESCRIPTION = "Returns all books if not provided with"
