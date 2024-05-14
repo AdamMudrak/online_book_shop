@@ -2,9 +2,12 @@ package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.constants.AuthConstants;
 import com.example.onlinebookshop.constants.Constants;
+import com.example.onlinebookshop.dto.user.UserLoginRequestDto;
+import com.example.onlinebookshop.dto.user.UserLoginResponseDto;
 import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.UserResponseDto;
 import com.example.onlinebookshop.exceptions.RegistrationException;
+import com.example.onlinebookshop.security.AuthenticationService;
 import com.example.onlinebookshop.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @Operation(summary = AuthConstants.REGISTER_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_REGISTERED)
@@ -31,5 +35,13 @@ public class AuthController {
     public UserResponseDto registerUser(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         return userService.register(requestDto);
+    }
+
+    @Operation(summary = AuthConstants.LOGIN_SUMMARY)
+    @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_LOGGED_IN)
+    @ApiResponse(responseCode = Constants.CODE_400, description = Constants.INVALID_ENTITY_VALUE)
+    @PostMapping("/login")
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
+        return authenticationService.authenticate(request);
     }
 }
