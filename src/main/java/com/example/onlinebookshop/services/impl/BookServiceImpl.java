@@ -1,6 +1,7 @@
 package com.example.onlinebookshop.services.impl;
 
 import com.example.onlinebookshop.dto.book.BookDto;
+import com.example.onlinebookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
 import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
@@ -35,6 +36,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(pageable).stream()
         .map(bookMapper::toDto)
         .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllWithoutCategoryIds(Long id) {
+        return bookRepository.findAllByCategoryId(id).stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .toList();
     }
 
     @Override

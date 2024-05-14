@@ -1,6 +1,7 @@
 package com.example.onlinebookshop.services;
 
 import com.example.onlinebookshop.dto.book.BookDto;
+import com.example.onlinebookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
 import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
@@ -11,6 +12,8 @@ public interface BookService {
     BookDto save(CreateBookRequestDto requestDto);
 
     List<BookDto> findAll(Pageable pageable);
+
+    List<BookDtoWithoutCategoryIds> findAllWithoutCategoryIds(Long id);
 
     BookDto findById(Long id);
 
