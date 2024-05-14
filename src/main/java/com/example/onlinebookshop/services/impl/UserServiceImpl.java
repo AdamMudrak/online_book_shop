@@ -38,8 +38,6 @@ public class UserServiceImpl implements UserService {
 
     private void assignUserRole(User user) {
         Role userRole = roleRepository.findByName(Role.RoleName.USER);
-        Set<Role> roles = user.getRoles();
-        roles.add(userRole);
-        user.setRoles(roles);
+        user.setRoles(Set.of(userRole));
     }
 }
