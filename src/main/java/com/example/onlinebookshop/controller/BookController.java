@@ -2,10 +2,10 @@ package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.constants.BookConstants;
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.dto.book.BookDto;
-import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
         description = BookConstants.BOOK_API_DESCRIPTION)
 @RequestMapping(value = "/books")
 public class BookController {
-
     private final BookService bookService;
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -105,11 +104,14 @@ public class BookController {
     })
     @PutMapping("/{id}")
     public BookDto updateBook(@RequestBody @Valid UpdateBookRequestDto bookRequestDto,
-                              @PathVariable @Parameter(name = Constants.ID,
+                              @PathVariable @Parameter(
+                                      name = Constants.ID,
                                       description = BookConstants.VALID_ID_DESCRIPTION,
                                       example = Constants.ID_EXAMPLE) @Positive Long id,
-                             @Parameter(name = Constants.BOOLEAN,
-                             example = Constants.BOOLEAN_EXAMPLE) boolean areCategoriesReplaced) {
+                             @Parameter(
+                                     name = BookConstants.BOOLEAN,
+                                     description = BookConstants.BOOLEAN_DESCRIPTION)
+                                  boolean areCategoriesReplaced) {
         return bookService.update(bookRequestDto, id, areCategoriesReplaced);
     }
 
