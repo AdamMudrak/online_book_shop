@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.dto.category.request;
 
-import com.example.onlinebookshop.constants.CategoryDtoConstants;
+import com.example.onlinebookshop.constants.dtoconstants.CategoryDtoConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

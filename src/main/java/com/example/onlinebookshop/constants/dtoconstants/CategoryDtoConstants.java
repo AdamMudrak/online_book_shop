@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.constants;
+package com.example.onlinebookshop.constants.dtoconstants;
 
 public class CategoryDtoConstants {
     public static final String CATEGORY_NAME = "name";

@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.constants;
+package com.example.onlinebookshop.constants.dtoconstants;
 
 public class BookDtoConstants {
     public static final String TITLE = "title";

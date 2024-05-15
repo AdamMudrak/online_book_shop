@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.constants;
+package com.example.onlinebookshop.constants.dtoconstants;
 
 public class UserDtoConstants {
     public static final String EMAIL = "email";
