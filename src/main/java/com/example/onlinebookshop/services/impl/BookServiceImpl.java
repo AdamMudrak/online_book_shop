@@ -1,11 +1,11 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.book.BookDto;
-import com.example.onlinebookshop.dto.book.BookDtoWithoutCategoryIds;
-import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
-import com.example.onlinebookshop.dto.category.CategoryDto;
+import com.example.onlinebookshop.dto.book.response.BookDto;
+import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.BookMapper;

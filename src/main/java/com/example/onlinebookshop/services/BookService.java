@@ -1,10 +1,10 @@
 package com.example.onlinebookshop.services;
 
-import com.example.onlinebookshop.dto.book.BookDto;
-import com.example.onlinebookshop.dto.book.BookDtoWithoutCategoryIds;
-import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.response.BookDto;
+import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 

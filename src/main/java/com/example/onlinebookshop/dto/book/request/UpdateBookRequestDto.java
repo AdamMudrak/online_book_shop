@@ -1,7 +1,7 @@
-package com.example.onlinebookshop.dto.book;
+package com.example.onlinebookshop.dto.book.request;
 
 import com.example.onlinebookshop.constants.BookDtoConstants;
-import com.example.onlinebookshop.dto.category.CategoryDto;
+import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.validation.PathToFile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;

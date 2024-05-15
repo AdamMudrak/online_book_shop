@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
-import com.example.onlinebookshop.dto.user.UserResponseDto;
+import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
+import com.example.onlinebookshop.dto.user.response.UserResponseDto;
 import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void assignUserRole(User user) {
-        Role userRole = roleRepository.findByName(Role.RoleName.USER);
+        Role userRole = roleRepository.findByName(Role.RoleName.ROLE_USER);
         user.setRoles(Set.of(userRole));
     }
 }

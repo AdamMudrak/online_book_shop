@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.dto.book;
+package com.example.onlinebookshop.dto.book.request;
 
 import com.example.onlinebookshop.constants.BookDtoConstants;
 import com.example.onlinebookshop.validation.ValidPriceRange;
