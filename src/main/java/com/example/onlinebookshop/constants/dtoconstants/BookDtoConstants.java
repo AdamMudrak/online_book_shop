@@ -12,7 +12,7 @@ public class BookDtoConstants {
             "Must be exactly equal to the author in DB. You can specify many authors";
 
     public static final String CATEGORY = "categoryIds";
-    public static final String CATEGORY_EXAMPLE = "1";
+    public static final String CATEGORY_EXAMPLE = "[1,2]";
 
     public static final String ISBN = "isbn";
     public static final String ISBN_EXAMPLE = "1234567890";
