@@ -9,7 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 public record CreateCategoryDto(
         @Schema(name = CategoryDtoConstants.CATEGORY_NAME,
         example = CategoryDtoConstants.CATEGORY_EXAMPLE,
-        description = CategoryDtoConstants.CATEGORY_NAME_DESCRIPTION)
+        description = CategoryDtoConstants.CATEGORY_NAME_DESCRIPTION,
+        requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank String name,
 
         @Schema(name = CategoryDtoConstants.CATEGORY_DESCRIPTION,
