@@ -13,5 +13,6 @@ public record UpdateCategoryDto(
         @NotBlank String name,
 
         @Schema(name = CategoryDtoConstants.CATEGORY_DESCRIPTION,
+        example = CategoryDtoConstants.CATEGORY_DESCRIPTION_EXPLANATION,
         description = CategoryDtoConstants.CATEGORY_DESCRIPTION_EXPLANATION)
         String description){}
