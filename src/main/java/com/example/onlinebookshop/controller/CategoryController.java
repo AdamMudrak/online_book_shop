@@ -67,9 +67,9 @@ public class CategoryController {
         return categoryService.getById(id);
     }
 
-    //TODO ???
     @GetMapping("/{id}/books")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable @Parameter(name = Constants.ID,
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            @PathVariable @Parameter(name = Constants.ID,
             description = BookConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         return bookService.findAllWithoutCategoryIds(id);
