@@ -5,16 +5,18 @@ import com.example.onlinebookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
 import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.category.CategoryDto;
 import com.example.onlinebookshop.entities.Book;
-import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.BookMapper;
+import com.example.onlinebookshop.mapper.CategoryMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
 import com.example.onlinebookshop.services.BookService;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final CategoryMapper categoryMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
@@ -65,7 +68,12 @@ public class BookServiceImpl implements BookService {
                 updatedBook.setId(id);
                 return bookMapper.toDto(bookRepository.save(updatedBook));
             }
-            Set<Category> presentCategories = book.get().getCategories();
+            Set<CategoryDto> presentCategories = book
+                    .get()
+                    .getCategories()
+                    .stream()
+                    .map(categoryMapper::toCategoryDto)
+                    .collect(Collectors.toSet());
             presentCategories.addAll(requestDto.getCategories());
             requestDto.setCategories(presentCategories);
             updatedBook = bookMapper.toUpdateModel(requestDto);

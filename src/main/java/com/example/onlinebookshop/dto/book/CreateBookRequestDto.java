@@ -3,7 +3,7 @@ package com.example.onlinebookshop.dto.book;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 import com.example.onlinebookshop.constants.BookDtoConstants;
-import com.example.onlinebookshop.entities.Category;
+import com.example.onlinebookshop.dto.category.CategoryDto;
 import com.example.onlinebookshop.validation.PathToFile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,7 +31,7 @@ public class CreateBookRequestDto {
     @Schema(name = BookDtoConstants.CATEGORY, example = BookDtoConstants.CATEGORY_EXAMPLE,
             requiredMode = REQUIRED)
     @NotBlank
-    private Set<Category> categories = new HashSet<>();
+    private Set<CategoryDto> categories = new HashSet<>();
     @Schema(name = BookDtoConstants.ISBN, example = BookDtoConstants.ISBN_EXAMPLE,
             description = BookDtoConstants.ISBN_DESCRIPTION,
             requiredMode = REQUIRED)
