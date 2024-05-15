@@ -86,7 +86,7 @@ public class CategoryController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(@RequestBody CreateCategoryDto categoryDto) {
+    public CategoryDto createCategory(@RequestBody @Valid CreateCategoryDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
