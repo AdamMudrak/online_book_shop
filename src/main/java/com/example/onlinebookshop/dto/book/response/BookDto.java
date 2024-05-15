@@ -2,16 +2,12 @@ package com.example.onlinebookshop.dto.book.response;
 
 import java.math.BigDecimal;
 import java.util.Set;
-import lombok.Data;
 
-@Data
-public class BookDto {
-    private Long id;
-    private String title;
-    private String author;
-    private Set<Long> categoryIds;
-    private String isbn;
-    private BigDecimal price;
-    private String description;
-    private String coverImage;
-}
+public record BookDto(Long id,
+                      String title,
+                      String author,
+                      Set<Long> categoryIds,
+                      String isbn,
+                      BigDecimal price,
+                      String description,
+                      String coverImage){}

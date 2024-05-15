@@ -11,13 +11,16 @@ import jakarta.validation.constraints.Size;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record UserLoginRequestDto(
-        @Schema(name = UserDtoConstants.EMAIL, example = UserDtoConstants.EMAIL_EXAMPLE,
-                requiredMode = REQUIRED)
+        @Schema(name = UserDtoConstants.EMAIL,
+        example = UserDtoConstants.EMAIL_EXAMPLE,
+        requiredMode = REQUIRED)
         @NotBlank
         @Email String email,
-        @Schema(name = UserDtoConstants.PASSWORD, example = UserDtoConstants.PASSWORD_EXAMPLE,
-                description = UserDtoConstants.PASSWORD_DESCRIPTION,
-                requiredMode = REQUIRED)
+
+        @Schema(name = UserDtoConstants.PASSWORD,
+        example = UserDtoConstants.PASSWORD_EXAMPLE,
+        description = UserDtoConstants.PASSWORD_DESCRIPTION,
+        requiredMode = REQUIRED)
         @Size(min = 8, max = 32)
         @NotBlank
         String password) {
