@@ -1,7 +1,6 @@
 package com.example.onlinebookshop.dto.book.request;
 
 import com.example.onlinebookshop.constants.dtoconstants.BookDtoConstants;
-import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.validation.PathToFile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +20,7 @@ public class UpdateBookRequestDto {
     @Schema(name = BookDtoConstants.AUTHOR, example = BookDtoConstants.AUTHOR_EXAMPLE)
     private String author;
     @Schema(name = BookDtoConstants.CATEGORY, example = BookDtoConstants.CATEGORY_EXAMPLE)
-    private Set<CategoryDto> categories = new HashSet<>();
+    private Set<Long> categoryIds = new HashSet<>();
     @Schema(name = BookDtoConstants.ISBN, example = BookDtoConstants.ISBN_EXAMPLE,
             description = BookDtoConstants.ISBN_DESCRIPTION)
     @Size(min = 10, max = 17)
