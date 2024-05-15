@@ -5,11 +5,10 @@ import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
 import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
 import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
-import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.entities.Book;
+import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.BookMapper;
-import com.example.onlinebookshop.mapper.CategoryMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
 import com.example.onlinebookshop.services.BookService;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final CategoryMapper categoryMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
@@ -62,23 +60,11 @@ public class BookServiceImpl implements BookService {
     public BookDto update(UpdateBookRequestDto requestDto, Long id, boolean areCategoriesReplaced) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
-            Book updatedBook;
-            if (areCategoriesReplaced) {
-                updatedBook = bookMapper.toUpdateModel(requestDto);
-                updatedBook.setId(id);
-                return bookMapper.toDto(bookRepository.save(updatedBook));
+            if (!areCategoriesReplaced) {
+                addToPresentCategories(requestDto, book.get());
+                return saveToDbAndGetSavedResult(requestDto, id);
             }
-            Set<CategoryDto> presentCategories = book
-                    .get()
-                    .getCategories()
-                    .stream()
-                    .map(categoryMapper::toCategoryDto)
-                    .collect(Collectors.toSet());
-            presentCategories.addAll(requestDto.getCategories());
-            requestDto.setCategories(presentCategories);
-            updatedBook = bookMapper.toUpdateModel(requestDto);
-            updatedBook.setId(id);
-            return bookMapper.toDto(bookRepository.save(updatedBook));
+            return saveToDbAndGetSavedResult(requestDto, id);
         }
         throw new EntityNotFoundException("Can't find and update book by id " + id);
     }
@@ -100,5 +86,19 @@ public class BookServiceImpl implements BookService {
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    private void addToPresentCategories(UpdateBookRequestDto requestDto, Book book) {
+        Set<Long> presentCategoriesIds = book.getCategories().stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet());
+        presentCategoriesIds.addAll(requestDto.getCategoryIds());
+        requestDto.setCategoryIds(presentCategoriesIds);
+    }
+
+    private BookDto saveToDbAndGetSavedResult(UpdateBookRequestDto requestDto, Long id) {
+        Book book = bookMapper.toUpdateModel(requestDto);
+        book.setId(id);
+        return bookMapper.toDto(bookRepository.save(book));
     }
 }
