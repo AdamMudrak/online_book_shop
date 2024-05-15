@@ -17,7 +17,7 @@ public interface BookService {
 
     BookDto findById(Long id);
 
-    BookDto update(UpdateBookRequestDto requestDto, Long id);
+    BookDto update(UpdateBookRequestDto requestDto, Long id, boolean areCategoriesReplaced);
 
     void delete(Long id);
 

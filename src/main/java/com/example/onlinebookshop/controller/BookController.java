@@ -107,8 +107,10 @@ public class BookController {
     public BookDto updateBook(@RequestBody @Valid UpdateBookRequestDto bookRequestDto,
                               @PathVariable @Parameter(name = Constants.ID,
                                       description = BookConstants.VALID_ID_DESCRIPTION,
-                                      example = Constants.ID_EXAMPLE) @Positive Long id) {
-        return bookService.update(bookRequestDto, id);
+                                      example = Constants.ID_EXAMPLE) @Positive Long id,
+                             @Parameter(name = Constants.BOOLEAN,
+                             example = Constants.BOOLEAN_EXAMPLE) boolean areCategoriesReplaced) {
+        return bookService.update(bookRequestDto, id, areCategoriesReplaced);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

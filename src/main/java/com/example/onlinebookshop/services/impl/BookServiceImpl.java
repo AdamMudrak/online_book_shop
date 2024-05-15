@@ -6,6 +6,7 @@ import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.book.CreateBookRequestDto;
 import com.example.onlinebookshop.dto.book.UpdateBookRequestDto;
 import com.example.onlinebookshop.entities.Book;
+import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.BookMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
@@ -13,6 +14,7 @@ import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationB
 import com.example.onlinebookshop.services.BookService;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -54,10 +56,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto update(UpdateBookRequestDto requestDto, Long id) {
+    public BookDto update(UpdateBookRequestDto requestDto, Long id, boolean areCategoriesReplaced) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
-            Book updatedBook = bookMapper.toUpdateModel(requestDto);
+            Book updatedBook;
+            if (areCategoriesReplaced) {
+                updatedBook = bookMapper.toUpdateModel(requestDto);
+                updatedBook.setId(id);
+                return bookMapper.toDto(bookRepository.save(updatedBook));
+            }
+            Set<Category> presentCategories = book.get().getCategories();
+            presentCategories.addAll(requestDto.getCategories());
+            requestDto.setCategories(presentCategories);
+            updatedBook = bookMapper.toUpdateModel(requestDto);
             updatedBook.setId(id);
             return bookMapper.toDto(bookRepository.save(updatedBook));
         }
