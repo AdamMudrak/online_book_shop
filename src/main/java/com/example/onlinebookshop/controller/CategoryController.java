@@ -1,11 +1,11 @@
 package com.example.onlinebookshop.controller;
 
-import com.example.onlinebookshop.constants.BookConstants;
 import com.example.onlinebookshop.constants.CategoryConstants;
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.dto.book.BookDtoWithoutCategoryIds;
-import com.example.onlinebookshop.dto.category.CategoryDto;
-import com.example.onlinebookshop.dto.category.UpdateCategoryDto;
+import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.services.BookService;
 import com.example.onlinebookshop.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,7 +70,7 @@ public class CategoryController {
     @GetMapping("/{id}/books")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             @PathVariable @Parameter(name = Constants.ID,
-            description = BookConstants.VALID_ID_DESCRIPTION,
+            description = CategoryConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         return bookService.findAllWithoutCategoryIds(id);
     }
@@ -86,7 +86,7 @@ public class CategoryController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(CategoryDto categoryDto) {
+    public CategoryDto createCategory(@RequestBody CreateCategoryDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
@@ -120,7 +120,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable @Parameter(name = Constants.ID,
-            description = BookConstants.VALID_ID_DESCRIPTION,
+            description = CategoryConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         categoryService.deleteById(id);
     }
