@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate-categories-table
+      author: AdamMudrak
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO categories (name, description)
+              VALUES
+              ('Horror', 'Scary books where some cruel or supernatural things happen'),
+              ('Fantasy', 'Fascinating books about fabulous incredible events'),
+              ('Fiction', 'Interesting books about imaginary though possible events');
+              
