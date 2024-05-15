@@ -38,5 +38,6 @@ public class BookConstants {
 
     public static final String BOOLEAN = "areCategoriesReplaced";
     public static final String BOOLEAN_DESCRIPTION =
-            "Choose if want to replace or add to existing categories list";
+            "\"true\" if want to replace or \"false\" "
+                    + "if you want to add to existing categories list";
 }
