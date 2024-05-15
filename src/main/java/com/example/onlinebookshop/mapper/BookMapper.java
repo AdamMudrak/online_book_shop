@@ -19,12 +19,6 @@ public interface BookMapper {
     @Mapping(target = "categoryIds", ignore = true)
     BookDto toDto(Book book);
 
-    Book toCreateModel(CreateBookRequestDto requestDto);
-
-    Book toUpdateModel(UpdateBookRequestDto requestDto);
-
-    BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
-
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
         Set<Long> categoryIds = book.getCategories().stream()
@@ -32,4 +26,28 @@ public interface BookMapper {
                 .collect(Collectors.toSet());
         bookDto.setCategoryIds(categoryIds);
     }
+
+    @Mapping(target = "categories", ignore = true)
+    Book toCreateModel(CreateBookRequestDto requestDto);
+
+    @Mapping(target = "categories", ignore = true)
+    Book toUpdateModel(UpdateBookRequestDto requestDto);
+
+    @AfterMapping
+    default void setCategories(@MappingTarget Book book, CreateBookRequestDto bookDto) {
+        Set<Category> categories = bookDto.getCategoryIds().stream()
+                .map(Category::new)
+                .collect(Collectors.toSet());
+        book.setCategories(categories);
+    }
+
+    @AfterMapping
+    default void setCategories(@MappingTarget Book book, UpdateBookRequestDto bookDto) {
+        Set<Category> categories = bookDto.getCategoryIds().stream()
+                .map(Category::new)
+                .collect(Collectors.toSet());
+        book.setCategories(categories);
+    }
+
+    BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 }
