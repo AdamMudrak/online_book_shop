@@ -17,6 +17,4 @@ public class Constants {
     public static final String CODE_400 = "400";
     public static final String ID = "id";
     public static final String ID_EXAMPLE = "1";
-    public static final String BOOLEAN = "boolean";
-    public static final String BOOLEAN_EXAMPLE = "true / false";
 }

@@ -28,4 +28,7 @@ public class BookConstants {
             {"page": 0,
             "size": 5,
              "sort": "price,DESC"}""";
+    public static final String BOOLEAN = "areCategoriesReplaced";
+    public static final String BOOLEAN_DESCRIPTION =
+            "Choose if want to replace or add to existing categories list";
 }
