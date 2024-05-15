@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.constants;
+package com.example.onlinebookshop.constants.controllerconstants;
 
 public class CategoryConstants {
     public static final String CATEGORY_API_NAME = "Categories API";

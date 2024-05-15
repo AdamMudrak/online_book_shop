@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.controller;
 
-import com.example.onlinebookshop.constants.BookConstants;
+import com.example.onlinebookshop.constants.controllerconstants.BookConstants;
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;

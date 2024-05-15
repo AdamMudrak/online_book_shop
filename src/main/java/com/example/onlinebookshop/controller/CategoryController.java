@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.controller;
 
-import com.example.onlinebookshop.constants.CategoryConstants;
+import com.example.onlinebookshop.constants.controllerconstants.CategoryConstants;
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
