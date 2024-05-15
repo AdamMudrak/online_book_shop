@@ -11,6 +11,7 @@ import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.BookMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
+import com.example.onlinebookshop.repositories.category.CategoryRepository;
 import com.example.onlinebookshop.services.BookService;
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +26,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
+        isCategoryIdPresentInDb(requestDto);
         Book book = bookMapper.toCreateModel(requestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -43,9 +46,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDtoWithoutCategoryIds> findAllWithoutCategoryIds(Long id) {
-        return bookRepository.findAllByCategoryId(id).stream()
-                .map(bookMapper::toDtoWithoutCategories)
-                .toList();
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isPresent()) {
+            return bookRepository.findAllByCategoryId(id).stream()
+                    .map(bookMapper::toDtoWithoutCategories)
+                    .toList();
+        }
+        throw new EntityNotFoundException("Can't find category by id " + id);
     }
 
     @Override
@@ -60,9 +67,9 @@ public class BookServiceImpl implements BookService {
     public BookDto update(UpdateBookRequestDto requestDto, Long id, boolean areCategoriesReplaced) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
+            isCategoryIdPresentInDb(requestDto);
             if (!areCategoriesReplaced) {
-                addToPresentCategories(requestDto, book.get());
-                return saveToDbAndGetSavedResult(requestDto, id);
+                addIdsFromDtoToDbBook(requestDto, book.get());
             }
             return saveToDbAndGetSavedResult(requestDto, id);
         }
@@ -88,7 +95,17 @@ public class BookServiceImpl implements BookService {
                 .toList();
     }
 
-    private void addToPresentCategories(UpdateBookRequestDto requestDto, Book book) {
+    private void isCategoryIdPresentInDb(CreateBookRequestDto requestDto) {
+        requestDto.getCategoryIds().forEach(id -> categoryRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Can't find category by id " + id)));
+    }
+
+    private void isCategoryIdPresentInDb(UpdateBookRequestDto requestDto) {
+        requestDto.getCategoryIds().forEach(id -> categoryRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Can't find category by id " + id)));
+    }
+
+    private void addIdsFromDtoToDbBook(UpdateBookRequestDto requestDto, Book book) {
         Set<Long> presentCategoriesIds = book.getCategories().stream()
                 .map(Category::getId)
                 .collect(Collectors.toSet());
