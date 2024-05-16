@@ -8,6 +8,7 @@ import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
+import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
 import com.example.onlinebookshop.mapper.BookMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
@@ -32,6 +33,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
+        if (bookRepository.existsByIsbn(requestDto.getIsbn())) {
+            throw new ParameterAlreadyExistsException("Another book with ISBN "
+                    + requestDto.getIsbn() + " already exists in DB");
+        }
         isCategoryIdPresentInDb(requestDto);
         Book book = bookMapper.toCreateModel(requestDto);
         return bookMapper.toDto(bookRepository.save(book));
@@ -67,6 +72,11 @@ public class BookServiceImpl implements BookService {
     public BookDto update(UpdateBookRequestDto requestDto, Long id, boolean areCategoriesReplaced) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
+            Optional<Book> bookByIsbn = bookRepository.findBookByIsbn(requestDto.getIsbn());
+            if (bookByIsbn.isPresent() && !bookByIsbn.get().getId().equals(id)) {
+                throw new ParameterAlreadyExistsException("Book with ISBN " + requestDto.getIsbn()
+                        + " already exists in DB");
+            }
             isCategoryIdPresentInDb(requestDto);
             if (!areCategoriesReplaced) {
                 addIdsFromDtoToDbBook(requestDto, book.get());

@@ -14,4 +14,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     List<Book> findAllByCategoryId(Long categoryId);
 
     Optional<Book> findBookByIsbn(String isbn);
+
+    boolean existsByIsbn(String isbn);
 }
