@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.dto.user;
+package com.example.onlinebookshop.dto.user.response;
 
 public record UserResponseDto(Long id,
                               String email,

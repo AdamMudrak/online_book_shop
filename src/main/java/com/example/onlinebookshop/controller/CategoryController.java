@@ -1,12 +1,13 @@
 package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.constants.controllerconstants.BookConstants;
-import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
-import com.example.onlinebookshop.dto.book.response.BookDto;
+import com.example.onlinebookshop.constants.controllerconstants.CategoryConstants;
+import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.services.BookService;
+import com.example.onlinebookshop.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,25 +34,26 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@Tag(name = BookConstants.BOOK_API_NAME,
-        description = BookConstants.BOOK_API_DESCRIPTION)
-@RequestMapping(value = "/books")
-public class BookController {
+@Tag(name = CategoryConstants.CATEGORY_API_NAME,
+        description = CategoryConstants.CATEGORY_API_DESCRIPTION)
+@RequestMapping(value = "/categories")
+public class CategoryController {
+    private final CategoryService categoryService;
     private final BookService bookService;
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = BookConstants.GET_ALL_SUMMARY,
-            description = BookConstants.GET_ALL_DESCRIPTION)
+    @Operation(summary = CategoryConstants.GET_ALL_SUMMARY,
+            description = CategoryConstants.GET_ALL_DESCRIPTION)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
-    public List<BookDto> getAll(
-            @Parameter(example = BookConstants.PAGEABLE_EXAMPLE) Pageable pageable) {
-        return bookService.findAll(pageable);
+    public List<CategoryDto> getAll(
+            @Parameter(example = CategoryConstants.PAGEABLE_EXAMPLE) Pageable pageable) {
+        return categoryService.findAll(pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = BookConstants.GET_BY_ID_SUMMARY,
-            description = BookConstants.GET_BY_ID_DESCRIPTION)
+    @Operation(summary = CategoryConstants.GET_BY_ID_SUMMARY,
+            description = CategoryConstants.GET_BY_ID_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_RETRIEVED),
@@ -59,27 +61,23 @@ public class BookController {
                     description = Constants.INVALID_ID_DESCRIPTION)
     })
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable @Parameter(name = Constants.ID,
-            description = BookConstants.VALID_ID_DESCRIPTION,
+    public CategoryDto getCategoryById(@PathVariable @Parameter(name = Constants.ID,
+            description = CategoryConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
-        return bookService.findById(id);
+        return categoryService.getById(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = BookConstants.SEARCH_BOOKS_SUMMARY,
-            description = BookConstants.SEARCH_BOOKS_DESCRIPTION)
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = Constants.CODE_200,
-                    description = Constants.SUCCESSFULLY_RETRIEVED),
-    })
-    @GetMapping("/search")
-    public List<BookDto> searchBooks(@Valid BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    @GetMapping("/{id}/books")
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            @PathVariable @Parameter(name = Constants.ID,
+            description = CategoryConstants.VALID_ID_DESCRIPTION,
+            example = Constants.ID_EXAMPLE) @Positive Long id) {
+        return bookService.findAllWithoutCategoryIds(id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = BookConstants.CREATE_BOOK_SUMMARY,
-            description = BookConstants.CREATE_BOOK_DESCRIPTION)
+    @Operation(summary = CategoryConstants.CREATE_CATEGORY_SUMMARY,
+            description = CategoryConstants.CREATE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_201,
                     description = Constants.SUCCESSFULLY_CREATED),
@@ -88,13 +86,13 @@ public class BookController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto) {
-        return bookService.save(bookRequestDto);
+    public CategoryDto createCategory(@RequestBody @Valid CreateCategoryDto categoryDto) {
+        return categoryService.save(categoryDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = BookConstants.UPDATE_BOOK_SUMMARY,
-            description = BookConstants.UPDATE_BOOK_DESCRIPTION)
+    @Operation(summary = CategoryConstants.UPDATE_CATEGORY_SUMMARY,
+            description = CategoryConstants.UPDATE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_UPDATED),
@@ -103,21 +101,16 @@ public class BookController {
                             + ". Or " + Constants.INVALID_ENTITY_VALUE)
     })
     @PutMapping("/{id}")
-    public BookDto updateBook(@RequestBody @Valid UpdateBookRequestDto bookRequestDto,
-                              @PathVariable @Parameter(
-                                      name = Constants.ID,
-                                      description = BookConstants.VALID_ID_DESCRIPTION,
-                                      example = Constants.ID_EXAMPLE) @Positive Long id,
-                             @Parameter(
-                                     name = BookConstants.BOOLEAN,
-                                     description = BookConstants.BOOLEAN_DESCRIPTION)
-                                  boolean areCategoriesReplaced) {
-        return bookService.update(bookRequestDto, id, areCategoriesReplaced);
+    public CategoryDto updateCategory(@RequestBody @Valid UpdateCategoryDto categoryDto,
+                                      @PathVariable @Parameter(name = Constants.ID,
+                                              description = CategoryConstants.VALID_ID_DESCRIPTION,
+                                              example = Constants.ID_EXAMPLE) @Positive Long id) {
+        return categoryService.update(categoryDto, id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = BookConstants.DELETE_BOOK_SUMMARY,
-            description = BookConstants.DELETE_BOOK_DESCRIPTION)
+    @Operation(summary = CategoryConstants.DELETE_CATEGORY_SUMMARY,
+            description = CategoryConstants.DELETE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_204,
                     description = Constants.CODE_204_DESCRIPTION),
@@ -126,9 +119,9 @@ public class BookController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Parameter(name = Constants.ID,
-            description = BookConstants.VALID_ID_DESCRIPTION,
+    public void deleteCategory(@PathVariable @Parameter(name = Constants.ID,
+            description = CategoryConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
-        bookService.delete(id);
+        categoryService.deleteById(id);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.constants;
+package com.example.onlinebookshop.constants.dtoconstants;
 
 public class BookDtoConstants {
     public static final String TITLE = "title";
@@ -10,6 +10,9 @@ public class BookDtoConstants {
     public static final String AUTHOR_EXAMPLE = "J.K. Rowling";
     public static final String AUTHOR_DESCRIPTION =
             "Must be exactly equal to the author in DB. You can specify many authors";
+
+    public static final String CATEGORY = "categoryIds";
+    public static final String CATEGORY_EXAMPLE = "[1,2]";
 
     public static final String ISBN = "isbn";
     public static final String ISBN_EXAMPLE = "1234567890";

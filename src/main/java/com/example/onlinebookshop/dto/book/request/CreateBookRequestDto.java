@@ -1,8 +1,8 @@
-package com.example.onlinebookshop.dto.book;
+package com.example.onlinebookshop.dto.book.request;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
-import com.example.onlinebookshop.constants.BookDtoConstants;
+import com.example.onlinebookshop.constants.dtoconstants.BookDtoConstants;
 import com.example.onlinebookshop.validation.PathToFile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,6 +12,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 @Data
@@ -25,6 +27,9 @@ public class CreateBookRequestDto {
             requiredMode = REQUIRED)
     @NotBlank
     private String author;
+    @Schema(name = BookDtoConstants.CATEGORY, example = BookDtoConstants.CATEGORY_EXAMPLE,
+            requiredMode = REQUIRED)
+    private Set<Long> categoryIds = new HashSet<>();
     @Schema(name = BookDtoConstants.ISBN, example = BookDtoConstants.ISBN_EXAMPLE,
             description = BookDtoConstants.ISBN_DESCRIPTION,
             requiredMode = REQUIRED)

@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.security;
 
-import com.example.onlinebookshop.constants.AuthConstants;
+import com.example.onlinebookshop.constants.controllerconstants.AuthConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

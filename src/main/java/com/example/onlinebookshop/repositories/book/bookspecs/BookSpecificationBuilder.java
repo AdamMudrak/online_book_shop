@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.repositories.book.bookspecs;
 
-import com.example.onlinebookshop.dto.book.BookSearchParametersDto;
+import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.repositories.specifications.SpecificationBuilder;
 import com.example.onlinebookshop.repositories.specifications.SpecificationProviderManager;
@@ -16,29 +16,29 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     @Override
     public Specification<Book> build(BookSearchParametersDto bookSearchParametersDto) {
         Specification<Book> specification = Specification.where(null);
-        if (bookSearchParametersDto.getTitles() != null
-                && bookSearchParametersDto.getTitles().length > 0) {
+        if (bookSearchParametersDto.titles() != null
+                && bookSearchParametersDto.titles().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("title")
-                    .getSpecification(bookSearchParametersDto.getTitles()));
+                    .getSpecification(bookSearchParametersDto.titles()));
         }
-        if (bookSearchParametersDto.getAuthors() != null
-                && bookSearchParametersDto.getAuthors().length > 0) {
+        if (bookSearchParametersDto.authors() != null
+                && bookSearchParametersDto.authors().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("author")
-                    .getSpecification(bookSearchParametersDto.getAuthors()));
+                    .getSpecification(bookSearchParametersDto.authors()));
         }
-        if (bookSearchParametersDto.getFromPrice() != null) {
+        if (bookSearchParametersDto.fromPrice() != null) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("fromPrice")
                     .getSpecification(new String[]{String
-                            .valueOf(bookSearchParametersDto.getFromPrice())}));
+                            .valueOf(bookSearchParametersDto.fromPrice())}));
         }
-        if (bookSearchParametersDto.getToPrice() != null) {
+        if (bookSearchParametersDto.toPrice() != null) {
             specification = specification.and(bookSpecificationProviderManager
                     .getSpecificationProvider("toPrice")
                     .getSpecification(new String[]{String
-                            .valueOf(bookSearchParametersDto.getToPrice())}));
+                            .valueOf(bookSearchParametersDto.toPrice())}));
         }
         return specification;
     }

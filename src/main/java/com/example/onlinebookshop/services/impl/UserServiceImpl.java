@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.user.UserRegistrationRequestDto;
-import com.example.onlinebookshop.dto.user.UserResponseDto;
+import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
+import com.example.onlinebookshop.dto.user.response.UserResponseDto;
 import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
@@ -25,13 +25,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
-        if (userRepository.existsByEmail(requestDto.getEmail())) {
+        if (userRepository.existsByEmail(requestDto.email())) {
             throw new RegistrationException("User with email "
-                    + requestDto.getEmail() + " already exists");
+                    + requestDto.email() + " already exists");
         }
         User user = userMapper.toUser(requestDto);
         assignUserRole(user);
-        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(requestDto.password()));
         userRepository.save(user);
         return userMapper.toUserResponseDto(user);
     }
