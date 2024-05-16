@@ -32,7 +32,7 @@ public class Book {
     private String title;
     @Column(nullable = false)
     private String author;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "books_categories",
             joinColumns = @JoinColumn(name = "book_id"),
