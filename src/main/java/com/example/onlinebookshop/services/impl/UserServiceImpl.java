@@ -3,10 +3,12 @@ package com.example.onlinebookshop.services.impl;
 import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.response.UserResponseDto;
 import com.example.onlinebookshop.entities.Role;
+import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
 import com.example.onlinebookshop.mapper.UserMapper;
 import com.example.onlinebookshop.repositories.role.RoleRepository;
+import com.example.onlinebookshop.repositories.shoppingcart.ShoppingCartRepository;
 import com.example.onlinebookshop.repositories.user.UserRepository;
 import com.example.onlinebookshop.services.UserService;
 import java.util.Set;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -31,13 +34,21 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toUser(requestDto);
         assignUserRole(user);
+        assignShoppingCart(user);
         user.setPassword(passwordEncoder.encode(requestDto.password()));
         userRepository.save(user);
+        shoppingCartRepository.save(assignShoppingCart(user));
         return userMapper.toUserResponseDto(user);
     }
 
     private void assignUserRole(User user) {
         Role userRole = roleRepository.findByName(Role.RoleName.ROLE_USER);
         user.setRoles(Set.of(userRole));
+    }
+    
+    private ShoppingCart assignShoppingCart(User user) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(user);
+        return shoppingCart;
     }
 }
