@@ -2,6 +2,7 @@ package com.example.onlinebookshop.exceptions;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
@@ -61,6 +62,17 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 ex.getMessage(),
                 new HttpHeaders(),
                 NOT_FOUND,
+                request);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    protected ResponseEntity<Object> handleForbidden(
+            RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(
+                ex,
+                ex.getMessage(),
+                new HttpHeaders(),
+                FORBIDDEN,
                 request);
     }
 
