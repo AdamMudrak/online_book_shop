@@ -16,6 +16,6 @@ public interface ShoppingCartMapper {
     @AfterMapping
     default void setUserId(@MappingTarget ShoppingCartDto shoppingCartDto,
                            ShoppingCart shoppingCart) {
-        Long userId = shoppingCart.getUser().getId();
+        shoppingCartDto.setUserId(shoppingCart.getUser().getId());
     }
 }
