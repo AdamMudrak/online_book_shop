@@ -3,7 +3,6 @@ package com.example.onlinebookshop.controller;
 import com.example.onlinebookshop.dto.cartitem.request.AddCartItemDto;
 import com.example.onlinebookshop.dto.shoppingcart.request.UpdateQuantityInShoppingCartDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
-import com.example.onlinebookshop.dto.user.request.SendUserTokenRequestDto;
 import com.example.onlinebookshop.services.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,28 +20,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
-    @GetMapping
-    public ShoppingCartDto getShoppingCartByUserId(@RequestBody SendUserTokenRequestDto token) {
-        return shoppingCartService.getShoppingCartByUserId(token);
+    @GetMapping("/{userId}")
+    public ShoppingCartDto getShoppingCartByUserId(@PathVariable Long userId) {
+        return shoppingCartService.getShoppingCartByUserId(userId);
     }
 
-    @PostMapping
-    public ShoppingCartDto addBookToShoppingCart(@RequestBody SendUserTokenRequestDto token,
+    @PostMapping("/{userId}")
+    public ShoppingCartDto addBookToShoppingCart(@PathVariable Long userId,
                                                  @RequestBody AddCartItemDto addCartItemDto) {
-        return shoppingCartService.addBookToShoppingCart(token, addCartItemDto);
+        return shoppingCartService.addBookToShoppingCart(userId, addCartItemDto);
     }
 
-    @PutMapping("/cart-items/{cartItemId}")
-    public ShoppingCartDto updateBookQuantity(@RequestBody SendUserTokenRequestDto token,
+    @PutMapping("/cart-items/{userId}/{cartItemId}")
+    public ShoppingCartDto updateBookQuantity(@PathVariable Long userId,
                                               @PathVariable Long cartItemId,
                                               @RequestBody
                                               UpdateQuantityInShoppingCartDto quantity) {
-        return shoppingCartService.updateBookQuantity(token, cartItemId, quantity);
+        return shoppingCartService.updateBookQuantity(userId, cartItemId, quantity);
     }
 
-    @DeleteMapping("/cart-items/{cartItemId}")
-    public void deleteBookFromShoppingCart(@RequestBody SendUserTokenRequestDto token,
+    @DeleteMapping("/cart-items/{userId}/{cartItemId}")
+    public void deleteBookFromShoppingCart(@PathVariable Long userId,
                                            @PathVariable Long cartItemId) {
-        shoppingCartService.deleteBookFromShoppingCart(token, cartItemId);
+        shoppingCartService.deleteBookFromShoppingCart(userId, cartItemId);
     }
 }
