@@ -27,9 +27,8 @@ public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "shoppingCart")
     private Set<CartItem> cartItems = new HashSet<>();
