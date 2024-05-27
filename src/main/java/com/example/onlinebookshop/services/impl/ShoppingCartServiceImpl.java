@@ -29,18 +29,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BookRepository bookRepository;
 
     @Override
-    public ShoppingCartDto getShoppingCartByUserId(Long userId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
+    public ShoppingCartDto getShoppingCartByUserEmail(String email) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
         ShoppingCartDto shoppingCartDto =
-                shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.findByUserId(userId));
+                shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.findByUserEmail(email));
         setCartItemsInDto(shoppingCartDto, shoppingCart);
         return shoppingCartDto;
     }
 
     @Override
-    public ShoppingCartDto addBookToShoppingCart(Long userId,
+    public ShoppingCartDto addBookToShoppingCart(String email,
                                                  AddCartItemDto addCartItemDto) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
 
         CartItem cartItem = new CartItem();
         cartItem.setShoppingCart(shoppingCart);
@@ -57,9 +57,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto updateBookQuantity(Long userId, Long cartItemId,
+    public ShoppingCartDto updateBookQuantity(String email, Long cartItemId,
                                               UpdateQuantityInShoppingCartDto quantity) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
         CartItem cartItem = getCartItemById(shoppingCart, cartItemId);
         cartItem.setQuantity(quantity.quantity());
         ShoppingCartDto shoppingCartDto = shoppingCartMapper.toShoppingCartDto(shoppingCart);
@@ -68,8 +68,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteBookFromShoppingCart(Long userId, Long cartItemId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
+    public void deleteBookFromShoppingCart(String email, Long cartItemId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
         CartItem cartItem = getCartItemById(shoppingCart, cartItemId);
         shoppingCart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);

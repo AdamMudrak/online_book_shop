@@ -5,13 +5,13 @@ import com.example.onlinebookshop.dto.shoppingcart.request.UpdateQuantityInShopp
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 
 public interface ShoppingCartService {
-    ShoppingCartDto getShoppingCartByUserId(Long userId);
+    ShoppingCartDto getShoppingCartByUserEmail(String email);
 
-    ShoppingCartDto addBookToShoppingCart(Long userId,
+    ShoppingCartDto addBookToShoppingCart(String email,
                                           AddCartItemDto addCartItemDto);
 
-    ShoppingCartDto updateBookQuantity(Long userId, Long cartItemId,
+    ShoppingCartDto updateBookQuantity(String email, Long cartItemId,
                                        UpdateQuantityInShoppingCartDto quantity);
 
-    void deleteBookFromShoppingCart(Long userId, Long cartItemId);
+    void deleteBookFromShoppingCart(String email, Long cartItemId);
 }
