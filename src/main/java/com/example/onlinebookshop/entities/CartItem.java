@@ -21,11 +21,11 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(name = "outer_id")
+    private Long outerId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart shoppingCart;
-    @Column(nullable = false)
     @ManyToOne
     @JoinTable(
             name = "cart_items_books",

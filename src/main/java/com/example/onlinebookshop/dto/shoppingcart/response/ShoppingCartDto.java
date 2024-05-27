@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.dto.shoppingcart.response;
 
-import com.example.onlinebookshop.entities.CartItem;
+import com.example.onlinebookshop.dto.cartitem.response.CartItemDto;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -11,5 +11,5 @@ import lombok.Setter;
 public class ShoppingCartDto {
     private Long id;
     private Long userId;
-    private Set<CartItem> cartItems = new HashSet<>();
+    private Set<CartItemDto> cartItems = new HashSet<>();
 }
