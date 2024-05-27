@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate-cart-items-books-table
+      author: AdamMudrak
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO cart_items_books (cart_item_id, book_id)
+              VALUES
+              (1, 1),
+              (2, 2),
+              (3, 3);
+              
