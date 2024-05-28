@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,16 +37,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
+    //TODO have no idea how to apply pageable here...
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = ShopCartConstants.GET_ALL_SUMMARY,
             description = ShopCartConstants.GET_ALL_DESCRIPTION)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
-    public ShoppingCartDto getShoppingCartByUserEmail(@AuthenticationPrincipal User user,
-            @Parameter(example = ShopCartConstants.PAGEABLE_EXAMPLE) Pageable pageable) { //TODO <-
+    public ShoppingCartDto getShoppingCartByUserEmail(@AuthenticationPrincipal User user) {
         return shoppingCartService.getShoppingCartByUserEmail(user.getEmail());
     }
-    //todo make sure all is positive
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = ShopCartConstants.ADD_ITEM_SUMMARY)
