@@ -1,13 +1,25 @@
 package com.example.onlinebookshop.controller;
 
+import com.example.onlinebookshop.constants.Constants;
+import com.example.onlinebookshop.constants.controllerconstants.BookConstants;
+import com.example.onlinebookshop.constants.controllerconstants.ShopCartConstants;
 import com.example.onlinebookshop.dto.cartitem.request.AddCartItemDto;
-import com.example.onlinebookshop.dto.shoppingcart.request.UpdateQuantityInShoppingCartDto;
+import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
-import com.example.onlinebookshop.repositories.user.UserRepository;
-import com.example.onlinebookshop.security.JwtUtil;
+import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.ShoppingCartService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,41 +27,77 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
+@Tag(name = ShopCartConstants.SHOPPING_CART_API_NAME,
+        description = ShopCartConstants.SHOPPING_CART_API_DESCRIPTION)
 @RequestMapping("/cart")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
-    private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
 
-    //TODO BEST SOLUTION YET use forbidden change all 4
-    @PreAuthorize("#email == authentication.principal.username")
-    @GetMapping("/{userId}")
-    public ShoppingCartDto getShoppingCartByUserId(String email) {
-        return shoppingCartService.getShoppingCartByUserId(userRepository.findByEmail(email)
-                .get().getId());
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = ShopCartConstants.GET_ALL_SUMMARY,
+            description = ShopCartConstants.GET_ALL_DESCRIPTION)
+    @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
+    @GetMapping
+    public ShoppingCartDto getShoppingCartByUserEmail(@AuthenticationPrincipal User user,
+            @Parameter(example = ShopCartConstants.PAGEABLE_EXAMPLE) Pageable pageable) { //TODO <-
+        return shoppingCartService.getShoppingCartByUserEmail(user.getEmail());
+    }
+    //todo make sure all is positive
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = ShopCartConstants.ADD_ITEM_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = Constants.CODE_200,
+                    description = Constants.SUCCESSFULLY_ADDED),
+            @ApiResponse(responseCode = Constants.CODE_400,
+                    description = Constants.INVALID_ENTITY_VALUE)
+    })
+    @PostMapping
+    public ShoppingCartDto addBookToShoppingCart(@AuthenticationPrincipal User user,
+            @RequestBody @Valid AddCartItemDto addCartItemDto) {
+        return shoppingCartService.addBookToShoppingCart(user.getEmail(), addCartItemDto);
     }
 
-    @PostMapping("/{userId}")
-    public ShoppingCartDto addBookToShoppingCart(@PathVariable Long userId,
-                                                 @RequestBody AddCartItemDto addCartItemDto) {
-        return shoppingCartService.addBookToShoppingCart(userId, addCartItemDto);
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = ShopCartConstants.UPDATE_ITEM_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = Constants.CODE_200,
+                    description = Constants.SUCCESSFULLY_UPDATED),
+            @ApiResponse(responseCode = Constants.CODE_400,
+                    description = Constants.INVALID_ID_DESCRIPTION
+                            + ". Or " + Constants.INVALID_ENTITY_VALUE)
+    })
+    @PutMapping("/cart-items/{cartItemId}")
+    public ShoppingCartDto updateBookQuantity(@AuthenticationPrincipal User user,
+                                              @PathVariable @Parameter(name = Constants.ID,
+                                                  description = BookConstants.VALID_ID_DESCRIPTION,
+                                                  example = Constants.ID_EXAMPLE)
+                                              @Positive Long cartItemId,
+                                              @RequestBody @Valid
+                                              UpdateItemQuantityDto quantity) {
+        return shoppingCartService.updateBookQuantity(user.getEmail(), cartItemId, quantity);
     }
 
-    @PutMapping("/cart-items/{userId}/{cartItemId}")
-    public ShoppingCartDto updateBookQuantity(@PathVariable Long userId,
-                                              @PathVariable Long cartItemId,
-                                              @RequestBody
-                                              UpdateQuantityInShoppingCartDto quantity) {
-        return shoppingCartService.updateBookQuantity(userId, cartItemId, quantity);
-    }
-
-    @DeleteMapping("/cart-items/{userId}/{cartItemId}")
-    public void deleteBookFromShoppingCart(@PathVariable Long userId,
-                                           @PathVariable Long cartItemId) {
-        shoppingCartService.deleteBookFromShoppingCart(userId, cartItemId);
+    @Operation(summary = ShopCartConstants.DELETE_ITEM_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = Constants.CODE_204,
+                    description = Constants.CODE_204_DESCRIPTION),
+            @ApiResponse(responseCode = Constants.CODE_400,
+                    description = Constants.INVALID_ID_DESCRIPTION)
+    })
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @DeleteMapping("/cart-items/{cartItemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBookFromShoppingCart(@AuthenticationPrincipal User user,
+                                           @PathVariable @Parameter(name = Constants.ID,
+                                                   description = BookConstants.VALID_ID_DESCRIPTION,
+                                                   example = Constants.ID_EXAMPLE)
+                                           @Positive Long cartItemId) {
+        shoppingCartService.deleteBookFromShoppingCart(user.getEmail(), cartItemId);
     }
 }
