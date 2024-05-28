@@ -5,6 +5,7 @@ public class ShopCartConstants {
     public static final String SHOPPING_CART_API_DESCRIPTION =
             "Here you'll find a comprehensive overview of how to add, delete, update and look at "
                     + "items in user's shopping cart";
+    public static final String CART_ITEM_ID = "Cart item id";
     public static final String VALID_ID_DESCRIPTION =
             "Cart item id, must exist in your shopping cart and be greater than 0";
 
