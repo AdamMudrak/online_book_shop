@@ -98,6 +98,17 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 request);
     }
 
+    @ExceptionHandler(CartItemAlreadyExistsException.class)
+    protected ResponseEntity<Object> handleCartItemAlreadyExistsException(
+            Exception ex, WebRequest request) {
+        return handleExceptionInternal(
+                ex,
+                ex.getMessage(),
+                new HttpHeaders(),
+                CONFLICT,
+                request);
+    }
+
     private String getErrorMessage(ObjectError e) {
         if (e instanceof FieldError fieldError) {
             String field = fieldError.getField();
