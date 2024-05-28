@@ -5,6 +5,7 @@ import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.CartItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
+import com.example.onlinebookshop.exceptions.CartItemAlreadyExistsException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.CartItemMapper;
 import com.example.onlinebookshop.mapper.ShoppingCartMapper;
@@ -13,6 +14,7 @@ import com.example.onlinebookshop.repositories.cartitem.CartItemRepository;
 import com.example.onlinebookshop.repositories.shoppingcart.ShoppingCartRepository;
 import com.example.onlinebookshop.services.ShoppingCartService;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,10 +41,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto addBookToShoppingCart(String email,
                                                  AddCartItemDto addCartItemDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
-
+        Long bookId = addCartItemDto.bookId();
+        checkIfCartContainsSameItem(shoppingCart, bookId);
         CartItem cartItem = new CartItem();
         cartItem.setShoppingCart(shoppingCart);
-        Long bookId = addCartItemDto.bookId();
         cartItem.setBook(bookRepository.findById(bookId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id " + bookId)));
         cartItem.setQuantity(addCartItemDto.quantity());
@@ -95,6 +97,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     .map(CartItem::getOuterId).max(Comparator.naturalOrder()).get() + 1);
         } else {
             cartItem.setOuterId(1L);
+        }
+    }
+
+    private void checkIfCartContainsSameItem(ShoppingCart shoppingCart, Long bookId) {
+        Optional<CartItem> cartItemWithTheSameId = shoppingCart.getCartItems()
+                .stream()
+                .filter(cartItem -> cartItem.getBook().getId().equals(bookId))
+                .findFirst();
+        if (cartItemWithTheSameId.isPresent()) {
+            throw new CartItemAlreadyExistsException(
+                    "CartItem with id " + bookId + " already exists");
         }
     }
 }
