@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.services.impl;
 
 import com.example.onlinebookshop.dto.cartitem.request.AddCartItemDto;
-import com.example.onlinebookshop.dto.shoppingcart.request.UpdateQuantityInShoppingCartDto;
+import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.CartItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
@@ -56,7 +56,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto updateBookQuantity(String email, Long cartItemId,
-                                              UpdateQuantityInShoppingCartDto quantity) {
+                                              UpdateItemQuantityDto quantity) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
         CartItem cartItem = getCartItemById(shoppingCart, cartItemId);
         cartItem.setQuantity(quantity.quantity());

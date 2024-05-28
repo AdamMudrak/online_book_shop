@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.services;
 
 import com.example.onlinebookshop.dto.cartitem.request.AddCartItemDto;
-import com.example.onlinebookshop.dto.shoppingcart.request.UpdateQuantityInShoppingCartDto;
+import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 
 public interface ShoppingCartService {
@@ -11,7 +11,7 @@ public interface ShoppingCartService {
                                           AddCartItemDto addCartItemDto);
 
     ShoppingCartDto updateBookQuantity(String email, Long cartItemId,
-                                       UpdateQuantityInShoppingCartDto quantity);
+                                       UpdateItemQuantityDto quantity);
 
     void deleteBookFromShoppingCart(String email, Long cartItemId);
 }
