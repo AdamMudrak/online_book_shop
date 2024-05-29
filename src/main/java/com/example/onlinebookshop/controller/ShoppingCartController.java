@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
-    //have no idea how to apply pageable here...
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = ShopCartConstants.GET_ALL_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
