@@ -14,11 +14,6 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: outer_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
                   name: shopping_cart_id
                   type: bigint
                   constraints:
