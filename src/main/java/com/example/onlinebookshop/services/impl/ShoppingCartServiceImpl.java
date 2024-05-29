@@ -78,7 +78,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public void deleteBookFromShoppingCart(String email, Long cartItemId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
-        CartItem cartItem = getCartItemById(shoppingCart, cartItemId);
+        CartItem cartItem = itemRepository.findByIdAndShoppingCartId(itemId, shoppingCart.getId()).....
         shoppingCart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
         shoppingCartRepository.save(shoppingCart);
