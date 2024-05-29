@@ -8,6 +8,7 @@ import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,11 +73,10 @@ public class ShoppingCartController {
     public ShoppingCartDto updateBookQuantity(
             @AuthenticationPrincipal User user,
             @PathVariable
-            //// why if this annot is used - parameter simply disappears from swagger?
-            //@Parameter(
-            //name = ShopCartConstants.CART_ITEM_ID,
-            //description = ShopCartConstants.VALID_ID_DESCRIPTION,
-            //example = Constants.ID_EXAMPLE)
+            @Parameter(
+            name = ShopCartConstants.CART_ITEM_ID,
+            description = ShopCartConstants.VALID_ID_DESCRIPTION,
+            example = Constants.ID_EXAMPLE)
             @Positive
             Long cartItemId,
             @RequestBody @Valid UpdateItemQuantityDto quantity) {
@@ -95,12 +95,10 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookFromShoppingCart(@AuthenticationPrincipal User user,
                                            @PathVariable
-                                           //// why if this annot is used - parameter simply
-                                           // disappears from swagger?
-                                           //@Parameter(
-                                           //name = ShopCartConstants.CART_ITEM_ID,
-                                           //description = ShopCartConstants.VALID_ID_DESCRIPTION,
-                                           //example = Constants.ID_EXAMPLE)
+                                           @Parameter(
+                                           name = ShopCartConstants.CART_ITEM_ID,
+                                           description = ShopCartConstants.VALID_ID_DESCRIPTION,
+                                           example = Constants.ID_EXAMPLE)
                                            @Positive
                                            Long cartItemId) {
         shoppingCartService.deleteBookFromShoppingCart(user.getId(), cartItemId);
