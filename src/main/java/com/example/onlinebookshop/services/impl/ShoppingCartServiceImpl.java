@@ -38,7 +38,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getShoppingCartByUserEmail(String email) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
+        return cartMapper.toDto(repository.findByUserId(userId));
         ShoppingCartDto shoppingCartDto =
                 shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.findByUserEmail(email));
         setCartItemsInDto(shoppingCartDto, shoppingCart);
