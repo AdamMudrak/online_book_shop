@@ -6,8 +6,8 @@ import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.CartItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.entities.User;
-import com.example.onlinebookshop.exceptions.CartItemAlreadyExistsException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
+import com.example.onlinebookshop.exceptions.ObjectAlreadyExistsException;
 import com.example.onlinebookshop.mapper.CartItemMapper;
 import com.example.onlinebookshop.mapper.ShoppingCartMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
@@ -114,7 +114,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .filter(cartItem -> cartItem.getBook().getId().equals(bookId))
                 .findFirst();
         if (cartItemWithTheSameId.isPresent()) {
-            throw new CartItemAlreadyExistsException(
+            throw new ObjectAlreadyExistsException(
                     "CartItem with id " + bookId + " already exists");
         }
     }
