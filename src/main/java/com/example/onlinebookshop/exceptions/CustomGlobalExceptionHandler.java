@@ -86,17 +86,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 request);
     }
 
-    @ExceptionHandler(ObjectAlreadyExistsException.class)
-    protected ResponseEntity<Object> handleCartItemAlreadyExistsException(
-            Exception ex, WebRequest request) {
-        return handleExceptionInternal(
-                ex,
-                ex.getMessage(),
-                new HttpHeaders(),
-                CONFLICT,
-                request);
-    }
-
     @ExceptionHandler(TooManyObjectsException.class)
     protected ResponseEntity<Object> handleTooManyObjectsException(
             Exception ex, WebRequest request) {
