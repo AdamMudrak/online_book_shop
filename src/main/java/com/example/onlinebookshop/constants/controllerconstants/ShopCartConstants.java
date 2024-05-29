@@ -10,7 +10,7 @@ public class ShopCartConstants {
             "Cart item id, must exist in your shopping cart and be greater than 0";
 
     public static final String GET_ALL_SUMMARY =
-            "Get all items in the shopping cart optionally with pagination and sorting";
+            "Get all items in the shopping cart";
 
     public static final String ADD_ITEM_SUMMARY = "Add item to the shopping cart";
     public static final String DELETE_ITEM_SUMMARY = "Delete item from the shopping cart";
