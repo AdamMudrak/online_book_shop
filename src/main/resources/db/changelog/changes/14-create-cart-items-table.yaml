@@ -25,6 +25,12 @@ databaseChangeLog:
                     foreignKeyName: fk_shopping_cart_id
                     references: shopping_carts(id)
               - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_book_id_id
+                    references: books(id)
+              - column:
                   name: quantity
                   type: integer
                   constraints:
