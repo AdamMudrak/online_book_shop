@@ -68,7 +68,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto updateBookQuantity(String email, Long cartItemId,
                                               UpdateItemQuantityDto quantity) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(email);
-        CartItem cartItem = getCartItemById(shoppingCart, cartItemId);
+        CartItem cartItem = itemRepository.findByIdAndShoppingCartId(cartItemId, cart.getId())
+                .map(item -> {
+                    item.setQuantity(itemDto.quantity());
+                    return item;
+                }).orElseThrow(() -> new EntityNotFoundException(
+                        String.format("No cart item with id: %d for user: %d", cartItemId, userId)
+                ));
+                itemRepository.save(cartItem);
+               return cartMapper.toDto(cart);
         cartItem.setQuantity(quantity.quantity());
         ShoppingCartDto shoppingCartDto = shoppingCartMapper.toShoppingCartDto(shoppingCart);
         setCartItemsInDto(shoppingCartDto, shoppingCart);
