@@ -9,13 +9,13 @@ public interface ShoppingCartService {
 
     void createShoppingCart(User user);
 
-    ShoppingCartDto getShoppingCartByUserEmail(String email);
+    ShoppingCartDto getShoppingCartByUserEmail(Long userId);
 
-    ShoppingCartDto addBookToShoppingCart(String email,
+    ShoppingCartDto addBookToShoppingCart(Long userId,
                                           AddCartItemDto addCartItemDto);
 
-    ShoppingCartDto updateBookQuantity(String email, Long cartItemId,
+    ShoppingCartDto updateBookQuantity(Long userId, Long cartItemId,
                                        UpdateItemQuantityDto quantity);
 
-    void deleteBookFromShoppingCart(String email, Long cartItemId);
+    void deleteBookFromShoppingCart(Long userId, Long cartItemId);
 }
