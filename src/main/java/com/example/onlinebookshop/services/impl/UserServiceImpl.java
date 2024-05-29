@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.services.impl;
 
 import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
-import com.example.onlinebookshop.dto.user.response.UserResponseDto;
+import com.example.onlinebookshop.dto.user.response.UserRegistrationResponseDto;
 import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final ShoppingCartService shoppingCartService;
 
     @Override
-    public UserResponseDto register(UserRegistrationRequestDto requestDto)
+    public UserRegistrationResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepository.existsByEmail(requestDto.email())) {
             throw new RegistrationException("User with email "

@@ -1,15 +1,15 @@
 package com.example.onlinebookshop.services;
 
 import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {
-    BookDto save(CreateBookRequestDto requestDto);
+    BookDto save(CreateBookDto requestDto);
 
     List<BookDto> findAll(Pageable pageable);
 
@@ -17,7 +17,7 @@ public interface BookService {
 
     BookDto findById(Long id);
 
-    BookDto update(UpdateBookRequestDto requestDto, Long id, boolean areCategoriesReplaced);
+    BookDto update(UpdateBookDto requestDto, Long id, boolean areCategoriesReplaced);
 
     void delete(Long id);
 

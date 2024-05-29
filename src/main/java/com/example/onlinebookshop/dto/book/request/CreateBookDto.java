@@ -18,7 +18,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CreateBookRequestDto {
+public class CreateBookDto {
     @Schema(name = BookDtoConstants.TITLE, example = BookDtoConstants.TITLE_EXAMPLE,
             requiredMode = REQUIRED)
     @NotBlank

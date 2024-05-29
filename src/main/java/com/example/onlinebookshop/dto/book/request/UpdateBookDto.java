@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UpdateBookRequestDto {
+public class UpdateBookDto {
     @Schema(name = BookDtoConstants.TITLE, example = BookDtoConstants.TITLE_EXAMPLE)
     private String title;
     @Schema(name = BookDtoConstants.AUTHOR, example = BookDtoConstants.AUTHOR_EXAMPLE)
