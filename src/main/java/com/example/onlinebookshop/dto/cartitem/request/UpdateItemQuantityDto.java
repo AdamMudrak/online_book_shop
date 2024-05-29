@@ -12,7 +12,8 @@ import jakarta.validation.constraints.Positive;
 public record UpdateItemQuantityDto(
         @Schema(name = CartItemDtoConstants.QUANTITY,
                 example = CartItemDtoConstants.QUANTITY_EXAMPLE,
-                description = CartItemDtoConstants.QUANTITY_DESCRIPTION)
+                description = CartItemDtoConstants.QUANTITY_DESCRIPTION,
+                requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull
         @Positive
         @Digits(integer = 3, fraction = 0)

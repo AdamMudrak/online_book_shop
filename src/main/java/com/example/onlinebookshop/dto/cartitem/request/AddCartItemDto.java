@@ -11,7 +11,8 @@ import jakarta.validation.constraints.Positive;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record AddCartItemDto(
-        @Schema(name = CartItemDtoConstants.BOOK_ID, example = Constants.ID_EXAMPLE)
+        @Schema(name = CartItemDtoConstants.BOOK_ID, example = Constants.ID_EXAMPLE,
+                requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull
         @Positive
         @Digits(integer = 19, fraction = 0)
@@ -19,7 +20,8 @@ public record AddCartItemDto(
         Long bookId,
         @Schema(name = CartItemDtoConstants.QUANTITY,
                 example = CartItemDtoConstants.QUANTITY_EXAMPLE,
-                description = CartItemDtoConstants.QUANTITY_DESCRIPTION)
+                description = CartItemDtoConstants.QUANTITY_DESCRIPTION,
+                requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull
         @Positive
         @Digits(integer = 3, fraction = 0)
