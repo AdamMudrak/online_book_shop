@@ -42,7 +42,7 @@ public class ShoppingCartController {
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
     public ShoppingCartDto getShoppingCartByUserEmail(@AuthenticationPrincipal User user) {
-        return shoppingCartService.getShoppingCartByUserEmail(user.getEmail());
+        return shoppingCartService.getShoppingCartByUserEmail(user.getId());
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -56,7 +56,7 @@ public class ShoppingCartController {
     @PostMapping
     public ShoppingCartDto addBookToShoppingCart(@AuthenticationPrincipal User user,
             @RequestBody @Valid AddCartItemDto addCartItemDto) {
-        return shoppingCartService.addBookToShoppingCart(user.getEmail(), addCartItemDto);
+        return shoppingCartService.addBookToShoppingCart(user.getId(), addCartItemDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -80,7 +80,7 @@ public class ShoppingCartController {
             @Positive
             Long cartItemId,
             @RequestBody @Valid UpdateItemQuantityDto quantity) {
-        return shoppingCartService.updateBookQuantity(user.getEmail(), cartItemId, quantity);
+        return shoppingCartService.updateBookQuantity(user.getId(), cartItemId, quantity);
     }
 
     @Operation(summary = ShopCartConstants.DELETE_ITEM_SUMMARY)
@@ -103,6 +103,6 @@ public class ShoppingCartController {
                                            //example = Constants.ID_EXAMPLE)
                                            @Positive
                                            Long cartItemId) {
-        shoppingCartService.deleteBookFromShoppingCart(user.getEmail(), cartItemId);
+        shoppingCartService.deleteBookFromShoppingCart(user.getId(), cartItemId);
     }
 }
