@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class CartItemDto {
     @JsonProperty("id")
-    private Long outerId;
+    private Long id;
     @JsonProperty("bookId")
     private Long bookId;
     @JsonProperty("bookTitle")
