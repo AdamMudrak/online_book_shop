@@ -65,17 +65,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 request);
     }
 
-    @ExceptionHandler(ForbiddenException.class)
-    protected ResponseEntity<Object> handleForbidden(
-            RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(
-                ex,
-                ex.getMessage(),
-                new HttpHeaders(),
-                FORBIDDEN,
-                request);
-    }
-
     @ExceptionHandler(RegistrationException.class)
     protected ResponseEntity<Object> handleRegistrationException(
             Exception ex, WebRequest request) {
@@ -98,7 +87,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 request);
     }
 
-    @ExceptionHandler(CartItemAlreadyExistsException.class)
+    @ExceptionHandler(ObjectAlreadyExistsException.class)
     protected ResponseEntity<Object> handleCartItemAlreadyExistsException(
             Exception ex, WebRequest request) {
         return handleExceptionInternal(
