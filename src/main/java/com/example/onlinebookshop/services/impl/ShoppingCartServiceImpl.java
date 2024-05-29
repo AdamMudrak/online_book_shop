@@ -8,7 +8,6 @@ import com.example.onlinebookshop.entities.CartItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
-import com.example.onlinebookshop.mapper.CartItemMapper;
 import com.example.onlinebookshop.mapper.ShoppingCartMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.cartitem.CartItemRepository;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartItemRepository cartItemRepository;
-    private final CartItemMapper cartItemMapper;
     private final ShoppingCartMapper shoppingCartMapper;
     private final BookRepository bookRepository;
 
@@ -81,7 +79,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartRepository.save(shoppingCart);
     }
 
-    private void addCartItemToCart(AddCartItemDto addCartItemDto, Book book, ShoppingCart cart) {
-
+    private void addCartItemToCart(AddCartItemDto addCartItemDto, Book book,
+                                   ShoppingCart shoppingCart) {
+        CartItem cartItem = new CartItem();
+        cartItem.setShoppingCart(shoppingCart);
+        cartItem.setBook(book);
+        cartItem.setQuantity(addCartItemDto.quantity());
+        cartItemRepository.save(cartItem);
+        shoppingCart.getCartItems().add(cartItem);
     }
 }
