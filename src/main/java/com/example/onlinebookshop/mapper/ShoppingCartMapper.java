@@ -11,7 +11,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface ShoppingCartMapper {
-    @Mapping(target = "userId", ignore = true)
+    @Mapping(source = "user.id", target = "userId")
     @Mapping(target = "cartItems", ignore = true)
     ShoppingCartDto toShoppingCartDto(ShoppingCart shoppingCart);
 
