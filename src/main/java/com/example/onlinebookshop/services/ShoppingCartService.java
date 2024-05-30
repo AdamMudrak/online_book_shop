@@ -9,7 +9,7 @@ public interface ShoppingCartService {
 
     void createShoppingCart(User user);
 
-    ShoppingCartDto getShoppingCartByUserEmail(Long userId);
+    ShoppingCartDto getShoppingCartByUserId(Long userId);
 
     ShoppingCartDto addBookToShoppingCart(Long userId,
                                           AddCartItemDto addCartItemDto);

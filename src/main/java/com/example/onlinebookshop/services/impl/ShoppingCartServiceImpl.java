@@ -35,7 +35,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto getShoppingCartByUserEmail(Long userId) {
+    public ShoppingCartDto getShoppingCartByUserId(Long userId) {
         return shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.findByUserId(userId));
     }
 

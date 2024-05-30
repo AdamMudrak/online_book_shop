@@ -42,8 +42,8 @@ public class ShoppingCartController {
     @Operation(summary = ShopCartConstants.GET_ALL_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
-    public ShoppingCartDto getShoppingCartByUserEmail(@AuthenticationPrincipal User user) {
-        return shoppingCartService.getShoppingCartByUserEmail(user.getId());
+    public ShoppingCartDto getShoppingCartByUserId(@AuthenticationPrincipal User user) {
+        return shoppingCartService.getShoppingCartByUserId(user.getId());
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -79,8 +79,8 @@ public class ShoppingCartController {
             example = Constants.ID_EXAMPLE)
             @Positive
             Long cartItemId,
-            @RequestBody @Valid UpdateItemQuantityDto quantity) {
-        return shoppingCartService.updateBookQuantity(user.getId(), cartItemId, quantity);
+            @RequestBody @Valid UpdateItemQuantityDto itemDto) {
+        return shoppingCartService.updateBookQuantity(user.getId(), cartItemId, itemDto);
     }
 
     @Operation(summary = ShopCartConstants.DELETE_ITEM_SUMMARY)
