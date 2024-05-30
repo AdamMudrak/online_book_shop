@@ -6,7 +6,6 @@ import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.User;
 
 public interface ShoppingCartService {
-
     void createShoppingCart(User user);
 
     ShoppingCartDto getShoppingCartByUserEmail(Long userId);
