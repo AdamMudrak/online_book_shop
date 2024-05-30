@@ -89,7 +89,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private void addCartItemToCart(AddCartItemDto addCartItemDto, Book book,
                                    ShoppingCart shoppingCart) {
-        CartItem cartItem = new CartItem();
+        CartItem cartItem = itemMapper.toCartItem(addCartItemDto);
+        cartItem.setBook(book);
+        shoppingCart.addItemToCart(cartItem);
         cartItem.setShoppingCart(shoppingCart);
         cartItem.setBook(book);
         cartItem.setQuantity(addCartItemDto.quantity());
