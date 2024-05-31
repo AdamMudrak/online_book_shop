@@ -11,11 +11,13 @@ import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.TooManyObjectsException;
+import com.example.onlinebookshop.mapper.CartItemMapper;
 import com.example.onlinebookshop.mapper.ShoppingCartMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.cartitem.CartItemRepository;
 import com.example.onlinebookshop.repositories.shoppingcart.ShoppingCartRepository;
 import com.example.onlinebookshop.services.ShoppingCartService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartMapper shoppingCartMapper;
+    private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepository;
 
     @Override
@@ -39,6 +42,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.findByUserId(userId));
     }
 
+    @Transactional
     @Override
     public ShoppingCartDto addBookToShoppingCart(Long userId,
                                                  CartItemRequestDto cartItemRequestDto) {
@@ -76,6 +80,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
+    @Transactional
     @Override
     public void deleteBookFromShoppingCart(Long userId, Long cartItemId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
@@ -89,13 +94,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private void addCartItemToCart(CartItemRequestDto cartItemRequestDto, Book book,
                                    ShoppingCart shoppingCart) {
-        CartItem cartItem = itemMapper.toCartItem(addCartItemDto);
-        cartItem.setBook(book);
-        shoppingCart.addItemToCart(cartItem);
+        CartItem cartItem = cartItemMapper.toCartItem(cartItemRequestDto);
         cartItem.setShoppingCart(shoppingCart);
         cartItem.setBook(book);
-        cartItem.setQuantity(cartItemRequestDto.quantity());
         cartItemRepository.save(cartItem);
-        shoppingCart.getCartItems().add(cartItem);
+        shoppingCart.addItemToCart(cartItem);
     }
 }
