@@ -1,8 +1,8 @@
 package com.example.onlinebookshop.services.impl;
 
 import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
-    public BookDto save(CreateBookRequestDto requestDto) {
+    public BookDto save(CreateBookDto requestDto) {
         if (bookRepository.existsByIsbn(requestDto.getIsbn())) {
             throw new ParameterAlreadyExistsException("Another book with ISBN "
                     + requestDto.getIsbn() + " already exists in DB");
@@ -69,7 +69,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto update(UpdateBookRequestDto requestDto, Long id, boolean areCategoriesReplaced) {
+    public BookDto update(UpdateBookDto requestDto, Long id, boolean areCategoriesReplaced) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             Optional<Book> bookByIsbn = bookRepository.findBookByIsbn(requestDto.getIsbn());
@@ -105,17 +105,17 @@ public class BookServiceImpl implements BookService {
                 .toList();
     }
 
-    private void isCategoryIdPresentInDb(CreateBookRequestDto requestDto) {
+    private void isCategoryIdPresentInDb(CreateBookDto requestDto) {
         requestDto.getCategoryIds().forEach(id -> categoryRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't find category by id " + id)));
     }
 
-    private void isCategoryIdPresentInDb(UpdateBookRequestDto requestDto) {
+    private void isCategoryIdPresentInDb(UpdateBookDto requestDto) {
         requestDto.getCategoryIds().forEach(id -> categoryRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't find category by id " + id)));
     }
 
-    private void addIdsFromDtoToDbBook(UpdateBookRequestDto requestDto, Book book) {
+    private void addIdsFromDtoToDbBook(UpdateBookDto requestDto, Book book) {
         Set<Long> presentCategoriesIds = book.getCategories().stream()
                 .map(Category::getId)
                 .collect(Collectors.toSet());
@@ -123,7 +123,7 @@ public class BookServiceImpl implements BookService {
         requestDto.setCategoryIds(presentCategoriesIds);
     }
 
-    private BookDto saveToDbAndGetSavedResult(UpdateBookRequestDto requestDto, Long id) {
+    private BookDto saveToDbAndGetSavedResult(UpdateBookDto requestDto, Long id) {
         Book book = bookMapper.toUpdateModel(requestDto);
         book.setId(id);
         return bookMapper.toDto(bookRepository.save(book));

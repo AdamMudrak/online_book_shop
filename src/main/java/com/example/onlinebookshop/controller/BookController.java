@@ -3,8 +3,8 @@ package com.example.onlinebookshop.controller;
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllerconstants.BookConstants;
 import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -88,7 +88,7 @@ public class BookController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookDto bookRequestDto) {
         return bookService.save(bookRequestDto);
     }
 
@@ -103,7 +103,7 @@ public class BookController {
                             + ". Or " + Constants.INVALID_ENTITY_VALUE)
     })
     @PutMapping("/{id}")
-    public BookDto updateBook(@RequestBody @Valid UpdateBookRequestDto bookRequestDto,
+    public BookDto updateBook(@RequestBody @Valid UpdateBookDto bookRequestDto,
                               @PathVariable @Parameter(
                                       name = Constants.ID,
                                       description = BookConstants.VALID_ID_DESCRIPTION,

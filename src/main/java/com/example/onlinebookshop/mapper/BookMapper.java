@@ -1,8 +1,8 @@
 package com.example.onlinebookshop.mapper;
 
 import com.example.onlinebookshop.config.MapperConfig;
-import com.example.onlinebookshop.dto.book.request.CreateBookRequestDto;
-import com.example.onlinebookshop.dto.book.request.UpdateBookRequestDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
@@ -28,13 +28,13 @@ public interface BookMapper {
     }
 
     @Mapping(target = "categories", ignore = true)
-    Book toCreateModel(CreateBookRequestDto requestDto);
+    Book toCreateModel(CreateBookDto requestDto);
 
     @Mapping(target = "categories", ignore = true)
-    Book toUpdateModel(UpdateBookRequestDto requestDto);
+    Book toUpdateModel(UpdateBookDto requestDto);
 
     @AfterMapping
-    default void setCategories(@MappingTarget Book book, CreateBookRequestDto bookDto) {
+    default void setCategories(@MappingTarget Book book, CreateBookDto bookDto) {
         Set<Category> categories = bookDto.getCategoryIds().stream()
                 .map(Category::new)
                 .collect(Collectors.toSet());
@@ -42,7 +42,7 @@ public interface BookMapper {
     }
 
     @AfterMapping
-    default void setCategories(@MappingTarget Book book, UpdateBookRequestDto bookDto) {
+    default void setCategories(@MappingTarget Book book, UpdateBookDto bookDto) {
         Set<Category> categories = bookDto.getCategoryIds().stream()
                 .map(Category::new)
                 .collect(Collectors.toSet());

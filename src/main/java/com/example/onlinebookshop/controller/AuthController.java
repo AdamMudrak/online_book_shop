@@ -5,7 +5,7 @@ import com.example.onlinebookshop.constants.controllerconstants.AuthConstants;
 import com.example.onlinebookshop.dto.user.request.UserLoginRequestDto;
 import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
 import com.example.onlinebookshop.dto.user.response.UserLoginResponseDto;
-import com.example.onlinebookshop.dto.user.response.UserResponseDto;
+import com.example.onlinebookshop.dto.user.response.UserRegistrationResponseDto;
 import com.example.onlinebookshop.exceptions.RegistrationException;
 import com.example.onlinebookshop.security.AuthenticationService;
 import com.example.onlinebookshop.services.UserService;
@@ -32,7 +32,8 @@ public class AuthController {
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_REGISTERED)
     @ApiResponse(responseCode = Constants.CODE_400, description = Constants.INVALID_ENTITY_VALUE)
     @PostMapping("/registration")
-    public UserResponseDto registerUser(@RequestBody @Valid UserRegistrationRequestDto requestDto)
+    public UserRegistrationResponseDto registerUser(
+            @RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         return userService.register(requestDto);
     }
