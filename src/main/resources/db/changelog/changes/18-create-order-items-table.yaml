@@ -23,7 +23,7 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_book_id_id
+                    foreignKeyName: fk_another_book_id
                     references: books(id)
               - column:
                   name: quantity
