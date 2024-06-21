@@ -66,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
             Order order = optionalOrder.get();
             order.setStatus(getStatusByCode(statusRequestDto.status()));
             orderRepository.save(order);
+            return orderMapper.orderToOrderDto(order);
         }
         throw new EntityNotFoundException("Can't find order with id " + orderId);
     }
