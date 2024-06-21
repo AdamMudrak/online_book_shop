@@ -6,7 +6,6 @@ import com.example.onlinebookshop.dto.order.response.OrderDto;
 import com.example.onlinebookshop.dto.orderitem.OrderItemDto;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.OrderService;
-import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +40,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{orderId}")
     public OrderDto updateOrderStatus(@PathVariable Long orderId,
-                                      @Parameter StatusRequestDto statusRequestDto) {
+                                      @RequestBody StatusRequestDto statusRequestDto) {
         return orderService.updateOrderStatus(orderId, statusRequestDto);
     }
 
