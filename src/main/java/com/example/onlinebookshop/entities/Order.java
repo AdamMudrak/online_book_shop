@@ -33,7 +33,7 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user; //TODO try and get from shopping_cart
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(nullable = false)
