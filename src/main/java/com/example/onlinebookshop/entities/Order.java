@@ -1,9 +1,10 @@
 package com.example.onlinebookshop.entities;
 
-import com.example.onlinebookshop.enums.Status;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,7 +33,8 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @Enumerated(EnumType.STRING)
     private Status status;
     @Column(nullable = false)
     private BigDecimal total;
@@ -48,5 +50,14 @@ public class Order {
     public void addItemToOrder(OrderItem orderItem) {
         orderItem.setOrder(this);
         orderItems.add(orderItem);
+    }
+
+    public enum Status {
+        CREATED,
+        PENDING_PAYMENT,
+        IN_PROGRESS,
+        SHIPPED,
+        COMPLETED,
+        CANCELLED
     }
 }
