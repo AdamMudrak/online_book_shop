@@ -1,4 +1,4 @@
 package com.example.onlinebookshop.dto.order.request;
 
-public record StatusDto(Integer status) {
+public record StatusRequestDto(Integer status) {
 }
