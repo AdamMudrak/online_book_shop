@@ -31,3 +31,11 @@ databaseChangeLog:
       file: db/changelog/changes/15-populate-shopping-carts.yaml
   - include:
       file: db/changelog/changes/16-populate-cart-items.yaml
+  - include:
+      file: db/changelog/changes/17-create-orders-table.yaml
+  - include:
+      file: db/changelog/changes/18-create-order-items-table.yaml
+  - include:
+      file: db/changelog/changes/19-populate-orders-table.yaml
+  - include:
+      file: db/changelog/changes/20-populate-order-items-table.yaml
