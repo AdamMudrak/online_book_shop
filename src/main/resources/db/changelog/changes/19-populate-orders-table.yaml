@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate-orders-table
+      author: AdamMudrak
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO orders (user_id, status, total, order_time, shipping_address)
+              VALUES
+              (1, 'CREATED', 51.96, '2024-06-21 08:45:53', '123 Main St, Anytown, USA'),
+              (2, 'PENDING_PAYMENT', 52.45, '2024-06-20 23:59:59', '456 Elm St, Othertown, USA'),
+              (3, 'IN_PROGRESS', 59.94, '2024-06-19 19:57:31', '789 Oak St, Adminville, USA');
+              
