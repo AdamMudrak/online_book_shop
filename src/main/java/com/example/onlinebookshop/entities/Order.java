@@ -32,19 +32,18 @@ public class Order {
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; //TODO try and get from shopping_cart
+    private User user;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(nullable = false)
-    private BigDecimal total; //TODO in service, sum all prices * quantities
+    private BigDecimal total;
     @Column(name = "order_time", nullable = false)
     private LocalDateTime orderTime;
     @Column(name = "shipping_address", nullable = false)
-    private String shippingAddress; //TODO try and get from user
+    private String shippingAddress;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems = new HashSet<>();
-    //TODO try and get from shopping_cart - transform cartItems
     @Column(nullable = false)
     private boolean isDeleted = false;
 
