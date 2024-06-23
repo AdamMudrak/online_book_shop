@@ -1,11 +1,18 @@
 package com.example.onlinebookshop.controller;
 
+import com.example.onlinebookshop.constants.Constants;
+import com.example.onlinebookshop.constants.controllerconstants.OrderConstants;
+import com.example.onlinebookshop.constants.dtoconstants.OrderDtoConstants;
+import com.example.onlinebookshop.constants.dtoconstants.UserDtoConstants;
 import com.example.onlinebookshop.dto.order.request.AddressDto;
 import com.example.onlinebookshop.dto.order.request.StatusRequestDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.OrderService;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,27 +40,48 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     public OrderDto addOrder(@AuthenticationPrincipal User user,
-                             @RequestBody AddressDto addressDto) {
+                             @Valid
+                             @RequestBody
+                             @Parameter(name = UserDtoConstants.SHIPPING_ADDRESS,
+                                     example = UserDtoConstants.SHIPPING_ADDRESS_EXAMPLE,
+                                     description = OrderDtoConstants.SHIPPING_ADDRESS_DESCRIPTION)
+                             AddressDto addressDto) {
         return orderService.addOrder(user.getId(), addressDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{orderId}")
     public OrderDto updateOrderStatus(@PathVariable Long orderId,
-                                      @RequestBody StatusRequestDto statusRequestDto) {
+                                      @Valid
+                                      @RequestBody
+                                      @Parameter(name = OrderDtoConstants.STATUS_DTO,
+                                              example = OrderDtoConstants.STATUS_DTO_EXAMPLE,
+                                              description = OrderDtoConstants.STATUS_DTO_RULES)
+                                      StatusRequestDto statusRequestDto) {
         return orderService.updateOrderStatus(orderId, statusRequestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items")
-    public List<OrderItemDto> findOrderItemsByOrderId(@PathVariable Long orderId) {
+    public List<OrderItemDto> findOrderItemsByOrderId(
+            @PathVariable
+            @Parameter(name = Constants.ID,
+                description = OrderConstants.VALID_ID_DESCRIPTION,
+                example = Constants.ID_EXAMPLE) @Positive Long orderId) {
         return orderService.findOrderItemsByOrderId(orderId);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items/{itemId}")
-    public OrderItemDto findOrderItemsByOrderIdAndItemId(@PathVariable Long orderId,
-                                                         @PathVariable Long itemId) {
+    public OrderItemDto findOrderItemsByOrderIdAndItemId(
+            @PathVariable
+            @Parameter(name = Constants.ID,
+                description = OrderConstants.VALID_ID_DESCRIPTION,
+                example = Constants.ID_EXAMPLE) @Positive Long orderId,
+            @PathVariable
+            @Parameter(name = Constants.ID,
+                description = OrderConstants.VALID_ITEM_ID_DESCRIPTION,
+                example = Constants.ID_EXAMPLE) @Positive Long itemId) {
         return orderService.findOrderItemsByOrderIdAndItemId(orderId, itemId);
     }
 }
