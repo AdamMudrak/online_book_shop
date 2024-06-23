@@ -3,7 +3,7 @@ package com.example.onlinebookshop.services.impl;
 import com.example.onlinebookshop.dto.order.request.AddressDto;
 import com.example.onlinebookshop.dto.order.request.StatusRequestDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
-import com.example.onlinebookshop.dto.orderitem.OrderItemDto;
+import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Order;
 import com.example.onlinebookshop.entities.OrderItem;
 import com.example.onlinebookshop.entities.ShoppingCart;

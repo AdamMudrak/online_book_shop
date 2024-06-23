@@ -3,7 +3,7 @@ package com.example.onlinebookshop.controller;
 import com.example.onlinebookshop.dto.order.request.AddressDto;
 import com.example.onlinebookshop.dto.order.request.StatusRequestDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
-import com.example.onlinebookshop.dto.orderitem.OrderItemDto;
+import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.OrderService;
 import java.util.List;

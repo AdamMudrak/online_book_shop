@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.dto.order.response;
 
-import com.example.onlinebookshop.dto.orderitem.OrderItemDto;
+import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
