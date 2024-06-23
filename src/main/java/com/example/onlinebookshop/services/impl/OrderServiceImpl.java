@@ -15,6 +15,7 @@ import com.example.onlinebookshop.repositories.order.OrderRepository;
 import com.example.onlinebookshop.repositories.orderitem.OrderItemRepository;
 import com.example.onlinebookshop.repositories.shoppingcart.ShoppingCartRepository;
 import com.example.onlinebookshop.services.OrderService;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public OrderDto addOrder(Long userId, AddressDto addressDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
@@ -54,8 +56,11 @@ public class OrderServiceImpl implements OrderService {
         );
         setAddress(addressDto, shoppingCart, order);
         order.setOrderTime(LocalDateTime.now());
+
         orderRepository.save(order);
         orderItemRepository.saveAll(order.getOrderItems());
+        shoppingCart.getCartItems().clear();
+        shoppingCartRepository.save(shoppingCart);
         return orderMapper.orderToOrderDto(order);
     }
 
