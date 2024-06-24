@@ -18,6 +18,7 @@ import com.example.onlinebookshop.services.OrderService;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+    private final DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private final OrderRepository orderRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderItemRepository orderItemRepository;
@@ -34,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUserId(userId).stream()
+        return orderRepository.findAllByUserId(userId).stream()
                 .map(orderMapper::orderToOrderDto)
                 .toList();
     }
@@ -55,8 +58,7 @@ public class OrderServiceImpl implements OrderService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
         );
         setAddress(addressDto, shoppingCart, order);
-        order.setOrderTime(LocalDateTime.now());
-
+        setOrderTime(order);
         orderRepository.save(order);
         orderItemRepository.saveAll(order.getOrderItems());
         shoppingCart.getCartItems().clear();
@@ -140,5 +142,11 @@ public class OrderServiceImpl implements OrderService {
         } else {
             order.setShippingAddress(addressDto.shippingAddress());
         }
+    }
+
+    private void setOrderTime(Order order) {
+        LocalDateTime now = LocalDateTime.now();
+        String nowWithoutMilliseconds = now.format(formatter);
+        order.setOrderTime(LocalDateTime.parse(nowWithoutMilliseconds));
     }
 }
