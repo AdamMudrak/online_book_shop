@@ -83,11 +83,16 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            return order.getOrderItems().stream()
-                    .map(orderItemMapper::toOrderItemDto)
-                    .toList();
+            return formOrderItemDtoList(order);
         }
         throw new EntityNotFoundException("Can't find order with id " + orderId);
+    }
+
+    @Override
+    public List<OrderItemDto> findOrderItemsByOrderId(Long userId, Long orderId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Order order = isUserLookingForHisOrders(optionalOrder, userId, orderId);
+        return formOrderItemDtoList(order);
     }
 
     @Override
@@ -95,26 +100,16 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            return order.getOrderItems().stream()
-                    .filter(orderItem -> orderItem.getId().equals(itemId))
-                    .findFirst()
-                    .map(orderItemMapper::toOrderItemDto)
-                    .orElseThrow(
-                            () -> new EntityNotFoundException("Can't find item with id " + itemId));
+            return getOrderItemById(order, itemId);
         }
         throw new EntityNotFoundException("Can't find order with id " + orderId);
     }
 
-    private Order.Status getStatusByCode(int statusCode) {
-        return switch (statusCode) {
-            case 1 -> Order.Status.CREATED;
-            case 2 -> Order.Status.PENDING_PAYMENT;
-            case 3 -> Order.Status.IN_PROGRESS;
-            case 4 -> Order.Status.SHIPPED;
-            case 5 -> Order.Status.COMPLETED;
-            case 6 -> Order.Status.CANCELLED;
-            default -> throw new EntityNotFoundException("Can't find status by code " + statusCode);
-        };
+    @Override
+    public OrderItemDto findOrderItemsByOrderIdAndItemId(Long userId, Long orderId, Long itemId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Order order = isUserLookingForHisOrders(optionalOrder, userId, orderId);
+        return getOrderItemById(order, itemId);
     }
 
     private void setOrderItems(ShoppingCart shoppingCart, Order order) {
@@ -148,5 +143,41 @@ public class OrderServiceImpl implements OrderService {
         LocalDateTime now = LocalDateTime.now();
         String nowWithoutMilliseconds = now.format(formatter);
         order.setOrderTime(LocalDateTime.parse(nowWithoutMilliseconds));
+    }
+
+    private Order.Status getStatusByCode(int statusCode) {
+        return switch (statusCode) {
+            case 1 -> Order.Status.CREATED;
+            case 2 -> Order.Status.PENDING_PAYMENT;
+            case 3 -> Order.Status.IN_PROGRESS;
+            case 4 -> Order.Status.SHIPPED;
+            case 5 -> Order.Status.COMPLETED;
+            case 6 -> Order.Status.CANCELLED;
+            default -> throw new EntityNotFoundException("Can't find status by code " + statusCode);
+        };
+    }
+
+    private Order isUserLookingForHisOrders(
+            Optional<Order> optionalOrder, Long userId, Long orderId) {
+        if (optionalOrder.isPresent() && optionalOrder.get().getUser().getId().equals(userId)) {
+            return optionalOrder.get();
+        }
+        throw new EntityNotFoundException("Can't find order with id " + orderId
+                + " for user " + userId);
+    }
+
+    private List<OrderItemDto> formOrderItemDtoList(Order order) {
+        return order.getOrderItems().stream()
+                .map(orderItemMapper::toOrderItemDto)
+                .toList();
+    }
+
+    private OrderItemDto getOrderItemById(Order order, Long itemId) {
+        return order.getOrderItems().stream()
+                .filter(orderItem -> orderItem.getId().equals(itemId))
+                .findFirst()
+                .map(orderItemMapper::toOrderItemDto)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Can't find item with id " + itemId));
     }
 }

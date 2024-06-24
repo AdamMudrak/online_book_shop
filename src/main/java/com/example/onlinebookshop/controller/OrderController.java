@@ -7,6 +7,7 @@ import com.example.onlinebookshop.dto.order.request.AddressDto;
 import com.example.onlinebookshop.dto.order.request.StatusRequestDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
+import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -83,7 +84,6 @@ public class OrderController {
         return orderService.updateOrderStatus(orderId, statusRequestDto);
     }
 
-    //TODO не видно в GUI вообще параметров
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = OrderConstants.GET_ORDER_ITEMS_BY_ORDER_ID)
     @ApiResponses(value = {
@@ -92,13 +92,20 @@ public class OrderController {
             @ApiResponse(responseCode = Constants.CODE_400,
                     description = Constants.INVALID_ID_DESCRIPTION)
     })
+
     @GetMapping("/{orderId}/items")
     public List<OrderItemDto> findOrderItemsByOrderId(
+            @AuthenticationPrincipal User user,
             @PathVariable
             @Parameter(name = OrderConstants.ORDER_ID,
                 description = OrderConstants.VALID_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long orderId) {
-        return orderService.findOrderItemsByOrderId(orderId);
+        // I want users to be able to see only their orders, but admins to be able to see everything
+        if (userIsAdmin(user)) {
+            return orderService.findOrderItemsByOrderId(orderId);
+        } else {
+            return orderService.findOrderItemsByOrderId(user.getId(), orderId);
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -111,6 +118,7 @@ public class OrderController {
     })
     @GetMapping("/{orderId}/items/{itemId}")
     public OrderItemDto findOrderItemsByOrderIdAndItemId(
+            @AuthenticationPrincipal User user,
             @PathVariable
             @Parameter(name = OrderConstants.ORDER_ID,
                 description = OrderConstants.VALID_ID_DESCRIPTION,
@@ -119,6 +127,15 @@ public class OrderController {
             @Parameter(name = OrderConstants.ITEM_ID,
                 description = OrderConstants.VALID_ITEM_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long itemId) {
-        return orderService.findOrderItemsByOrderIdAndItemId(orderId, itemId);
+        if (userIsAdmin(user)) {
+            return orderService.findOrderItemsByOrderIdAndItemId(orderId, itemId);
+        } else {
+            return orderService.findOrderItemsByOrderIdAndItemId(user.getId(), orderId, itemId);
+        }
+    }
+
+    private boolean userIsAdmin(User user) {
+        return user.getRoles().stream()
+                .anyMatch(role -> role.getName().equals(Role.RoleName.ROLE_ADMIN));
     }
 }

@@ -15,5 +15,9 @@ public interface OrderService {
 
     List<OrderItemDto> findOrderItemsByOrderId(Long orderId);
 
+    List<OrderItemDto> findOrderItemsByOrderId(Long userId, Long orderId);
+
     OrderItemDto findOrderItemsByOrderIdAndItemId(Long orderId, Long itemId);
+
+    OrderItemDto findOrderItemsByOrderIdAndItemId(Long userId, Long orderId, Long itemId);
 }
