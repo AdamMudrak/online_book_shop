@@ -8,6 +8,7 @@ import com.example.onlinebookshop.entities.Order;
 import com.example.onlinebookshop.entities.OrderItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.exceptions.AddressNotFoundException;
+import com.example.onlinebookshop.exceptions.EmptyCartException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.OrderItemMapper;
 import com.example.onlinebookshop.mapper.OrderMapper;
@@ -48,6 +49,10 @@ public class OrderServiceImpl implements OrderService {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
         if (shoppingCart == null) {
             throw new EntityNotFoundException("Can't find shopping cart for user " + userId);
+        }
+        if (shoppingCart.getCartItems().isEmpty()) {
+            throw new EmptyCartException(
+                    "To post an order, you should have at least 1 product in your cart");
         }
         Order order = new Order();
         order.setUser(shoppingCart.getUser());
