@@ -4,7 +4,6 @@ public class OrderDtoConstants {
     public static final String STATUS_DTO = "status";
     public static final String STATUS_DTO_EXAMPLE = "1";
     public static final String STATUS_DTO_RULES = """
-            
             1 -> mark order as CREATED;
             2 -> mark order as PENDING_PAYMENT;
             3 -> mark order as IN_PROGRESS;

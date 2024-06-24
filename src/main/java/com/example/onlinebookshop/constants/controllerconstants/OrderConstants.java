@@ -10,7 +10,7 @@ public class OrderConstants {
 
     public static final String ADD_ORDER_SUMMARY = "Add a new order";
     public static final String ADD_ORDER_DESCRIPTION =
-            "Adds a new order using items from the shopping cart, clears the shopping cart";
+            "Adds a new order using items from the shopping cart, clears the shopping cart. ";
     public static final String SHIPPING_ADDRESS_DESCRIPTION = """
             If not provided, the address from
             the user's account will be used.
