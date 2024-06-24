@@ -49,7 +49,8 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = OrderConstants.ADD_ORDER_SUMMARY,
-            description = OrderConstants.ADD_ORDER_DESCRIPTION)
+            description = OrderConstants.ADD_ORDER_DESCRIPTION
+                    + OrderConstants.SHIPPING_ADDRESS_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_201,
                     description = Constants.SUCCESSFULLY_CREATED),
@@ -61,15 +62,13 @@ public class OrderController {
     public OrderDto addOrder(@AuthenticationPrincipal User user,
                              @Valid
                              @RequestBody
-                             @Parameter(name = UserDtoConstants.SHIPPING_ADDRESS,
-                                     example = UserDtoConstants.SHIPPING_ADDRESS_EXAMPLE,
-                                     description = OrderDtoConstants.SHIPPING_ADDRESS_DESCRIPTION)
                              AddressDto addressDto) {
         return orderService.addOrder(user.getId(), addressDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = OrderConstants.UPDATE_ORDER_SUMMARY)
+    @Operation(summary = OrderConstants.UPDATE_ORDER_SUMMARY,
+            description = OrderDtoConstants.STATUS_DTO_RULES)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_UPDATED),
@@ -81,9 +80,6 @@ public class OrderController {
     public OrderDto updateOrderStatus(@PathVariable Long orderId,
                                       @Valid
                                       @RequestBody
-                                      @Parameter(name = OrderDtoConstants.STATUS_DTO,
-                                              example = OrderDtoConstants.STATUS_DTO_EXAMPLE,
-                                              description = OrderDtoConstants.STATUS_DTO_RULES)
                                       StatusRequestDto statusRequestDto) {
         return orderService.updateOrderStatus(orderId, statusRequestDto);
     }
@@ -100,7 +96,7 @@ public class OrderController {
     @GetMapping("/{orderId}/items")
     public List<OrderItemDto> findOrderItemsByOrderId(
             @PathVariable
-            @Parameter(name = Constants.ID,
+            @Parameter(name = OrderConstants.ORDER_ID,
                 description = OrderConstants.VALID_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long orderId) {
         return orderService.findOrderItemsByOrderId(orderId);
@@ -117,11 +113,11 @@ public class OrderController {
     @GetMapping("/{orderId}/items/{itemId}")
     public OrderItemDto findOrderItemsByOrderIdAndItemId(
             @PathVariable
-            @Parameter(name = Constants.ID,
+            @Parameter(name = OrderConstants.ORDER_ID,
                 description = OrderConstants.VALID_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long orderId,
             @PathVariable
-            @Parameter(name = Constants.ID,
+            @Parameter(name = OrderConstants.ITEM_ID,
                 description = OrderConstants.VALID_ITEM_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long itemId) {
         return orderService.findOrderItemsByOrderIdAndItemId(orderId, itemId);
