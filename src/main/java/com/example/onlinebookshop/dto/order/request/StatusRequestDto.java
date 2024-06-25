@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record StatusRequestDto(
+public record UpdateOrderDto(
         @Schema(name = OrderDtoConstants.STATUS_DTO,
                 example = OrderDtoConstants.STATUS_DTO_EXAMPLE,
                 description = OrderDtoConstants.STATUS_DTO_RULES,
