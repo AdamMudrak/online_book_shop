@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("Can't find shopping cart for user " + userId);
         }
         if (shoppingCart.getCartItems().isEmpty()) {
-            throw new EmptyCartException(
+            throw new OrderProcessingException(
                     "To post an order, you should have at least 1 product in your cart");
         }
         Order order = new Order();
