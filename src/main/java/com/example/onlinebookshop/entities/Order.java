@@ -38,7 +38,7 @@ public class Order {
     private Status status;
     @Column(nullable = false)
     private BigDecimal total;
-    @Column(name = "order_time", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime orderTime;
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
