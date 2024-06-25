@@ -97,7 +97,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 request);
     }
 
-    @ExceptionHandler(EmptyCartException.class)
+    @ExceptionHandler(OrderProcessingException.class)
     protected ResponseEntity<Object> handleEmptyCartException(
             Exception ex, WebRequest request) {
         return handleExceptionInternal(

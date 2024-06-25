@@ -9,6 +9,7 @@ import com.example.onlinebookshop.entities.OrderItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.exceptions.AddressNotFoundException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
+import com.example.onlinebookshop.exceptions.OrderProcessingException;
 import com.example.onlinebookshop.mapper.OrderItemMapper;
 import com.example.onlinebookshop.mapper.OrderMapper;
 import com.example.onlinebookshop.repositories.order.OrderRepository;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,8 +38,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    public List<OrderDto> getOrdersByUserId(Long userId) {
-        return orderRepository.findAllByUserId(userId).stream()
+    public List<OrderDto> getOrdersByUserId(Long userId, Pageable pageable) {
+        return orderRepository.findAllByUserId(userId, pageable).stream()
                 .map(orderMapper::orderToOrderDto)
                 .toList();
     }
@@ -74,20 +76,14 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto updateOrderStatus(Long orderId, UpdateOrderDto updateOrderDto) {
         Order order = orderRepository.findById(orderId)
                 .map(o -> {
-                    o.setStatus(Status.valueOf(orderDto.status()));
+                    o.setStatus(getStatusByCode(updateOrderDto.status()));
                     return o;
                 })
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Order with id: %d not found", orderId)
                 ));
+        orderRepository.save(order);
         return orderMapper.orderToOrderDto(order);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            order.setStatus(getStatusByCode(updateOrderDto.status()));
-            orderRepository.save(order);
-            return orderMapper.orderToOrderDto(order);
-        }
-        throw new EntityNotFoundException("Can't find order with id " + orderId);
     }
 
     @Override
@@ -107,8 +103,6 @@ public class OrderServiceImpl implements OrderService {
                         String.format("Order with id: %d not found for user: %d", orderId, userId)
                 ));
         return orderItemMapper.toOrderItemDtoList(order.getOrderItems());
-        Order order = isUserLookingForHisOrders(optionalOrder, userId, orderId);
-        return formOrderItemDtoList(order);
     }
 
     @Override
@@ -123,14 +117,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderItemDto findOrderItemsByOrderIdAndItemId(Long userId, Long orderId, Long itemId) {
-        OrderItem item = itemRepository.findByIdAndOrderIdAndUserId(orderItemId, orderId, userId)
+        OrderItem item = orderItemRepository.findByIdAndOrderIdAndUserId(itemId, orderId, userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Order item: %d not found in order: %d for user: %d",
-                                orderItemId, orderId, userId)
+                                itemId, orderId, userId)
                 ));
         return orderItemMapper.toOrderItemDto(item);
-        Order order = isUserLookingForHisOrders(optionalOrder, userId, orderId);
-        return getOrderItemById(order, itemId);
     }
 
     private void setOrderItems(ShoppingCart shoppingCart, Order order) {
@@ -176,15 +168,6 @@ public class OrderServiceImpl implements OrderService {
             case 6 -> Order.Status.CANCELLED;
             default -> throw new EntityNotFoundException("Can't find status by code " + statusCode);
         };
-    }
-
-    private Order isUserLookingForHisOrders(
-            Optional<Order> optionalOrder, Long userId, Long orderId) {
-        if (optionalOrder.isPresent() && optionalOrder.get().getUser().getId().equals(userId)) {
-            return optionalOrder.get();
-        }
-        throw new EntityNotFoundException("Can't find order with id " + orderId
-                + " for user " + userId);
     }
 
     private List<OrderItemDto> formOrderItemDtoList(Order order) {

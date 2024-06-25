@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,8 +46,8 @@ public class OrderController {
     @Operation(summary = OrderConstants.GET_ALL_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
-    public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user) {
-        return orderService.getOrdersByUserId(user.getId());
+    public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user, Pageable pageable) {
+        return orderService.getOrdersByUserId(user.getId(), pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
