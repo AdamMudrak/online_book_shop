@@ -95,7 +95,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderItemDto> findOrderItemsByOrderId(Long userId, Long orderId) {
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Order with id: %d not found for user: %d", orderId, userId)
+                ));
+        return orderItemMapper.toOrderItemDtoList(order.getOrderItems());
         Order order = isUserLookingForHisOrders(optionalOrder, userId, orderId);
         return formOrderItemDtoList(order);
     }
