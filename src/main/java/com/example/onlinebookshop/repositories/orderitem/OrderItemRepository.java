@@ -9,7 +9,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query(value = "SELECT orderitem FROM OrderItem orderitem "
             + "INNER JOIN orderitem.order order "
             + "INNER JOIN order.user user "
-            + "WHERE order.id = :orderId "
+            + "WHERE orderitem.id = :id "
+            + "AND order.id = :orderId "
             + "AND user.id = :userId")
     Optional<OrderItem> findByIdAndOrderIdAndUserId(Long id, Long orderId, Long userId);
 }
