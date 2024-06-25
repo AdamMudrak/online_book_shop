@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.services;
 
-import com.example.onlinebookshop.dto.order.request.AddressDto;
-import com.example.onlinebookshop.dto.order.request.StatusRequestDto;
+import com.example.onlinebookshop.dto.order.request.CreateOrderDto;
+import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 public interface OrderService {
     List<OrderDto> getOrdersByUserId(Long userId);
 
-    OrderDto addOrder(Long userId, AddressDto addressDto);
+    OrderDto addOrder(Long userId, CreateOrderDto createOrderDto);
 
-    OrderDto updateOrderStatus(Long orderId, StatusRequestDto statusRequestDto);
+    OrderDto updateOrderStatus(Long orderId, UpdateOrderDto updateOrderDto);
 
     List<OrderItemDto> findOrderItemsByOrderId(Long orderId);
 

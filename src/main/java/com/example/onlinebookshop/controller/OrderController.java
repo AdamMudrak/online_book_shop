@@ -3,8 +3,8 @@ package com.example.onlinebookshop.controller;
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllerconstants.OrderConstants;
 import com.example.onlinebookshop.constants.dtoconstants.OrderDtoConstants;
-import com.example.onlinebookshop.dto.order.request.AddressDto;
-import com.example.onlinebookshop.dto.order.request.StatusRequestDto;
+import com.example.onlinebookshop.dto.order.request.CreateOrderDto;
+import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Role;
@@ -64,8 +64,8 @@ public class OrderController {
     public OrderDto addOrder(@AuthenticationPrincipal User user,
                              @Valid
                              @RequestBody
-                             AddressDto addressDto) {
-        return orderService.addOrder(user.getId(), addressDto);
+                             CreateOrderDto createOrderDto) {
+        return orderService.addOrder(user.getId(), createOrderDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -82,8 +82,8 @@ public class OrderController {
     public OrderDto updateOrderStatus(@PathVariable Long orderId,
                                       @Valid
                                       @RequestBody
-                                      StatusRequestDto statusRequestDto) {
-        return orderService.updateOrderStatus(orderId, statusRequestDto);
+                                      UpdateOrderDto updateOrderDto) {
+        return orderService.updateOrderStatus(orderId, updateOrderDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

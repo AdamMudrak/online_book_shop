@@ -1,14 +1,13 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.order.request.AddressDto;
-import com.example.onlinebookshop.dto.order.request.StatusRequestDto;
+import com.example.onlinebookshop.dto.order.request.CreateOrderDto;
+import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Order;
 import com.example.onlinebookshop.entities.OrderItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.exceptions.AddressNotFoundException;
-import com.example.onlinebookshop.exceptions.EmptyCartException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.mapper.OrderItemMapper;
 import com.example.onlinebookshop.mapper.OrderMapper;
@@ -45,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderDto addOrder(Long userId, AddressDto addressDto) {
+    public OrderDto addOrder(Long userId, CreateOrderDto createOrderDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
         if (shoppingCart == null) {
             throw new EntityNotFoundException("Can't find shopping cart for user " + userId);
@@ -62,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderItem::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
         );
-        setAddress(addressDto, shoppingCart, order);
+        setAddress(createOrderDto, shoppingCart, order);
         setOrderTime(order);
         orderRepository.save(order);
         orderItemRepository.saveAll(order.getOrderItems());
@@ -72,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto updateOrderStatus(Long orderId, StatusRequestDto statusRequestDto) {
+    public OrderDto updateOrderStatus(Long orderId, UpdateOrderDto updateOrderDto) {
         Order order = orderRepository.findById(orderId)
                 .map(o -> {
                     o.setStatus(Status.valueOf(orderDto.status()));
@@ -84,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.orderToOrderDto(order);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            order.setStatus(getStatusByCode(statusRequestDto.status()));
+            order.setStatus(getStatusByCode(updateOrderDto.status()));
             orderRepository.save(order);
             return orderMapper.orderToOrderDto(order);
         }
@@ -147,8 +146,8 @@ public class OrderServiceImpl implements OrderService {
                 });
     }
 
-    private void setAddress(AddressDto addressDto, ShoppingCart shoppingCart, Order order) {
-        if (addressDto.shippingAddress().isBlank()) {
+    private void setAddress(CreateOrderDto createOrderDto, ShoppingCart shoppingCart, Order order) {
+        if (createOrderDto.shippingAddress().isBlank()) {
             String shippingAddress = shoppingCart.getUser().getShippingAddress();
             if (!shippingAddress.isBlank()) {
                 order.setShippingAddress(shippingAddress);
@@ -157,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
                         "Can't form an order with no address. Try again and be sure to input it.");
             }
         } else {
-            order.setShippingAddress(addressDto.shippingAddress());
+            order.setShippingAddress(createOrderDto.shippingAddress());
         }
     }
 
