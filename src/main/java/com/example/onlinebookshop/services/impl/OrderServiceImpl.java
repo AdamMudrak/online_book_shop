@@ -73,7 +73,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto updateOrderStatus(Long orderId, StatusRequestDto statusRequestDto) {
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId)
+                .map(o -> {
+                    o.setStatus(Status.valueOf(orderDto.status()));
+                    return o;
+                })
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Order with id: %d not found", orderId)
+                ));
+        return orderMapper.orderToOrderDto(order);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             order.setStatus(getStatusByCode(statusRequestDto.status()));
