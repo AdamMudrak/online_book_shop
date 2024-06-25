@@ -40,7 +40,7 @@ public class Order {
     private BigDecimal total;
     @Column(nullable = false)
     private LocalDateTime orderTime;
-    @Column(name = "shipping_address", nullable = false)
+    @Column(nullable = false)
     private String shippingAddress;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems = new HashSet<>();
