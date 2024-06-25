@@ -1,8 +1,7 @@
 package com.example.onlinebookshop.dto.order.response;
 
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.example.onlinebookshop.entities.Order;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -18,16 +17,6 @@ public class OrderDto {
     private Set<OrderItemDto> orderItems = new HashSet<>();
     private LocalDateTime orderTime;
     private BigDecimal total;
-    @Enumerated(EnumType.STRING)
-    private StatusDto status;
-
-    public enum StatusDto {
-        CREATED,
-        PENDING_PAYMENT,
-        IN_PROGRESS,
-        SHIPPED,
-        COMPLETED,
-        CANCELLED
-    }
+    private Order.Status status;
 }
 
