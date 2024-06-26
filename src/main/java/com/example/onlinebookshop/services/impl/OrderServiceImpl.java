@@ -5,6 +5,7 @@ import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Order;
+import com.example.onlinebookshop.entities.Order.Status;
 import com.example.onlinebookshop.entities.OrderItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.exceptions.AddressNotFoundException;
@@ -47,6 +48,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDto addOrder(Long userId, CreateOrderDto createOrderDto) {
+        if (createOrderDto.shippingAddress().isBlank()) {
+            throw new AddressNotFoundException(
+                    "Can't form an order with no address. Try again and be sure to input it.");
+        }
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
         if (shoppingCart == null) {
             throw new EntityNotFoundException("Can't find shopping cart for user " + userId);
@@ -57,13 +62,13 @@ public class OrderServiceImpl implements OrderService {
         }
         Order order = new Order();
         order.setUser(shoppingCart.getUser());
-        order.setStatus(Order.Status.CREATED);
+        order.setStatus(Status.CREATED);
         setOrderItems(shoppingCart, order);
         order.setTotal(order.getOrderItems().stream()
                 .map(OrderItem::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
         );
-        setAddress(createOrderDto, shoppingCart, order);
+        order.setShippingAddress(createOrderDto.shippingAddress());
         setOrderTime(order);
         orderRepository.save(order);
         orderItemRepository.saveAll(order.getOrderItems());
@@ -76,7 +81,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto updateOrderStatus(Long orderId, UpdateOrderDto updateOrderDto) {
         Order order = orderRepository.findById(orderId)
                 .map(o -> {
-                    o.setStatus(getStatusByCode(updateOrderDto.status()));
+                    o.setStatus(Status.valueOf(updateOrderDto.status()
+                            .toUpperCase()
+                            .trim()));
                     return o;
                 })
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -138,36 +145,10 @@ public class OrderServiceImpl implements OrderService {
                 });
     }
 
-    private void setAddress(CreateOrderDto createOrderDto, ShoppingCart shoppingCart, Order order) {
-        if (createOrderDto.shippingAddress().isBlank()) {
-            String shippingAddress = shoppingCart.getUser().getShippingAddress();
-            if (!shippingAddress.isBlank()) {
-                order.setShippingAddress(shippingAddress);
-            } else {
-                throw new AddressNotFoundException(
-                        "Can't form an order with no address. Try again and be sure to input it.");
-            }
-        } else {
-            order.setShippingAddress(createOrderDto.shippingAddress());
-        }
-    }
-
     private void setOrderTime(Order order) {
         LocalDateTime now = LocalDateTime.now();
         String nowWithoutMilliseconds = now.format(formatter);
         order.setOrderTime(LocalDateTime.parse(nowWithoutMilliseconds));
-    }
-
-    private Order.Status getStatusByCode(int statusCode) {
-        return switch (statusCode) {
-            case 1 -> Order.Status.CREATED;
-            case 2 -> Order.Status.PENDING_PAYMENT;
-            case 3 -> Order.Status.IN_PROGRESS;
-            case 4 -> Order.Status.SHIPPED;
-            case 5 -> Order.Status.COMPLETED;
-            case 6 -> Order.Status.CANCELLED;
-            default -> throw new EntityNotFoundException("Can't find status by code " + statusCode);
-        };
     }
 
     private List<OrderItemDto> formOrderItemDtoList(Order order) {
