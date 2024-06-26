@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.dto.order.response;
 
 import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
-import com.example.onlinebookshop.entities.Order;
+import com.example.onlinebookshop.entities.Order.Status;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -17,6 +17,6 @@ public class OrderDto {
     private Set<OrderItemDto> orderItems = new HashSet<>();
     private LocalDateTime orderTime;
     private BigDecimal total;
-    private Order.Status status;
+    private Status status;
 }
 
