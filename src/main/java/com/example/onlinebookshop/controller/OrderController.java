@@ -48,7 +48,11 @@ public class OrderController {
     @GetMapping
     public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user,
                         @Parameter(example = OrderConstants.PAGEABLE_EXAMPLE)Pageable pageable) {
-        return orderService.getOrdersByUserId(user.getId(), pageable);
+        if (userIsAdmin(user)) {
+            return orderService.getOrders(pageable);
+        } else {
+            return orderService.getOrdersByUserId(user.getId(), pageable);
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
+    List<OrderDto> getOrders(Pageable pageable);
+
     List<OrderDto> getOrdersByUserId(Long userId, Pageable pageable);
 
     OrderDto addOrder(Long userId, CreateOrderDto createOrderDto);
