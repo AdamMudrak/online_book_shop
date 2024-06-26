@@ -46,14 +46,14 @@ public class OrderController {
     @Operation(summary = OrderConstants.GET_ALL_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
-    public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user, Pageable pageable) {
+    public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user,
+                        @Parameter(example = OrderConstants.PAGEABLE_EXAMPLE)Pageable pageable) {
         return orderService.getOrdersByUserId(user.getId(), pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = OrderConstants.ADD_ORDER_SUMMARY,
-            description = OrderConstants.ADD_ORDER_DESCRIPTION
-                    + OrderConstants.SHIPPING_ADDRESS_DESCRIPTION)
+            description = OrderConstants.ADD_ORDER_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_201,
                     description = Constants.SUCCESSFULLY_CREATED),
