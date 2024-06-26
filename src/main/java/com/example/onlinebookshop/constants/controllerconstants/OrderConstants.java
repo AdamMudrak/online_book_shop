@@ -25,4 +25,8 @@ public class OrderConstants {
             "Order id, must exist in DB and be greater than 0";
     public static final String VALID_ITEM_ID_DESCRIPTION =
             "Order item id, must exist in DB and be greater than 0";
+    public static final String PAGEABLE_EXAMPLE = """
+            {"page": 0,
+            "size": 3,
+             "sort": ["id,DESC", "orderTime,DESC", "total,DESC"]}""";
 }
