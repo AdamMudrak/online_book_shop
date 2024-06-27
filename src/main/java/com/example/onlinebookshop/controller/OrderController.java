@@ -50,9 +50,8 @@ public class OrderController {
                         @Parameter(example = OrderConstants.PAGEABLE_EXAMPLE)Pageable pageable) {
         if (userIsAdmin(user)) {
             return orderService.getOrders(pageable);
-        } else {
-            return orderService.getOrdersByUserId(user.getId(), pageable);
         }
+        return orderService.getOrdersByUserId(user.getId(), pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -107,12 +106,10 @@ public class OrderController {
             @Parameter(name = OrderConstants.ORDER_ID,
                 description = OrderConstants.VALID_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long orderId) {
-        // I want users to be able to see only their orders, but admins to be able to see everything
         if (userIsAdmin(user)) {
             return orderService.findOrderItemsByOrderId(orderId);
-        } else {
-            return orderService.findOrderItemsByOrderId(user.getId(), orderId);
         }
+        return orderService.findOrderItemsByOrderId(user.getId(), orderId);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -136,9 +133,8 @@ public class OrderController {
                 example = Constants.ID_EXAMPLE) @Positive Long itemId) {
         if (userIsAdmin(user)) {
             return orderService.findOrderItemsByOrderIdAndItemId(orderId, itemId);
-        } else {
-            return orderService.findOrderItemsByOrderIdAndItemId(user.getId(), orderId, itemId);
         }
+        return orderService.findOrderItemsByOrderIdAndItemId(user.getId(), orderId, itemId);
     }
 
     private boolean userIsAdmin(User user) {
