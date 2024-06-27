@@ -13,4 +13,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
             + "AND order.id = :orderId "
             + "AND user.id = :userId")
     Optional<OrderItem> findByIdAndOrderIdAndUserId(Long id, Long orderId, Long userId);
+
+    Optional<OrderItem> findByIdAndOrderId(Long id, Long orderId);
 }
