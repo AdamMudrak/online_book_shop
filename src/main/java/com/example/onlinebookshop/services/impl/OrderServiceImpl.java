@@ -80,18 +80,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto updateOrderStatus(Long orderId, UpdateOrderDto updateOrderDto) {
-        Order order = orderRepository.findById(orderId)
-                .map(o -> {
-                    o.setStatus(Status.valueOf(updateOrderDto.status()
+        Order orderById = orderRepository.findById(orderId)
+                .map(order -> {
+                    order.setStatus(Status.valueOf(updateOrderDto.status()
                             .toUpperCase()
                             .trim()));
-                    return o;
+                    return order;
                 })
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Order with id: %d not found", orderId)
                 ));
-        orderRepository.save(order);
-        return orderMapper.orderToOrderDto(order);
+        orderRepository.save(orderById);
+        return orderMapper.orderToOrderDto(orderById);
     }
 
     @Override
