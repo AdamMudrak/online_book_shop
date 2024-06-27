@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -97,12 +96,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderItemDto> findOrderItemsByOrderId(Long orderId) {
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            return formOrderItemDtoList(order);
-        }
-        throw new EntityNotFoundException("Can't find order with id " + orderId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Order with id: %d not found", orderId)
+                ));
+        return orderItemMapper.toOrderItemDtoList(order.getOrderItems());
     }
 
     @Override
@@ -116,12 +114,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderItemDto findOrderItemsByOrderIdAndItemId(Long orderId, Long itemId) {
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            return getOrderItemById(order, itemId);
-        }
-        throw new EntityNotFoundException("Can't find order with id " + orderId);
+        OrderItem item = orderItemRepository.findByIdAndOrderId(itemId, orderId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Order item: %d not found in order: %d",
+                                itemId, orderId)
+                ));
+        return orderItemMapper.toOrderItemDto(item);
     }
 
     @Override
@@ -151,20 +149,5 @@ public class OrderServiceImpl implements OrderService {
         LocalDateTime now = LocalDateTime.now();
         String nowWithoutMilliseconds = now.format(formatter);
         order.setOrderTime(LocalDateTime.parse(nowWithoutMilliseconds));
-    }
-
-    private List<OrderItemDto> formOrderItemDtoList(Order order) {
-        return order.getOrderItems().stream()
-                .map(orderItemMapper::toOrderItemDto)
-                .toList();
-    }
-
-    private OrderItemDto getOrderItemById(Order order, Long itemId) {
-        return order.getOrderItems().stream()
-                .filter(orderItem -> orderItem.getId().equals(itemId))
-                .findFirst()
-                .map(orderItemMapper::toOrderItemDto)
-                .orElseThrow(
-                        () -> new EntityNotFoundException("Can't find item with id " + itemId));
     }
 }
