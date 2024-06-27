@@ -19,4 +19,3 @@ public class OrderDto {
     private BigDecimal total;
     private Status status;
 }
-
