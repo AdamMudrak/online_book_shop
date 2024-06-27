@@ -2,8 +2,8 @@ package com.example.onlinebookshop.services.impl;
 
 import static com.example.onlinebookshop.constants.dto.CartItemDtoConstants.QUANTITY_DESCRIPTION;
 
-import com.example.onlinebookshop.dto.cartitem.request.CartItemRequestDto;
-import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;
+import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
+import com.example.onlinebookshop.dto.cartitem.request.UpdateCartItemDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.CartItem;
@@ -45,28 +45,28 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     @Override
     public ShoppingCartDto addBookToShoppingCart(Long userId,
-                                                 CartItemRequestDto cartItemRequestDto) {
-        Book book = bookRepository.findById(cartItemRequestDto.bookId()).orElseThrow(() ->
-                new EntityNotFoundException("Book with id " + cartItemRequestDto.bookId()
+                                                 CreateCartItemDto createCartItemDto) {
+        Book book = bookRepository.findById(createCartItemDto.bookId()).orElseThrow(() ->
+                new EntityNotFoundException("Book with id " + createCartItemDto.bookId()
                         + " not found"));
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
         shoppingCart.getCartItems().stream()
-                .filter(item -> item.getBook().getId().equals(cartItemRequestDto.bookId()))
+                .filter(item -> item.getBook().getId().equals(createCartItemDto.bookId()))
                 .findFirst()
                 .ifPresentOrElse(item -> {
-                    if (item.getQuantity() + cartItemRequestDto.quantity() <= 100) {
-                        item.setQuantity(item.getQuantity() + cartItemRequestDto.quantity());
+                    if (item.getQuantity() + createCartItemDto.quantity() <= 100) {
+                        item.setQuantity(item.getQuantity() + createCartItemDto.quantity());
                     } else {
                         throw new TooManyObjectsException(QUANTITY_DESCRIPTION);
                     }
-                },() -> addCartItemToCart(cartItemRequestDto, book, shoppingCart));
+                },() -> addCartItemToCart(createCartItemDto, book, shoppingCart));
         shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
     @Override
     public ShoppingCartDto updateBookQuantity(Long userId, Long cartItemId,
-                                              UpdateItemQuantityDto itemQuantityDto) {
+                                              UpdateCartItemDto itemQuantityDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
         CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(
                         cartItemId, shoppingCart.getId())
@@ -92,9 +92,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartRepository.save(shoppingCart);
     }
 
-    private void addCartItemToCart(CartItemRequestDto cartItemRequestDto, Book book,
+    private void addCartItemToCart(CreateCartItemDto createCartItemDto, Book book,
                                    ShoppingCart shoppingCart) {
-        CartItem cartItem = cartItemMapper.toCartItem(cartItemRequestDto);
+        CartItem cartItem = cartItemMapper.toCartItem(createCartItemDto);
         cartItem.setShoppingCart(shoppingCart);
         cartItem.setBook(book);
         cartItemRepository.save(cartItem);

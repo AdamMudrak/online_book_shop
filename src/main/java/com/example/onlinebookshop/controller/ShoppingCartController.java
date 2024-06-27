@@ -2,8 +2,8 @@ package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controller.ShopCartConstants;
-import com.example.onlinebookshop.dto.cartitem.request.CartItemRequestDto;
-import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;
+import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
+import com.example.onlinebookshop.dto.cartitem.request.UpdateCartItemDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.ShoppingCartService;
@@ -56,8 +56,8 @@ public class ShoppingCartController {
     })
     @PostMapping
     public ShoppingCartDto addBookToShoppingCart(@AuthenticationPrincipal User user,
-            @RequestBody @Valid CartItemRequestDto cartItemRequestDto) {
-        return shoppingCartService.addBookToShoppingCart(user.getId(), cartItemRequestDto);
+            @RequestBody @Valid CreateCartItemDto createCartItemDto) {
+        return shoppingCartService.addBookToShoppingCart(user.getId(), createCartItemDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -79,7 +79,7 @@ public class ShoppingCartController {
             example = Constants.ID_EXAMPLE)
             @Positive
             Long cartItemId,
-            @RequestBody @Valid UpdateItemQuantityDto itemDto) {
+            @RequestBody @Valid UpdateCartItemDto itemDto) {
         return shoppingCartService.updateBookQuantity(user.getId(), cartItemId, itemDto);
     }
 

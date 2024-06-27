@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record UpdateItemQuantityDto(
+public record UpdateCartItemDto(
         @Schema(name = CartItemDtoConstants.QUANTITY,
                 example = CartItemDtoConstants.QUANTITY_EXAMPLE,
                 description = CartItemDtoConstants.QUANTITY_DESCRIPTION,

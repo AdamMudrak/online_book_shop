@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CartItemRequestDto(
+public record CreateCartItemDto(
         @Schema(name = CartItemDtoConstants.BOOK_ID, example = Constants.ID_EXAMPLE,
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull

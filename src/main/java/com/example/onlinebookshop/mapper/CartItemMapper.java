@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.mapper;
 
 import com.example.onlinebookshop.config.MapperConfig;
-import com.example.onlinebookshop.dto.cartitem.request.CartItemRequestDto;
+import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
 import com.example.onlinebookshop.dto.cartitem.response.CartItemDto;
 import com.example.onlinebookshop.entities.CartItem;
 import org.mapstruct.Mapper;
@@ -13,5 +13,5 @@ public interface CartItemMapper {
     @Mapping(source = "book.title", target = "bookTitle")
     CartItemDto toDto(CartItem cartItem);
 
-    CartItem toCartItem(CartItemRequestDto cartItemRequestDto);
+    CartItem toCartItem(CreateCartItemDto createCartItemDto);
 }
