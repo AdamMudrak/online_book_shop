@@ -8,7 +8,6 @@ import com.example.onlinebookshop.entities.Order;
 import com.example.onlinebookshop.entities.Order.Status;
 import com.example.onlinebookshop.entities.OrderItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
-import com.example.onlinebookshop.exceptions.AddressNotFoundException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.OrderProcessingException;
 import com.example.onlinebookshop.mapper.OrderItemMapper;
@@ -55,10 +54,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDto addOrder(Long userId, CreateOrderDto createOrderDto) {
-        if (createOrderDto.shippingAddress().isBlank()) {
-            throw new AddressNotFoundException(
-                    "Can't form an order with no address. Try again and be sure to input it.");
-        }
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
         if (shoppingCart == null) {
             throw new EntityNotFoundException("Can't find shopping cart for user " + userId);

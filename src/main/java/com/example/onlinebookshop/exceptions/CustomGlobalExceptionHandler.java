@@ -108,17 +108,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 request);
     }
 
-    @ExceptionHandler(AddressNotFoundException.class)
-    protected ResponseEntity<Object> handleAddressNotFoundException(
-            Exception ex, WebRequest request) {
-        return handleExceptionInternal(
-                ex,
-                ex.getMessage(),
-                new HttpHeaders(),
-                BAD_REQUEST,
-                request);
-    }
-
     private String getErrorMessage(ObjectError e) {
         if (e instanceof FieldError fieldError) {
             String field = fieldError.getField();
