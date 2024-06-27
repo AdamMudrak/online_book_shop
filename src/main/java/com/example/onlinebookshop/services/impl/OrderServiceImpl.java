@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrders(Pageable pageable) {
-        return orderRepository.findAll().stream()
+        return orderRepository.findAll(pageable).stream()
                 .map(orderMapper::orderToOrderDto)
                 .toList();
     }
