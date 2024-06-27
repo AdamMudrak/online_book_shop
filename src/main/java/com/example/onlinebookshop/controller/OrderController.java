@@ -1,8 +1,8 @@
 package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.constants.controllerconstants.OrderConstants;
-import com.example.onlinebookshop.constants.dtoconstants.OrderDtoConstants;
+import com.example.onlinebookshop.constants.controller.OrderConstants;
+import com.example.onlinebookshop.constants.dto.OrderDtoConstants;
 import com.example.onlinebookshop.dto.order.request.CreateOrderDto;
 import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dto.order.response.OrderDto;

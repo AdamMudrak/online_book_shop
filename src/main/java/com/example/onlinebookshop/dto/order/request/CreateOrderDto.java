@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.dto.order.request;
 
-import com.example.onlinebookshop.constants.dtoconstants.UserDtoConstants;
+import com.example.onlinebookshop.constants.dto.UserDtoConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 

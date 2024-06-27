@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.dto.cartitem.request;
 
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.constants.dtoconstants.CartItemDtoConstants;
+import com.example.onlinebookshop.constants.dto.CartItemDtoConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Digits;

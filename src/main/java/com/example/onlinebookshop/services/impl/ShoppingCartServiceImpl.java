@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.services.impl;
 
-import static com.example.onlinebookshop.constants.dtoconstants.CartItemDtoConstants.QUANTITY_DESCRIPTION;
+import static com.example.onlinebookshop.constants.dto.CartItemDtoConstants.QUANTITY_DESCRIPTION;
 
 import com.example.onlinebookshop.dto.cartitem.request.CartItemRequestDto;
 import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;

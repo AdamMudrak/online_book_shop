@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.controller;
 
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.constants.controllerconstants.ShopCartConstants;
+import com.example.onlinebookshop.constants.controller.ShopCartConstants;
 import com.example.onlinebookshop.dto.cartitem.request.CartItemRequestDto;
 import com.example.onlinebookshop.dto.cartitem.request.UpdateItemQuantityDto;
 import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
