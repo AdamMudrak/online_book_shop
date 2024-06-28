@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.dto.cartitem.request;
 
-import com.example.onlinebookshop.constants.dtoconstants.CartItemDtoConstants;
+import com.example.onlinebookshop.constants.dto.CartItemDtoConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Digits;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record UpdateItemQuantityDto(
+public record UpdateCartItemDto(
         @Schema(name = CartItemDtoConstants.QUANTITY,
                 example = CartItemDtoConstants.QUANTITY_EXAMPLE,
                 description = CartItemDtoConstants.QUANTITY_DESCRIPTION,

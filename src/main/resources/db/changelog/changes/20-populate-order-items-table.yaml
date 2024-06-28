@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate-order-items-table
+      author: AdamMudrak
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO order_items (order_id, book_id, quantity, price)
+              VALUES
+              (1, 1, 4, 51.96),
+              (2, 2, 5, 52.45),
+              (3, 3, 6, 59.94);
+              

@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.constants.controllerconstants;
+package com.example.onlinebookshop.constants.controller;
 
 public class ShopCartConstants {
     public static final String SHOPPING_CART_API_NAME = "Shopping cart API";

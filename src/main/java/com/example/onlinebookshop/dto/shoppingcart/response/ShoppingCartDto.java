@@ -3,11 +3,9 @@ package com.example.onlinebookshop.dto.shoppingcart.response;
 import com.example.onlinebookshop.dto.cartitem.response.CartItemDto;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ShoppingCartDto {
     private Long id;
     private Long userId;

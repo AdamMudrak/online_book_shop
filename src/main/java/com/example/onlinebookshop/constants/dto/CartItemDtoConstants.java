@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.constants.dtoconstants;
+package com.example.onlinebookshop.constants.dto;
 
 public class CartItemDtoConstants {
     public static final String BOOK_ID = "bookId";

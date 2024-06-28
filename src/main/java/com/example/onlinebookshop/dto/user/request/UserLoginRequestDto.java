@@ -2,7 +2,7 @@ package com.example.onlinebookshop.dto.user.request;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
-import com.example.onlinebookshop.constants.dtoconstants.UserDtoConstants;
+import com.example.onlinebookshop.constants.dto.UserDtoConstants;
 import com.example.onlinebookshop.validation.Email;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
