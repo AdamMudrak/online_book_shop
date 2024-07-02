@@ -12,7 +12,6 @@ services:
     command: --init-file /data/application/init.sql
     volumes:
         - ./init.sql:/data/application/init.sql
-
   app:
     depends_on:
     - mysqldb
@@ -34,6 +33,10 @@ services:
         "spring.jpa.hibernate.ddl-auto": "update",
         "spring.jpa.show-sql": "true",
         "jwt.expiration": "$JWT_EXPIRATION",
-        "jwt.secret": "$JWT_SECRET"
+        "jwt.secret": "$JWT_SECRET",
+        "spring.liquibase.change-log" : "/db/changelog/db.changelog-master.yaml",
+        "spring.liquibase.url" : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE",
+        "spring.liquibase.user" : "$MYSQLDB_USER",
+        "spring.liquibase.password" : "$MYSQL_ROOT_PASSWORD"
       }'
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
