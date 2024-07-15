@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - include:
+      file: testdb/changelog/changes/01-create-books-table.yaml
+  - include:
+      file: testdb/changelog/changes/02-create-users-table.yaml
+  - include:
+      file: testdb/changelog/changes/03-create-roles-table.yaml
+  - include:
+      file: testdb/changelog/changes/04-create-users-roles-table.yaml
+  - include:
+      file: testdb/changelog/changes/05-populate-roles-table.yaml
+  - include:
+      file: testdb/changelog/changes/06-populate-users-table.yaml
+  - include:
+      file: testdb/changelog/changes/07-populate-users-roles-table.yaml
+  - include:
+      file: testdb/changelog/changes/08-create-categories-table.yaml
+  - include:
+      file: testdb/changelog/changes/9-create-books-categories-table.yaml
+  - include:
+      file: testdb/changelog/changes/10-create-shopping-carts-table.yaml
+  - include:
+      file: testdb/changelog/changes/11-create-cart-items-table.yaml
+  - include:
+      file: testdb/changelog/changes/12-create-orders-table.yaml
+  - include:
+      file: testdb/changelog/changes/13-create-order-items-table.yaml
