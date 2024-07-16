@@ -1,5 +1,12 @@
 package com.example.onlinebookshop.repositories.book;
 
+import static com.example.onlinebookshop.repositories.RepoConstants.ADD_BOOKS_CATEGORIES_SQL;
+import static com.example.onlinebookshop.repositories.RepoConstants.ADD_BOOKS_SQL;
+import static com.example.onlinebookshop.repositories.RepoConstants.ADD_CATEGORIES_SQL;
+import static com.example.onlinebookshop.repositories.RepoConstants.DELETE_BOOKS_CATEGORIES_SQL;
+import static com.example.onlinebookshop.repositories.RepoConstants.DELETE_BOOKS_SQL;
+import static com.example.onlinebookshop.repositories.RepoConstants.DELETE_CATEGORIES_SQL;
+import static com.example.onlinebookshop.repositories.RepoConstants.PATH_TO_SQL_SCRIPTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -19,14 +26,6 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
-    private static final String PATH_TO_SQL_SCRIPTS =
-            "classpath:testdb/changelog/test-temporary-changes/repositories/";
-    private static final String ADD_BOOKS_SQL = "add-books.sql";
-    private static final String ADD_CATEGORIES_SQL = "add-categories.sql";
-    private static final String ADD_BOOKS_CATEGORIES_SQL = "add-books-categories.sql";
-    private static final String DELETE_BOOKS_SQL = "delete-books.sql";
-    private static final String DELETE_CATEGORIES_SQL = "delete-categories.sql";
-    private static final String DELETE_BOOKS_CATEGORIES_SQL = "delete-books-categories.sql";
     private static final String testIsbn1 = "9780743273565";
     private static final String testIsbn2 = "9780061120084";
     private static final String testIsbn3 = "9780451524935";
