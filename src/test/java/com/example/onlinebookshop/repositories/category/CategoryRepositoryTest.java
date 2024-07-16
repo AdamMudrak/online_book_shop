@@ -1,8 +1,8 @@
 package com.example.onlinebookshop.repositories.category;
 
-import static com.example.onlinebookshop.repositories.RepoConstants.ADD_CATEGORIES_SQL;
-import static com.example.onlinebookshop.repositories.RepoConstants.DELETE_CATEGORIES_SQL;
-import static com.example.onlinebookshop.repositories.RepoConstants.PATH_TO_SQL_SCRIPTS;
+import static com.example.onlinebookshop.TestConstants.ADD_CATEGORIES_SQL;
+import static com.example.onlinebookshop.TestConstants.DELETE_CATEGORIES_SQL;
+import static com.example.onlinebookshop.TestConstants.PATH_TO_SQL_SCRIPTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

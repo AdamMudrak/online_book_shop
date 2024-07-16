@@ -1,6 +1,6 @@
-package com.example.onlinebookshop.repositories;
+package com.example.onlinebookshop;
 
-public class RepoConstants {
+public class TestConstants {
     public static final String PATH_TO_SQL_SCRIPTS =
             "classpath:testdb/changelog/test-temporary-changes/repositories/";
     public static final String ADD_BOOKS_SQL = "add-books.sql";
