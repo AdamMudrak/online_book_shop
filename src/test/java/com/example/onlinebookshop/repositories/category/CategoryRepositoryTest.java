@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.onlinebookshop.entities.Category;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -38,6 +39,7 @@ public class CategoryRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given a name of an existing category, successfully retrieve it from DB")
     @Test
     void findByName_IsAbleToFindExistingCategoryByName_Success() {
         if (categoryRepository.findByName(CATEGORY_NAME).isPresent()) {
@@ -50,6 +52,7 @@ public class CategoryRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given a name of a non-existing category, retrieve nothing from DB")
     @Test
     void findByName_IsNotAbleToFindNonExistingCategoryByName_Fail() {
         assertTrue(categoryRepository.findByName(NON_EXISTING_CATEGORY_NAME).isEmpty());
@@ -59,6 +62,7 @@ public class CategoryRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given a name of an existing category, successfully make sure it exists in DB")
     @Test
     void existsByName_IsAbleToCheckIfExistingCategoryExistsByName_Success() {
         assertTrue(categoryRepository.existsByName(CATEGORY_NAME));
@@ -68,6 +72,8 @@ public class CategoryRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given a name of a non-existing category, "
+            + "successfully make sure it doesn't exist in DB")
     @Test
     void existsByName_IsNotAbleToCheckIfNonExistingCategoryExistsByName_Fail() {
         assertFalse(categoryRepository.existsByName(NON_EXISTING_CATEGORY_NAME));

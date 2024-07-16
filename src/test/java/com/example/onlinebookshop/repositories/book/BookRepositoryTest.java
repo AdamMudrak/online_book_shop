@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -92,6 +93,8 @@ class BookRepositoryTest {
             PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
             PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given an id of an existing category, "
+            + "successfully retrieve a list of three books")
     @Test
     void findAllByCategoryId_IsAbleToFindBooksByExistingCategoryId_Success() {
         int expectedListSize = 3;
@@ -117,6 +120,7 @@ class BookRepositoryTest {
             PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
             PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given an id of a non-existing category, retrieve an empty list")
     @Test
     void findAllByCategoryId_IsNotAbleToFindBooksByNonExistingCategoryId_Fail() {
         assertTrue(bookRepository.findAllByCategoryId(NON_EXISTING_CATEGORY_ID).isEmpty());
@@ -126,6 +130,7 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given an ISBN of 3 present books, successfully retrieve each of them by ISBN")
     @Test
     void findBookByIsbn_IsAbleToGetBooksByExistingIsbn_Success() {
         Book actualBook = new Book();
@@ -149,6 +154,7 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given not a real ISBN, retrieve nothing")
     @Test
     void findBookByIsbn_IsNotAbleToGetBookByNonExistingIsbn_Fail() {
         assertTrue(bookRepository.findBookByIsbn(NON_EXISTING_ISBN).isEmpty());
@@ -158,6 +164,7 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given an ISBN of 3 present books, successfully make sure each of them exists")
     @Test
     void existsByIsbn_IsAbleToFindAddedBooksWithExistingIsbn_Success() {
         for (String isbn : testIsbns) {
@@ -169,6 +176,8 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Given not a real ISBN, "
+            + "successfully make sure a book with such ISBN doesn't exist")
     @Test
     void existsByIsbn_IsNotAbleToFindBookWithNonExistingIsbn_Fail() {
         assertFalse(bookRepository.existsByIsbn(NON_EXISTING_ISBN));
