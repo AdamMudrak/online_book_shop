@@ -19,9 +19,19 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
+    private static final String PATH_TO_SQL_SCRIPTS =
+            "classpath:testdb/changelog/test-temporary-changes/repositories/";
+    private static final String ADD_BOOKS_SQL = "add-books.sql";
+    private static final String ADD_CATEGORIES_SQL = "add-categories.sql";
+    private static final String ADD_BOOKS_CATEGORIES_SQL = "add-books-categories.sql";
+    private static final String DELETE_BOOKS_SQL = "delete-books.sql";
+    private static final String DELETE_CATEGORIES_SQL = "delete-categories.sql";
+    private static final String DELETE_BOOKS_CATEGORIES_SQL = "delete-books-categories.sql";
     private static final String testIsbn1 = "9780743273565";
     private static final String testIsbn2 = "9780061120084";
     private static final String testIsbn3 = "9780451524935";
+    private static final String NON_EXISTING_ISBN = "0000000000000";
+    private static final long NON_EXISTING_CATEGORY_ID = 1000L;
     private static final String[] testIsbns = new String[]{testIsbn1, testIsbn2, testIsbn3};
 
     private static Book expectedBook1;
@@ -35,7 +45,7 @@ class BookRepositoryTest {
     private BookRepository bookRepository;
 
     @BeforeAll
-    static void initBooksWithoutCategories() {
+    static void initVars() {
         category = new Category();
         category.setId(1L);
         category.setName("Fiction");
@@ -75,14 +85,13 @@ class BookRepositoryTest {
         expectedBooks = new Book[]{expectedBook1, expectedBook2, expectedBook3};
     }
 
-    @Sql(scripts = {"classpath:testdb/changelog/test-temporary-changes/book/repo/add-books.sql",
-            "classpath:testdb/changelog/test-temporary-changes/book/"
-                    + "repo/add-categories.sql",
-            "classpath:testdb/changelog/test-temporary-changes/book/"
-                    + "repo/bind-books-with-categories.sql"},
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/"
-            + "repo/delete-categories-and-books-categories.sql",
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void findAllByCategoryId_IsAbleToFindBooksByExistingCategoryId_Success() {
@@ -101,23 +110,22 @@ class BookRepositoryTest {
         }
     }
 
-    @Sql(scripts = {"classpath:testdb/changelog/test-temporary-changes/book/repo/add-books.sql",
-            "classpath:testdb/changelog/test-temporary-changes/book/"
-                    + "repo/add-categories.sql",
-            "classpath:testdb/changelog/test-temporary-changes/book/"
-                    + "repo/bind-books-with-categories.sql"},
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/"
-            + "repo/delete-categories-and-books-categories.sql",
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void findAllByCategoryId_IsNotAbleToFindBooksByNonExistingCategoryId_Fail() {
-        assertTrue(bookRepository.findAllByCategoryId(1000L).isEmpty());
+        assertTrue(bookRepository.findAllByCategoryId(NON_EXISTING_CATEGORY_ID).isEmpty());
     }
 
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/add-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/delete-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void findBookByIsbn_IsAbleToGetBooksByExistingIsbn_Success() {
@@ -138,19 +146,18 @@ class BookRepositoryTest {
         assertEquals(expectedBook3, actualBook);
     }
 
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/add-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/delete-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void findBookByIsbn_IsNotAbleToGetBookByNonExistingIsbn_Fail() {
-        String testIsbn = "0000000000000";
-        assertTrue(bookRepository.findBookByIsbn(testIsbn).isEmpty());
+        assertTrue(bookRepository.findBookByIsbn(NON_EXISTING_ISBN).isEmpty());
     }
 
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/add-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/delete-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void existsByIsbn_IsAbleToFindAddedBooksWithExistingIsbn_Success() {
@@ -159,13 +166,12 @@ class BookRepositoryTest {
         }
     }
 
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/add-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:testdb/changelog/test-temporary-changes/book/repo/delete-books.sql",
+    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void existsByIsbn_IsNotAbleToFindBookWithNonExistingIsbn_Fail() {
-        String testIsbn1 = "0000000000000";
-        assertFalse(bookRepository.existsByIsbn(testIsbn1));
+        assertFalse(bookRepository.existsByIsbn(NON_EXISTING_ISBN));
     }
 }
