@@ -27,62 +27,86 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
-    private static final String testIsbn1 = "9780743273565";
-    private static final String testIsbn2 = "9780061120084";
-    private static final String testIsbn3 = "9780451524935";
+    private static final String TEST_ISBN_1 = "9780743273565";
+    private static final String TEST_ISBN_2 = "9780061120084";
+    private static final String TEST_ISBN_3 = "9780451524935";
     private static final String NON_EXISTING_ISBN = "0000000000000";
     private static final long NON_EXISTING_CATEGORY_ID = 1000L;
-    private static final String[] testIsbns = new String[]{testIsbn1, testIsbn2, testIsbn3};
+    private static final String[] TEST_ISBNS = new String[]{TEST_ISBN_1, TEST_ISBN_2, TEST_ISBN_3};
 
-    private static Book expectedBook1;
-    private static Book expectedBook2;
-    private static Book expectedBook3;
-    private static Book[] expectedBooks;
+    private static final Category CATEGORY = new Category();
+    private static final long CATEGORY_ID = 1L;
+    private static final String CATEGORY_NAME = "Fiction";
+    private static final String CATEGORY_DESCRIPTION =
+            "Interesting books about imaginary though possible events";
 
-    private static Category category;
+    private static final Book EXPECTED_BOOK_1 = new Book();
+    private static final Book EXPECTED_BOOK_2 = new Book();
+    private static final Book EXPECTED_BOOK_3 = new Book();
+
+    private static final long GATSBY_ID = 1L;
+    private static final String GATSBY_TITLE = "The Great Gatsby";
+    private static final String GATSBY_AUTHOR = "F. Scott Fitzgerald";
+    private static final String GATSBY_ISBN = "9780743273565";
+    private static final BigDecimal GATSBY_PRICE = BigDecimal.valueOf(12.99);
+    private static final String GATSBY_DESCRIPTION = "A story of the fabulously wealthy Jay Gatsby "
+            + "and his love for the beautiful Daisy Buchanan.";
+    private static final String GATSBY_COVER_IMAGE = "gatsby.jpg";
+
+    private static final long TKAM_ID = 2L;
+    private static final String TKAM_TITLE = "To Kill a Mockingbird";
+    private static final String TKAM_AUTHOR = "Harper Lee";
+    private static final String TKAM_ISBN = "9780061120084";
+    private static final BigDecimal TKAM_PRICE = BigDecimal.valueOf(10.49);
+    private static final String TKAM_DESCRIPTION = "A novel that explores the irrationality of "
+            + "adult attitudes towards race and class in the Deep South of the 1930s.";
+    private static final String TKAM_COVER_IMAGE = "mockingbird.jpg";
+
+    private static final long ID_1984 = 3L;
+    private static final String TITLE_1984 = "1984";
+    private static final String AUTHOR_1984 = "George Orwell";
+    private static final String ISBN_1984 = "9780451524935";
+    private static final BigDecimal PRICE_1984 = BigDecimal.valueOf(9.99);
+    private static final String DESCRIPTION_1984 = "A dystopian novel set in Airstrip One, "
+            + "a province of the superstate Oceania, whose residents are victims of perpetual war, "
+            + "omnipresent government surveillance, and public manipulation.";
+    private static final String COVER_IMAGE_1984 = "1984.jpg";
+
+    private static final Book[] EXPECTED_BOOKS =
+            new Book[]{EXPECTED_BOOK_1, EXPECTED_BOOK_2, EXPECTED_BOOK_3};
 
     @Autowired
     private BookRepository bookRepository;
 
     @BeforeAll
     static void initVars() {
-        category = new Category();
-        category.setId(1L);
-        category.setName("Fiction");
-        category.setDescription("Interesting books about imaginary though possible events");
+        CATEGORY.setId(CATEGORY_ID);
+        CATEGORY.setName(CATEGORY_NAME);
+        CATEGORY.setDescription(CATEGORY_DESCRIPTION);
 
-        expectedBook1 = new Book();
-        expectedBook1.setId(1L);
-        expectedBook1.setTitle("The Great Gatsby");
-        expectedBook1.setAuthor("F. Scott Fitzgerald");
-        expectedBook1.setIsbn("9780743273565");
-        expectedBook1.setPrice(BigDecimal.valueOf(12.99));
-        expectedBook1.setDescription("A story of the fabulously wealthy Jay Gatsby and his love "
-                + "for the beautiful Daisy Buchanan.");
-        expectedBook1.setCoverImage("gatsby.jpg");
+        EXPECTED_BOOK_1.setId(GATSBY_ID);
+        EXPECTED_BOOK_1.setTitle(GATSBY_TITLE);
+        EXPECTED_BOOK_1.setAuthor(GATSBY_AUTHOR);
+        EXPECTED_BOOK_1.setIsbn(GATSBY_ISBN);
+        EXPECTED_BOOK_1.setPrice(GATSBY_PRICE);
+        EXPECTED_BOOK_1.setDescription(GATSBY_DESCRIPTION);
+        EXPECTED_BOOK_1.setCoverImage(GATSBY_COVER_IMAGE);
 
-        expectedBook2 = new Book();
-        expectedBook2.setId(2L);
-        expectedBook2.setTitle("To Kill a Mockingbird");
-        expectedBook2.setAuthor("Harper Lee");
-        expectedBook2.setIsbn("9780061120084");
-        expectedBook2.setPrice(BigDecimal.valueOf(10.49));
-        expectedBook2.setDescription("A novel that explores the irrationality of adult attitudes "
-                + "towards race and class in the Deep South of the 1930s.");
-        expectedBook2.setCoverImage("mockingbird.jpg");
+        EXPECTED_BOOK_2.setId(TKAM_ID);
+        EXPECTED_BOOK_2.setTitle(TKAM_TITLE);
+        EXPECTED_BOOK_2.setAuthor(TKAM_AUTHOR);
+        EXPECTED_BOOK_2.setIsbn(TKAM_ISBN);
+        EXPECTED_BOOK_2.setPrice(TKAM_PRICE);
+        EXPECTED_BOOK_2.setDescription(TKAM_DESCRIPTION);
+        EXPECTED_BOOK_2.setCoverImage(TKAM_COVER_IMAGE);
 
-        expectedBook3 = new Book();
-        expectedBook3.setId(3L);
-        expectedBook3.setTitle("1984");
-        expectedBook3.setAuthor("George Orwell");
-        expectedBook3.setIsbn("9780451524935");
-        expectedBook3.setPrice(BigDecimal.valueOf(9.99));
-        expectedBook3.setDescription("A dystopian novel set in Airstrip One, a province of the "
-                + "superstate Oceania, whose residents are victims of perpetual war, omnipresent "
-                + "government surveillance, and public manipulation.");
-        expectedBook3.setCoverImage("1984.jpg");
-
-        expectedBooks = new Book[]{expectedBook1, expectedBook2, expectedBook3};
+        EXPECTED_BOOK_3.setId(ID_1984);
+        EXPECTED_BOOK_3.setTitle(TITLE_1984);
+        EXPECTED_BOOK_3.setAuthor(AUTHOR_1984);
+        EXPECTED_BOOK_3.setIsbn(ISBN_1984);
+        EXPECTED_BOOK_3.setPrice(PRICE_1984);
+        EXPECTED_BOOK_3.setDescription(DESCRIPTION_1984);
+        EXPECTED_BOOK_3.setCoverImage(COVER_IMAGE_1984);
     }
 
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
@@ -100,14 +124,14 @@ class BookRepositoryTest {
         int expectedListSize = 3;
         List<Book> actualBooks = bookRepository.findAllByCategoryId(1L);
         assertEquals(expectedListSize, actualBooks.size());
-        for (Book expectedBook : expectedBooks) {
-            expectedBook.setCategories(Set.of(category));
+        for (Book expectedBook : EXPECTED_BOOKS) {
+            expectedBook.setCategories(Set.of(CATEGORY));
         }
         actualBooks.forEach(book -> {
             int currentId = book.getId().intValue();
-            assertEquals(expectedBooks[currentId - 1], book);
+            assertEquals(EXPECTED_BOOKS[currentId - 1], book);
         });
-        for (Book expectedBook : expectedBooks) {
+        for (Book expectedBook : EXPECTED_BOOKS) {
             expectedBook.setCategories(Set.of());
         }
     }
@@ -134,20 +158,20 @@ class BookRepositoryTest {
     @Test
     void findBookByIsbn_IsAbleToGetBooksByExistingIsbn_Success() {
         Book actualBook = new Book();
-        if (bookRepository.findBookByIsbn(testIsbn1).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(testIsbn1).get();
+        if (bookRepository.findBookByIsbn(TEST_ISBN_1).isPresent()) {
+            actualBook = bookRepository.findBookByIsbn(TEST_ISBN_1).get();
         }
-        assertEquals(expectedBook1, actualBook);
+        assertEquals(EXPECTED_BOOK_1, actualBook);
 
-        if (bookRepository.findBookByIsbn(testIsbn2).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(testIsbn2).get();
+        if (bookRepository.findBookByIsbn(TEST_ISBN_2).isPresent()) {
+            actualBook = bookRepository.findBookByIsbn(TEST_ISBN_2).get();
         }
-        assertEquals(expectedBook2, actualBook);
+        assertEquals(EXPECTED_BOOK_2, actualBook);
 
-        if (bookRepository.findBookByIsbn(testIsbn3).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(testIsbn3).get();
+        if (bookRepository.findBookByIsbn(TEST_ISBN_3).isPresent()) {
+            actualBook = bookRepository.findBookByIsbn(TEST_ISBN_3).get();
         }
-        assertEquals(expectedBook3, actualBook);
+        assertEquals(EXPECTED_BOOK_3, actualBook);
     }
 
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
@@ -167,7 +191,7 @@ class BookRepositoryTest {
     @DisplayName("Given an ISBN of 3 present books, successfully make sure each of them exists")
     @Test
     void existsByIsbn_IsAbleToFindAddedBooksWithExistingIsbn_Success() {
-        for (String isbn : testIsbns) {
+        for (String isbn : TEST_ISBNS) {
             assertTrue(bookRepository.existsByIsbn(isbn));
         }
     }
