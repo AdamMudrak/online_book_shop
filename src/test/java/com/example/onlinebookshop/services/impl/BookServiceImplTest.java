@@ -1,9 +1,12 @@
 package com.example.onlinebookshop.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.book.request.CreateBookDto;
 import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
@@ -14,7 +17,12 @@ import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
 import com.example.onlinebookshop.mapper.BookMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
+import com.example.onlinebookshop.repositories.book.bookspecs.bookfieldsspecs.AuthorSpecificationProvider;
+import com.example.onlinebookshop.repositories.book.bookspecs.bookfieldsspecs.FromPriceSpecificationProvider;
+import com.example.onlinebookshop.repositories.book.bookspecs.bookfieldsspecs.TitleSpecificationProvider;
+import com.example.onlinebookshop.repositories.book.bookspecs.bookfieldsspecs.ToPriceSpecificationProvider;
 import com.example.onlinebookshop.repositories.category.CategoryRepository;
+import com.example.onlinebookshop.repositories.specifications.SpecificationProviderManager;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +36,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
@@ -112,6 +121,21 @@ class BookServiceImplTest {
                     PRICE_1984,
                     DESCRIPTION_1984,
                     COVER_IMAGE_1984);
+    private static final int FLOOR_PRICE = 10;
+    private static final int CEILING_PRICE = 12;
+    private static final BookSearchParametersDto REAL_BOOK_SEARCH_PARAMETERS_DTO =
+            new BookSearchParametersDto(
+                    BigDecimal.valueOf(FLOOR_PRICE),
+                    BigDecimal.valueOf(CEILING_PRICE),
+                    new String[]{TITLE_1984, TKAM_TITLE},
+                    new String[]{AUTHOR_1984, TKAM_AUTHOR});
+
+    private static final BookSearchParametersDto RANDOM_BOOK_SEARCH_PARAMETERS_DTO =
+            new BookSearchParametersDto(
+                    BigDecimal.valueOf(FLOOR_PRICE),
+                    BigDecimal.valueOf(CEILING_PRICE),
+                    new String[]{SOME_TITLE},
+                    new String[]{SOME_AUTHOR});
     private static final int PAGE_NUMBER = 0;
     private static final int PAGE_SIZE = 3;
 
@@ -123,6 +147,8 @@ class BookServiceImplTest {
     private BookMapper bookMapper;
     @Mock
     private BookSpecificationBuilder bookSpecificationBuilder;
+    @Mock
+    private SpecificationProviderManager<Book> bookSpecificationProviderManager;
     @InjectMocks
     private BookServiceImpl bookService;
 
@@ -200,6 +226,8 @@ class BookServiceImplTest {
         EXPECTED_BOOK_DTO_3.setPrice(PRICE_1984);
         EXPECTED_BOOK_DTO_3.setDescription(DESCRIPTION_1984);
         EXPECTED_BOOK_DTO_3.setCoverImage(COVER_IMAGE_1984);
+
+        System.out.println(EXPECTED_BOOK_DTO_3);
     }
 
     @Test
@@ -308,6 +336,111 @@ class BookServiceImplTest {
     }
 
     @Test
-    void search() {
+    void search_IsAbleToSearchBooksWithExistingSpecifications_Success() {
+        prepareWhensForSearch();
+
+        Specification<Book> specification = getRealSpecification();
+
+        when(bookSpecificationBuilder.build(REAL_BOOK_SEARCH_PARAMETERS_DTO))
+                .thenReturn(specification);
+        List<Book> expectedBooks = List.of(EXPECTED_BOOK_2, EXPECTED_BOOK_3);
+
+        when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
+        when(bookMapper.toDto(EXPECTED_BOOK_2)).thenReturn(EXPECTED_BOOK_DTO_2);
+        when(bookMapper.toDto(EXPECTED_BOOK_3)).thenReturn(EXPECTED_BOOK_DTO_3);
+
+        List<BookDto> expectedBookDtos =
+                List.of(EXPECTED_BOOK_DTO_2, EXPECTED_BOOK_DTO_3);
+        List<BookDto> actualBookDtos = bookService.search(REAL_BOOK_SEARCH_PARAMETERS_DTO);
+
+        assertEquals(expectedBookDtos, actualBookDtos);
+    }
+
+    @Test
+    void search_MakeSureIfOtherBooksListGivenThen_Fail() {
+        prepareWhensForSearch();
+
+        Specification<Book> specification = getRealSpecification();
+
+        when(bookSpecificationBuilder.build(REAL_BOOK_SEARCH_PARAMETERS_DTO))
+                .thenReturn(specification);
+        List<Book> expectedBooks = List.of(EXPECTED_BOOK_2, EXPECTED_BOOK_3);
+
+        when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
+        when(bookMapper.toDto(EXPECTED_BOOK_2)).thenReturn(EXPECTED_BOOK_DTO_2);
+        when(bookMapper.toDto(EXPECTED_BOOK_3)).thenReturn(EXPECTED_BOOK_DTO_3);
+
+        List<BookDto> unexpectedBookDtos =
+                List.of(EXPECTED_BOOK_DTO_1, EXPECTED_BOOK_DTO_2);
+        List<BookDto> actualBookDtos = bookService.search(REAL_BOOK_SEARCH_PARAMETERS_DTO);
+
+        assertEquals(unexpectedBookDtos.size(), actualBookDtos.size());
+        assertNotEquals(unexpectedBookDtos, actualBookDtos);
+    }
+
+    @Test
+    void search_IsNotAbleToSearchBooksWithNonExistingSpecifications_Fail() {
+        prepareWhensForSearch();
+
+        Specification<Book> specification = getRandomSpecification();
+
+        when(bookSpecificationBuilder.build(RANDOM_BOOK_SEARCH_PARAMETERS_DTO))
+                .thenReturn(specification);
+        List<Book> expectedBooks = List.of();
+
+        when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
+
+        List<BookDto> actualBookDtos = bookService.search(RANDOM_BOOK_SEARCH_PARAMETERS_DTO);
+
+        assertTrue(actualBookDtos.isEmpty());
+    }
+
+    private Specification<Book> getRealSpecification() {
+        return Specification.allOf(bookSpecificationProviderManager
+                        .getSpecificationProvider("title")
+                        .getSpecification(REAL_BOOK_SEARCH_PARAMETERS_DTO.titles())
+                        .and(bookSpecificationProviderManager
+                                .getSpecificationProvider("author")
+                                .getSpecification(REAL_BOOK_SEARCH_PARAMETERS_DTO.authors())))
+                .and(bookSpecificationProviderManager
+                        .getSpecificationProvider("fromPrice")
+                        .getSpecification(
+                                new String[]{String
+                                        .valueOf(REAL_BOOK_SEARCH_PARAMETERS_DTO.fromPrice())}))
+                .and(bookSpecificationProviderManager
+                        .getSpecificationProvider("toPrice")
+                        .getSpecification(
+                                new String[]{String.valueOf(REAL_BOOK_SEARCH_PARAMETERS_DTO
+                                        .toPrice())}));
+    }
+
+    private Specification<Book> getRandomSpecification() {
+        return Specification.allOf(bookSpecificationProviderManager
+                        .getSpecificationProvider("title")
+                        .getSpecification(RANDOM_BOOK_SEARCH_PARAMETERS_DTO.titles())
+                        .and(bookSpecificationProviderManager
+                                .getSpecificationProvider("author")
+                                .getSpecification(RANDOM_BOOK_SEARCH_PARAMETERS_DTO.authors())))
+                .and(bookSpecificationProviderManager
+                        .getSpecificationProvider("fromPrice")
+                        .getSpecification(
+                                new String[]{String
+                                        .valueOf(RANDOM_BOOK_SEARCH_PARAMETERS_DTO.fromPrice())}))
+                .and(bookSpecificationProviderManager
+                        .getSpecificationProvider("toPrice")
+                        .getSpecification(
+                                new String[]{String.valueOf(RANDOM_BOOK_SEARCH_PARAMETERS_DTO
+                                        .toPrice())}));
+    }
+
+    private void prepareWhensForSearch() {
+        when(bookSpecificationProviderManager.getSpecificationProvider("title"))
+                .thenReturn(new TitleSpecificationProvider());
+        when(bookSpecificationProviderManager.getSpecificationProvider("author"))
+                .thenReturn(new AuthorSpecificationProvider());
+        when(bookSpecificationProviderManager.getSpecificationProvider("fromPrice"))
+                .thenReturn(new FromPriceSpecificationProvider());
+        when(bookSpecificationProviderManager.getSpecificationProvider("toPrice"))
+                .thenReturn(new ToPriceSpecificationProvider());
     }
 }
