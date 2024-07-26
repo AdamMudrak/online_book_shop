@@ -42,17 +42,17 @@ import org.springframework.data.jpa.domain.Specification;
 class BookServiceImplTest {
     private static final Category CATEGORY = new Category();
     private static final CreateBookDto CREATE_NEW_BOOK_DTO = new CreateBookDto();
-    private static final CreateBookDto CREATE_EXISTING_BOOK_DTO = new CreateBookDto();
+    private static final CreateBookDto CREATE_EXISTING_1984_BOOK_DTO = new CreateBookDto();
 
     private static final Book BOOK_FROM_CREATE_NEW_BOOK_DTO = new Book();
 
-    private static final Book EXPECTED_BOOK_1 = new Book();
-    private static final Book EXPECTED_BOOK_2 = new Book();
-    private static final Book EXPECTED_BOOK_3 = new Book();
+    private static final Book EXPECTED_GATSBY_BOOK = new Book();
+    private static final Book EXPECTED_TKAM_BOOK = new Book();
+    private static final Book EXPECTED_1984_BOOK = new Book();
 
-    private static final BookDto EXPECTED_BOOK_DTO_1 = new BookDto();
-    private static final BookDto EXPECTED_BOOK_DTO_2 = new BookDto();
-    private static final BookDto EXPECTED_BOOK_DTO_3 = new BookDto();
+    private static final BookDto EXPECTED_GATSBY_BOOK_DTO = new BookDto();
+    private static final BookDto EXPECTED_TKAM_BOOK_DTO = new BookDto();
+    private static final BookDto EXPECTED_1984_BOOK_DTO = new BookDto();
 
     private static final long CATEGORY_ID = 1L;
     private static final long RANDOM_CATEGORY_ID = 1000L;
@@ -95,7 +95,7 @@ class BookServiceImplTest {
     private static final String SOME_DESCRIPTION = "Some description";
     private static final String SOME_COVER_IMAGE = "some_picture.jpg";
 
-    private static final BookDtoWithoutCategoryIds EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_1 =
+    private static final BookDtoWithoutCategoryIds EXPECTED_GATSBY_BOOK_DTO_WITHOUT_CATEGORY_ID =
             new BookDtoWithoutCategoryIds(GATSBY_ID,
                     GATSBY_TITLE,
                     GATSBY_AUTHOR,
@@ -104,7 +104,7 @@ class BookServiceImplTest {
                     GATSBY_DESCRIPTION,
                     GATSBY_COVER_IMAGE);
 
-    private static final BookDtoWithoutCategoryIds EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_2 =
+    private static final BookDtoWithoutCategoryIds EXPECTED_TKAM_BOOK_DTO_WITHOUT_CATEGORY_ID =
             new BookDtoWithoutCategoryIds(TKAM_ID,
                     TKAM_TITLE,
                     TKAM_AUTHOR,
@@ -113,7 +113,7 @@ class BookServiceImplTest {
                     TKAM_DESCRIPTION,
                     TKAM_COVER_IMAGE);
 
-    private static final BookDtoWithoutCategoryIds EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_3 =
+    private static final BookDtoWithoutCategoryIds EXPECTED_1984_BOOK_DTO_WITHOUT_CATEGORY_ID =
             new BookDtoWithoutCategoryIds(ID_1984,
                     TITLE_1984,
                     AUTHOR_1984,
@@ -165,12 +165,12 @@ class BookServiceImplTest {
         CREATE_NEW_BOOK_DTO.setDescription(SOME_DESCRIPTION);
         CREATE_NEW_BOOK_DTO.setCoverImage(SOME_COVER_IMAGE);
 
-        CREATE_EXISTING_BOOK_DTO.setTitle(TITLE_1984);
-        CREATE_EXISTING_BOOK_DTO.setAuthor(AUTHOR_1984);
-        CREATE_EXISTING_BOOK_DTO.setIsbn(ISBN_1984);
-        CREATE_EXISTING_BOOK_DTO.setPrice(PRICE_1984);
-        CREATE_EXISTING_BOOK_DTO.setDescription(DESCRIPTION_1984);
-        CREATE_EXISTING_BOOK_DTO.setCoverImage(COVER_IMAGE_1984);
+        CREATE_EXISTING_1984_BOOK_DTO.setTitle(TITLE_1984);
+        CREATE_EXISTING_1984_BOOK_DTO.setAuthor(AUTHOR_1984);
+        CREATE_EXISTING_1984_BOOK_DTO.setIsbn(ISBN_1984);
+        CREATE_EXISTING_1984_BOOK_DTO.setPrice(PRICE_1984);
+        CREATE_EXISTING_1984_BOOK_DTO.setDescription(DESCRIPTION_1984);
+        CREATE_EXISTING_1984_BOOK_DTO.setCoverImage(COVER_IMAGE_1984);
 
         BOOK_FROM_CREATE_NEW_BOOK_DTO.setTitle(SOME_TITLE);
         BOOK_FROM_CREATE_NEW_BOOK_DTO.setAuthor(SOME_AUTHOR);
@@ -179,55 +179,55 @@ class BookServiceImplTest {
         BOOK_FROM_CREATE_NEW_BOOK_DTO.setDescription(SOME_DESCRIPTION);
         BOOK_FROM_CREATE_NEW_BOOK_DTO.setCoverImage(SOME_COVER_IMAGE);
 
-        EXPECTED_BOOK_1.setId(GATSBY_ID);
-        EXPECTED_BOOK_1.setTitle(GATSBY_TITLE);
-        EXPECTED_BOOK_1.setAuthor(GATSBY_AUTHOR);
-        EXPECTED_BOOK_1.setIsbn(GATSBY_ISBN);
-        EXPECTED_BOOK_1.setPrice(GATSBY_PRICE);
-        EXPECTED_BOOK_1.setDescription(GATSBY_DESCRIPTION);
-        EXPECTED_BOOK_1.setCoverImage(GATSBY_COVER_IMAGE);
+        EXPECTED_GATSBY_BOOK.setId(GATSBY_ID);
+        EXPECTED_GATSBY_BOOK.setTitle(GATSBY_TITLE);
+        EXPECTED_GATSBY_BOOK.setAuthor(GATSBY_AUTHOR);
+        EXPECTED_GATSBY_BOOK.setIsbn(GATSBY_ISBN);
+        EXPECTED_GATSBY_BOOK.setPrice(GATSBY_PRICE);
+        EXPECTED_GATSBY_BOOK.setDescription(GATSBY_DESCRIPTION);
+        EXPECTED_GATSBY_BOOK.setCoverImage(GATSBY_COVER_IMAGE);
 
-        EXPECTED_BOOK_2.setId(TKAM_ID);
-        EXPECTED_BOOK_2.setTitle(TKAM_TITLE);
-        EXPECTED_BOOK_2.setAuthor(TKAM_AUTHOR);
-        EXPECTED_BOOK_2.setIsbn(TKAM_ISBN);
-        EXPECTED_BOOK_2.setPrice(TKAM_PRICE);
-        EXPECTED_BOOK_2.setDescription(TKAM_DESCRIPTION);
-        EXPECTED_BOOK_2.setCoverImage(TKAM_COVER_IMAGE);
+        EXPECTED_TKAM_BOOK.setId(TKAM_ID);
+        EXPECTED_TKAM_BOOK.setTitle(TKAM_TITLE);
+        EXPECTED_TKAM_BOOK.setAuthor(TKAM_AUTHOR);
+        EXPECTED_TKAM_BOOK.setIsbn(TKAM_ISBN);
+        EXPECTED_TKAM_BOOK.setPrice(TKAM_PRICE);
+        EXPECTED_TKAM_BOOK.setDescription(TKAM_DESCRIPTION);
+        EXPECTED_TKAM_BOOK.setCoverImage(TKAM_COVER_IMAGE);
 
-        EXPECTED_BOOK_3.setId(ID_1984);
-        EXPECTED_BOOK_3.setTitle(TITLE_1984);
-        EXPECTED_BOOK_3.setAuthor(AUTHOR_1984);
-        EXPECTED_BOOK_3.setIsbn(ISBN_1984);
-        EXPECTED_BOOK_3.setPrice(PRICE_1984);
-        EXPECTED_BOOK_3.setDescription(DESCRIPTION_1984);
-        EXPECTED_BOOK_3.setCoverImage(COVER_IMAGE_1984);
+        EXPECTED_1984_BOOK.setId(ID_1984);
+        EXPECTED_1984_BOOK.setTitle(TITLE_1984);
+        EXPECTED_1984_BOOK.setAuthor(AUTHOR_1984);
+        EXPECTED_1984_BOOK.setIsbn(ISBN_1984);
+        EXPECTED_1984_BOOK.setPrice(PRICE_1984);
+        EXPECTED_1984_BOOK.setDescription(DESCRIPTION_1984);
+        EXPECTED_1984_BOOK.setCoverImage(COVER_IMAGE_1984);
 
-        EXPECTED_BOOK_DTO_1.setId(GATSBY_ID);
-        EXPECTED_BOOK_DTO_1.setTitle(GATSBY_TITLE);
-        EXPECTED_BOOK_DTO_1.setAuthor(GATSBY_AUTHOR);
-        EXPECTED_BOOK_DTO_1.setIsbn(GATSBY_ISBN);
-        EXPECTED_BOOK_DTO_1.setPrice(GATSBY_PRICE);
-        EXPECTED_BOOK_DTO_1.setDescription(GATSBY_DESCRIPTION);
-        EXPECTED_BOOK_DTO_1.setCoverImage(GATSBY_COVER_IMAGE);
+        EXPECTED_GATSBY_BOOK_DTO.setId(GATSBY_ID);
+        EXPECTED_GATSBY_BOOK_DTO.setTitle(GATSBY_TITLE);
+        EXPECTED_GATSBY_BOOK_DTO.setAuthor(GATSBY_AUTHOR);
+        EXPECTED_GATSBY_BOOK_DTO.setIsbn(GATSBY_ISBN);
+        EXPECTED_GATSBY_BOOK_DTO.setPrice(GATSBY_PRICE);
+        EXPECTED_GATSBY_BOOK_DTO.setDescription(GATSBY_DESCRIPTION);
+        EXPECTED_GATSBY_BOOK_DTO.setCoverImage(GATSBY_COVER_IMAGE);
 
-        EXPECTED_BOOK_DTO_2.setId(TKAM_ID);
-        EXPECTED_BOOK_DTO_2.setTitle(TKAM_TITLE);
-        EXPECTED_BOOK_DTO_2.setAuthor(TKAM_AUTHOR);
-        EXPECTED_BOOK_DTO_2.setIsbn(TKAM_ISBN);
-        EXPECTED_BOOK_DTO_2.setPrice(TKAM_PRICE);
-        EXPECTED_BOOK_DTO_2.setDescription(TKAM_DESCRIPTION);
-        EXPECTED_BOOK_DTO_2.setCoverImage(TKAM_COVER_IMAGE);
+        EXPECTED_TKAM_BOOK_DTO.setId(TKAM_ID);
+        EXPECTED_TKAM_BOOK_DTO.setTitle(TKAM_TITLE);
+        EXPECTED_TKAM_BOOK_DTO.setAuthor(TKAM_AUTHOR);
+        EXPECTED_TKAM_BOOK_DTO.setIsbn(TKAM_ISBN);
+        EXPECTED_TKAM_BOOK_DTO.setPrice(TKAM_PRICE);
+        EXPECTED_TKAM_BOOK_DTO.setDescription(TKAM_DESCRIPTION);
+        EXPECTED_TKAM_BOOK_DTO.setCoverImage(TKAM_COVER_IMAGE);
 
-        EXPECTED_BOOK_DTO_3.setId(ID_1984);
-        EXPECTED_BOOK_DTO_3.setTitle(TITLE_1984);
-        EXPECTED_BOOK_DTO_3.setAuthor(AUTHOR_1984);
-        EXPECTED_BOOK_DTO_3.setIsbn(ISBN_1984);
-        EXPECTED_BOOK_DTO_3.setPrice(PRICE_1984);
-        EXPECTED_BOOK_DTO_3.setDescription(DESCRIPTION_1984);
-        EXPECTED_BOOK_DTO_3.setCoverImage(COVER_IMAGE_1984);
+        EXPECTED_1984_BOOK_DTO.setId(ID_1984);
+        EXPECTED_1984_BOOK_DTO.setTitle(TITLE_1984);
+        EXPECTED_1984_BOOK_DTO.setAuthor(AUTHOR_1984);
+        EXPECTED_1984_BOOK_DTO.setIsbn(ISBN_1984);
+        EXPECTED_1984_BOOK_DTO.setPrice(PRICE_1984);
+        EXPECTED_1984_BOOK_DTO.setDescription(DESCRIPTION_1984);
+        EXPECTED_1984_BOOK_DTO.setCoverImage(COVER_IMAGE_1984);
 
-        System.out.println(EXPECTED_BOOK_DTO_3);
+        System.out.println(EXPECTED_1984_BOOK_DTO);
     }
 
     @Test
@@ -236,22 +236,22 @@ class BookServiceImplTest {
                 .thenReturn(BOOK_FROM_CREATE_NEW_BOOK_DTO);
         when(bookRepository.save(BOOK_FROM_CREATE_NEW_BOOK_DTO))
                 .thenReturn(BOOK_FROM_CREATE_NEW_BOOK_DTO);
-        when(bookMapper.toDto(BOOK_FROM_CREATE_NEW_BOOK_DTO)).thenReturn(EXPECTED_BOOK_DTO_1);
+        when(bookMapper.toDto(BOOK_FROM_CREATE_NEW_BOOK_DTO)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
         BookDto actualBookDto = bookService.save(CREATE_NEW_BOOK_DTO);
-        assertEquals(EXPECTED_BOOK_DTO_1, actualBookDto);
+        assertEquals(EXPECTED_GATSBY_BOOK_DTO, actualBookDto);
     }
 
     @Test
     void save_IsNotAbleToSaveBookWhichIsInDb_Fail() {
-        when(bookRepository.existsByIsbn(CREATE_EXISTING_BOOK_DTO.getIsbn()))
+        when(bookRepository.existsByIsbn(CREATE_EXISTING_1984_BOOK_DTO.getIsbn()))
                 .thenThrow(new ParameterAlreadyExistsException("Another book with ISBN "
-                        + CREATE_EXISTING_BOOK_DTO.getIsbn() + " already exists in DB"));
+                        + CREATE_EXISTING_1984_BOOK_DTO.getIsbn() + " already exists in DB"));
 
         Exception parameterAlreadyExistsException =
                 assertThrows(ParameterAlreadyExistsException.class, () ->
-                        bookService.save(CREATE_EXISTING_BOOK_DTO));
+                        bookService.save(CREATE_EXISTING_1984_BOOK_DTO));
         String expectedMessage = "Another book with ISBN "
-                + CREATE_EXISTING_BOOK_DTO.getIsbn() + " already exists in DB";
+                + CREATE_EXISTING_1984_BOOK_DTO.getIsbn() + " already exists in DB";
 
         assertEquals(expectedMessage, parameterAlreadyExistsException.getMessage());
     }
@@ -259,16 +259,16 @@ class BookServiceImplTest {
     @Test
     void findAll_IsAbleToFindThreeBooksFromDb_Success() {
         Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
-        List<Book> books = List.of(EXPECTED_BOOK_1, EXPECTED_BOOK_2, EXPECTED_BOOK_3);
+        List<Book> books = List.of(EXPECTED_GATSBY_BOOK, EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 
         when(bookRepository.findAll(pageable)).thenReturn(bookPage);
-        when(bookMapper.toDto(EXPECTED_BOOK_1)).thenReturn(EXPECTED_BOOK_DTO_1);
-        when(bookMapper.toDto(EXPECTED_BOOK_2)).thenReturn(EXPECTED_BOOK_DTO_2);
-        when(bookMapper.toDto(EXPECTED_BOOK_3)).thenReturn(EXPECTED_BOOK_DTO_3);
+        when(bookMapper.toDto(EXPECTED_GATSBY_BOOK)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
+        when(bookMapper.toDto(EXPECTED_TKAM_BOOK)).thenReturn(EXPECTED_TKAM_BOOK_DTO);
+        when(bookMapper.toDto(EXPECTED_1984_BOOK)).thenReturn(EXPECTED_1984_BOOK_DTO);
 
         List<BookDto> expectedBookDtos =
-                List.of(EXPECTED_BOOK_DTO_1, EXPECTED_BOOK_DTO_2, EXPECTED_BOOK_DTO_3);
+                List.of(EXPECTED_GATSBY_BOOK_DTO, EXPECTED_TKAM_BOOK_DTO, EXPECTED_1984_BOOK_DTO);
         List<BookDto> actualBookDtos = bookService.findAll(pageable);
 
         assertEquals(expectedBookDtos, actualBookDtos);
@@ -290,21 +290,21 @@ class BookServiceImplTest {
 
     @Test
     void findAllWithoutCategoryIds_IsAbleToFindThreeBooksFromDb_Success() {
-        List<Book> books = List.of(EXPECTED_BOOK_1, EXPECTED_BOOK_2, EXPECTED_BOOK_3);
+        List<Book> books = List.of(EXPECTED_GATSBY_BOOK, EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
 
         when(categoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(CATEGORY));
         when(bookRepository.findAllByCategoryId(CATEGORY_ID)).thenReturn(books);
-        when(bookMapper.toDtoWithoutCategories(EXPECTED_BOOK_1))
-                .thenReturn(EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_1);
-        when(bookMapper.toDtoWithoutCategories(EXPECTED_BOOK_2))
-                .thenReturn(EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_2);
-        when(bookMapper.toDtoWithoutCategories(EXPECTED_BOOK_3))
-                .thenReturn(EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_3);
+        when(bookMapper.toDtoWithoutCategories(EXPECTED_GATSBY_BOOK))
+                .thenReturn(EXPECTED_GATSBY_BOOK_DTO_WITHOUT_CATEGORY_ID);
+        when(bookMapper.toDtoWithoutCategories(EXPECTED_TKAM_BOOK))
+                .thenReturn(EXPECTED_TKAM_BOOK_DTO_WITHOUT_CATEGORY_ID);
+        when(bookMapper.toDtoWithoutCategories(EXPECTED_1984_BOOK))
+                .thenReturn(EXPECTED_1984_BOOK_DTO_WITHOUT_CATEGORY_ID);
 
         List<BookDtoWithoutCategoryIds> expectedBookDtos =
-                List.of(EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_1,
-                        EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_2,
-                        EXPECTED_BOOK_DTO_WITHOUT_CATEGORY_ID_3);
+                List.of(EXPECTED_GATSBY_BOOK_DTO_WITHOUT_CATEGORY_ID,
+                        EXPECTED_TKAM_BOOK_DTO_WITHOUT_CATEGORY_ID,
+                        EXPECTED_1984_BOOK_DTO_WITHOUT_CATEGORY_ID);
         List<BookDtoWithoutCategoryIds> actualBookDtos =
                 bookService.findAllWithoutCategoryIds(CATEGORY_ID);
 
@@ -328,7 +328,8 @@ class BookServiceImplTest {
     }
 
     @Test
-    void update() {
+    void update_CannotUpdateBookWhenIsbnExists_Fail() {
+        when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
     }
 
     @Test
@@ -343,14 +344,14 @@ class BookServiceImplTest {
 
         when(bookSpecificationBuilder.build(REAL_BOOK_SEARCH_PARAMETERS_DTO))
                 .thenReturn(specification);
-        List<Book> expectedBooks = List.of(EXPECTED_BOOK_2, EXPECTED_BOOK_3);
+        List<Book> expectedBooks = List.of(EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
 
         when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
-        when(bookMapper.toDto(EXPECTED_BOOK_2)).thenReturn(EXPECTED_BOOK_DTO_2);
-        when(bookMapper.toDto(EXPECTED_BOOK_3)).thenReturn(EXPECTED_BOOK_DTO_3);
+        when(bookMapper.toDto(EXPECTED_TKAM_BOOK)).thenReturn(EXPECTED_TKAM_BOOK_DTO);
+        when(bookMapper.toDto(EXPECTED_1984_BOOK)).thenReturn(EXPECTED_1984_BOOK_DTO);
 
         List<BookDto> expectedBookDtos =
-                List.of(EXPECTED_BOOK_DTO_2, EXPECTED_BOOK_DTO_3);
+                List.of(EXPECTED_TKAM_BOOK_DTO, EXPECTED_1984_BOOK_DTO);
         List<BookDto> actualBookDtos = bookService.search(REAL_BOOK_SEARCH_PARAMETERS_DTO);
 
         assertEquals(expectedBookDtos, actualBookDtos);
@@ -364,14 +365,14 @@ class BookServiceImplTest {
 
         when(bookSpecificationBuilder.build(REAL_BOOK_SEARCH_PARAMETERS_DTO))
                 .thenReturn(specification);
-        List<Book> expectedBooks = List.of(EXPECTED_BOOK_2, EXPECTED_BOOK_3);
+        List<Book> expectedBooks = List.of(EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
 
         when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
-        when(bookMapper.toDto(EXPECTED_BOOK_2)).thenReturn(EXPECTED_BOOK_DTO_2);
-        when(bookMapper.toDto(EXPECTED_BOOK_3)).thenReturn(EXPECTED_BOOK_DTO_3);
+        when(bookMapper.toDto(EXPECTED_TKAM_BOOK)).thenReturn(EXPECTED_TKAM_BOOK_DTO);
+        when(bookMapper.toDto(EXPECTED_1984_BOOK)).thenReturn(EXPECTED_1984_BOOK_DTO);
 
         List<BookDto> unexpectedBookDtos =
-                List.of(EXPECTED_BOOK_DTO_1, EXPECTED_BOOK_DTO_2);
+                List.of(EXPECTED_GATSBY_BOOK_DTO, EXPECTED_TKAM_BOOK_DTO);
         List<BookDto> actualBookDtos = bookService.search(REAL_BOOK_SEARCH_PARAMETERS_DTO);
 
         assertEquals(unexpectedBookDtos.size(), actualBookDtos.size());
