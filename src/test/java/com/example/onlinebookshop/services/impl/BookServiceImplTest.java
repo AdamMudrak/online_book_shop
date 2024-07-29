@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
 import com.example.onlinebookshop.dto.book.request.CreateBookDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
@@ -26,6 +27,7 @@ import com.example.onlinebookshop.repositories.specifications.SpecificationProvi
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,15 +46,19 @@ class BookServiceImplTest {
     private static final CreateBookDto CREATE_NEW_BOOK_DTO = new CreateBookDto();
     private static final CreateBookDto CREATE_EXISTING_1984_BOOK_DTO = new CreateBookDto();
 
-    private static final Book BOOK_FROM_CREATE_NEW_BOOK_DTO = new Book();
+    private static final UpdateBookDto UPDATE_BOOK_DTO = new UpdateBookDto();
+
+    private static final Book BOOK_FROM_DTO = new Book();
 
     private static final Book EXPECTED_GATSBY_BOOK = new Book();
+    private static final Book EXPECTED_GATSBY_AFTER_UPDATE = new Book();
     private static final Book EXPECTED_TKAM_BOOK = new Book();
     private static final Book EXPECTED_1984_BOOK = new Book();
 
     private static final BookDto EXPECTED_GATSBY_BOOK_DTO = new BookDto();
     private static final BookDto EXPECTED_TKAM_BOOK_DTO = new BookDto();
     private static final BookDto EXPECTED_1984_BOOK_DTO = new BookDto();
+    private static final BookDto EXPECTED_GATSBY_AFTER_UPDATE_DTO = new BookDto();
 
     private static final long CATEGORY_ID = 1L;
     private static final long RANDOM_CATEGORY_ID = 1000L;
@@ -88,6 +94,7 @@ class BookServiceImplTest {
             + "omnipresent government surveillance, and public manipulation.";
     private static final String COVER_IMAGE_1984 = "1984.jpg";
 
+    private static final long RANDOM_BOOK_ID = 1000L;
     private static final String SOME_TITLE = "Some book";
     private static final String SOME_AUTHOR = "Some author";
     private static final String SOME_ISBN = "0000000000000";
@@ -172,12 +179,20 @@ class BookServiceImplTest {
         CREATE_EXISTING_1984_BOOK_DTO.setDescription(DESCRIPTION_1984);
         CREATE_EXISTING_1984_BOOK_DTO.setCoverImage(COVER_IMAGE_1984);
 
-        BOOK_FROM_CREATE_NEW_BOOK_DTO.setTitle(SOME_TITLE);
-        BOOK_FROM_CREATE_NEW_BOOK_DTO.setAuthor(SOME_AUTHOR);
-        BOOK_FROM_CREATE_NEW_BOOK_DTO.setIsbn(SOME_ISBN);
-        BOOK_FROM_CREATE_NEW_BOOK_DTO.setPrice(SOME_PRICE);
-        BOOK_FROM_CREATE_NEW_BOOK_DTO.setDescription(SOME_DESCRIPTION);
-        BOOK_FROM_CREATE_NEW_BOOK_DTO.setCoverImage(SOME_COVER_IMAGE);
+        UPDATE_BOOK_DTO.setTitle(SOME_TITLE);
+        UPDATE_BOOK_DTO.setAuthor(SOME_AUTHOR);
+        UPDATE_BOOK_DTO.setCategoryIds(Set.of(CATEGORY_ID));
+        UPDATE_BOOK_DTO.setIsbn(SOME_ISBN);
+        UPDATE_BOOK_DTO.setPrice(SOME_PRICE);
+        UPDATE_BOOK_DTO.setDescription(SOME_DESCRIPTION);
+        UPDATE_BOOK_DTO.setCoverImage(SOME_COVER_IMAGE);
+
+        BOOK_FROM_DTO.setTitle(SOME_TITLE);
+        BOOK_FROM_DTO.setAuthor(SOME_AUTHOR);
+        BOOK_FROM_DTO.setIsbn(SOME_ISBN);
+        BOOK_FROM_DTO.setPrice(SOME_PRICE);
+        BOOK_FROM_DTO.setDescription(SOME_DESCRIPTION);
+        BOOK_FROM_DTO.setCoverImage(SOME_COVER_IMAGE);
 
         EXPECTED_GATSBY_BOOK.setId(GATSBY_ID);
         EXPECTED_GATSBY_BOOK.setTitle(GATSBY_TITLE);
@@ -227,16 +242,30 @@ class BookServiceImplTest {
         EXPECTED_1984_BOOK_DTO.setDescription(DESCRIPTION_1984);
         EXPECTED_1984_BOOK_DTO.setCoverImage(COVER_IMAGE_1984);
 
-        System.out.println(EXPECTED_1984_BOOK_DTO);
+        EXPECTED_GATSBY_AFTER_UPDATE.setId(GATSBY_ID);
+        EXPECTED_GATSBY_AFTER_UPDATE.setTitle(SOME_TITLE);
+        EXPECTED_GATSBY_AFTER_UPDATE.setAuthor(SOME_AUTHOR);
+        EXPECTED_GATSBY_AFTER_UPDATE.setIsbn(SOME_ISBN);
+        EXPECTED_GATSBY_AFTER_UPDATE.setPrice(SOME_PRICE);
+        EXPECTED_GATSBY_AFTER_UPDATE.setDescription(SOME_DESCRIPTION);
+        EXPECTED_GATSBY_AFTER_UPDATE.setCoverImage(SOME_COVER_IMAGE);
+
+        EXPECTED_GATSBY_AFTER_UPDATE_DTO.setId(GATSBY_ID);
+        EXPECTED_GATSBY_AFTER_UPDATE_DTO.setTitle(SOME_TITLE);
+        EXPECTED_GATSBY_AFTER_UPDATE_DTO.setAuthor(SOME_AUTHOR);
+        EXPECTED_GATSBY_AFTER_UPDATE_DTO.setIsbn(SOME_ISBN);
+        EXPECTED_GATSBY_AFTER_UPDATE_DTO.setPrice(SOME_PRICE);
+        EXPECTED_GATSBY_AFTER_UPDATE_DTO.setDescription(SOME_DESCRIPTION);
+        EXPECTED_GATSBY_AFTER_UPDATE_DTO.setCoverImage(SOME_COVER_IMAGE);
     }
 
     @Test
     void save_IsAbleToSaveBookWhichIsNotInDb_Success() {
         when(bookMapper.toCreateModel(CREATE_NEW_BOOK_DTO))
-                .thenReturn(BOOK_FROM_CREATE_NEW_BOOK_DTO);
-        when(bookRepository.save(BOOK_FROM_CREATE_NEW_BOOK_DTO))
-                .thenReturn(BOOK_FROM_CREATE_NEW_BOOK_DTO);
-        when(bookMapper.toDto(BOOK_FROM_CREATE_NEW_BOOK_DTO)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
+                .thenReturn(BOOK_FROM_DTO);
+        when(bookRepository.save(BOOK_FROM_DTO))
+                .thenReturn(BOOK_FROM_DTO);
+        when(bookMapper.toDto(BOOK_FROM_DTO)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
         BookDto actualBookDto = bookService.save(CREATE_NEW_BOOK_DTO);
         assertEquals(EXPECTED_GATSBY_BOOK_DTO, actualBookDto);
     }
@@ -328,8 +357,28 @@ class BookServiceImplTest {
     }
 
     @Test
-    void update_CannotUpdateBookWhenIsbnExists_Fail() {
-        when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+    void update_CannotUpdateBookWhenIsNotPresentById_Fail() {
+        String exceptionMessage = "Can't find and update book by id " + RANDOM_BOOK_ID;
+        when(bookRepository.findById(RANDOM_BOOK_ID))
+                .thenThrow(new EntityNotFoundException(
+                        "Can't find and update book by id " + RANDOM_BOOK_ID));
+        Exception exception = assertThrows(EntityNotFoundException.class, () ->
+                bookService.update(UPDATE_BOOK_DTO, RANDOM_BOOK_ID, true));
+        assertEquals(exceptionMessage, exception.getMessage());
+    }
+
+    @Test
+    void update_CannotUpdateBookWhenAnotherIsPresentByIsbn_Fail() {
+        String exceptionMessage = "Book with ISBN " + UPDATE_BOOK_DTO.getIsbn()
+                + " already exists in DB";
+        when(bookRepository.findById(RANDOM_BOOK_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+        when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn()))
+                .thenThrow(new ParameterAlreadyExistsException(
+                        "Book with ISBN " + UPDATE_BOOK_DTO.getIsbn()
+                                + " already exists in DB"));
+        Exception exception = assertThrows(ParameterAlreadyExistsException.class, () ->
+                bookService.update(UPDATE_BOOK_DTO, RANDOM_BOOK_ID, true));
+        assertEquals(exceptionMessage, exception.getMessage());
     }
 
     @Test
