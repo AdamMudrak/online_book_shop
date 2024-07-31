@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -268,6 +269,10 @@ class BookServiceImplTest {
         when(bookMapper.toDto(BOOK_FROM_DTO)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
         BookDto actualBookDto = bookService.save(CREATE_NEW_BOOK_DTO);
         assertEquals(EXPECTED_GATSBY_BOOK_DTO, actualBookDto);
+
+        verify(bookMapper, times(1)).toCreateModel(CREATE_NEW_BOOK_DTO);
+        verify(bookRepository, times(1)).save(BOOK_FROM_DTO);
+        verify(bookMapper, times(1)).toDto(BOOK_FROM_DTO);
     }
 
     @Test
@@ -283,6 +288,8 @@ class BookServiceImplTest {
                 + CREATE_EXISTING_1984_BOOK_DTO.getIsbn() + " already exists in DB";
 
         assertEquals(expectedMessage, parameterAlreadyExistsException.getMessage());
+
+        verify(bookRepository, times(1)).existsByIsbn(CREATE_EXISTING_1984_BOOK_DTO.getIsbn());
     }
 
     @Test
@@ -301,6 +308,11 @@ class BookServiceImplTest {
         List<BookDto> actualBookDtos = bookService.findAll(pageable);
 
         assertEquals(expectedBookDtos, actualBookDtos);
+
+        verify(bookRepository, times(1)).findAll(pageable);
+        verify(bookMapper, times(1)).toDto(EXPECTED_GATSBY_BOOK);
+        verify(bookMapper, times(1)).toDto(EXPECTED_TKAM_BOOK);
+        verify(bookMapper, times(1)).toDto(EXPECTED_1984_BOOK);
     }
 
     @Test
@@ -315,6 +327,8 @@ class BookServiceImplTest {
         List<BookDto> actualBookDtos = bookService.findAll(pageable);
 
         assertEquals(expectedBookDtos, actualBookDtos);
+
+        verify(bookRepository, times(1)).findAll(pageable);
     }
 
     @Test
@@ -338,6 +352,12 @@ class BookServiceImplTest {
                 bookService.findAllWithoutCategoryIds(CATEGORY_ID);
 
         assertEquals(expectedBookDtos, actualBookDtos);
+
+        verify(categoryRepository, times(1)).findById(CATEGORY_ID);
+        verify(bookRepository, times(1)).findAllByCategoryId(CATEGORY_ID);
+        verify(bookMapper, times(1)).toDtoWithoutCategories(EXPECTED_GATSBY_BOOK);
+        verify(bookMapper, times(1)).toDtoWithoutCategories(EXPECTED_TKAM_BOOK);
+        verify(bookMapper, times(1)).toDtoWithoutCategories(EXPECTED_1984_BOOK);
     }
 
     @Test
@@ -350,6 +370,8 @@ class BookServiceImplTest {
         String expectedMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
 
         assertEquals(expectedMessage, entityNotFoundException.getMessage());
+
+        verify(categoryRepository, times(1)).findById(RANDOM_CATEGORY_ID);
     }
 
     @Test
@@ -358,6 +380,9 @@ class BookServiceImplTest {
         when(bookMapper.toDto(EXPECTED_GATSBY_BOOK)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
         BookDto byGatsbyId = bookService.findById(GATSBY_ID);
         assertEquals(EXPECTED_GATSBY_BOOK_DTO, byGatsbyId);
+
+        verify(bookRepository, times(1)).findById(GATSBY_ID);
+        verify(bookMapper, times(1)).toDto(EXPECTED_GATSBY_BOOK);
     }
 
     @Test
@@ -368,6 +393,8 @@ class BookServiceImplTest {
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 bookService.findById(RANDOM_BOOK_ID));
         assertEquals(exceptionMessage, exception.getMessage());
+
+        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
     }
 
     @Test
@@ -382,6 +409,13 @@ class BookServiceImplTest {
                 .thenReturn(EXPECTED_GATSBY_AFTER_UPDATE_DTO);
         BookDto actual = bookService.update(UPDATE_BOOK_DTO, GATSBY_ID, true);
         assertEquals(EXPECTED_GATSBY_AFTER_UPDATE_DTO, actual);
+
+        verify(bookRepository, times(1)).findById(GATSBY_ID);
+        verify(bookRepository, times(1)).findBookByIsbn(UPDATE_BOOK_DTO.getIsbn());
+        verify(categoryRepository, times(1)).findById(CATEGORY_ID);
+        verify(bookMapper, times(1)).toUpdateModel(UPDATE_BOOK_DTO);
+        verify(bookRepository, times(1)).save(EXPECTED_GATSBY_AFTER_UPDATE);
+        verify(bookMapper, times(1)).toDto(EXPECTED_GATSBY_AFTER_UPDATE);
     }
 
     @Test
@@ -393,6 +427,8 @@ class BookServiceImplTest {
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 bookService.update(UPDATE_BOOK_DTO, RANDOM_BOOK_ID, true));
         assertEquals(exceptionMessage, exception.getMessage());
+
+        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
     }
 
     @Test
@@ -407,6 +443,9 @@ class BookServiceImplTest {
         Exception exception = assertThrows(ParameterAlreadyExistsException.class, () ->
                 bookService.update(UPDATE_BOOK_DTO, RANDOM_BOOK_ID, true));
         assertEquals(exceptionMessage, exception.getMessage());
+
+        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
+        verify(bookRepository, times(1)).findBookByIsbn(UPDATE_BOOK_DTO.getIsbn());
     }
 
     @Test
@@ -420,13 +459,16 @@ class BookServiceImplTest {
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 bookService.update(UPDATE_BOOK_DTO, GATSBY_ID, true));
         assertEquals(exceptionMessage, exception.getMessage());
+
+        verify(bookRepository, times(1)).findById(GATSBY_ID);
+        verify(bookRepository, times(1)).findBookByIsbn(UPDATE_BOOK_DTO.getIsbn());
+        verify(categoryRepository, times(1)).findById(CATEGORY_ID);
     }
 
     @Test
     void delete_IsAbleToDeleteBookById_Success() {
         when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         bookService.delete(GATSBY_ID);
-        verify(bookRepository).deleteById(GATSBY_ID);
         String exceptionMessage = "Can't find and delete book by id " + GATSBY_ID;
         when(bookRepository.findById(GATSBY_ID))
                 .thenThrow(new EntityNotFoundException(
@@ -434,6 +476,9 @@ class BookServiceImplTest {
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 bookService.delete(GATSBY_ID));
         assertEquals(exceptionMessage, exception.getMessage());
+
+        verify(bookRepository, times(2)).findById(GATSBY_ID);
+        verify(bookRepository, times(1)).deleteById(GATSBY_ID);
     }
 
     @Test
@@ -445,6 +490,9 @@ class BookServiceImplTest {
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 bookService.delete(RANDOM_BOOK_ID));
         assertEquals(exceptionMessage, exception.getMessage());
+
+        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
+        verify(bookRepository, times(0)).deleteById(RANDOM_BOOK_ID);
     }
 
     @Test
@@ -466,6 +514,12 @@ class BookServiceImplTest {
         List<BookDto> actualBookDtos = bookService.search(REAL_BOOK_SEARCH_PARAMETERS_DTO);
 
         assertEquals(expectedBookDtos, actualBookDtos);
+
+        verify(bookSpecificationBuilder, times(1)).build(REAL_BOOK_SEARCH_PARAMETERS_DTO);
+        verify(bookRepository, times(1)).findAll(specification);
+        verify(bookMapper, times(1)).toDto(EXPECTED_TKAM_BOOK);
+        verify(bookMapper, times(1)).toDto(EXPECTED_1984_BOOK);
+        verifyWhensForSearch();
     }
 
     @Test
@@ -488,6 +542,12 @@ class BookServiceImplTest {
 
         assertEquals(unexpectedBookDtos.size(), actualBookDtos.size());
         assertNotEquals(unexpectedBookDtos, actualBookDtos);
+
+        verify(bookSpecificationBuilder, times(1)).build(REAL_BOOK_SEARCH_PARAMETERS_DTO);
+        verify(bookRepository, times(1)).findAll(specification);
+        verify(bookMapper, times(1)).toDto(EXPECTED_TKAM_BOOK);
+        verify(bookMapper, times(1)).toDto(EXPECTED_1984_BOOK);
+        verifyWhensForSearch();
     }
 
     @Test
@@ -505,6 +565,10 @@ class BookServiceImplTest {
         List<BookDto> actualBookDtos = bookService.search(RANDOM_BOOK_SEARCH_PARAMETERS_DTO);
 
         assertTrue(actualBookDtos.isEmpty());
+
+        verify(bookSpecificationBuilder, times(1)).build(RANDOM_BOOK_SEARCH_PARAMETERS_DTO);
+        verify(bookRepository, times(1)).findAll(specification);
+        verifyWhensForSearch();
     }
 
     private Specification<Book> getRealSpecification() {
@@ -554,5 +618,12 @@ class BookServiceImplTest {
                 .thenReturn(new FromPriceSpecificationProvider());
         when(bookSpecificationProviderManager.getSpecificationProvider("toPrice"))
                 .thenReturn(new ToPriceSpecificationProvider());
+    }
+
+    private void verifyWhensForSearch() {
+        verify(bookSpecificationProviderManager, times(1)).getSpecificationProvider("title");
+        verify(bookSpecificationProviderManager, times(1)).getSpecificationProvider("author");
+        verify(bookSpecificationProviderManager, times(1)).getSpecificationProvider("fromPrice");
+        verify(bookSpecificationProviderManager, times(1)).getSpecificationProvider("toPrice");
     }
 }
