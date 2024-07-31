@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
@@ -242,7 +243,6 @@ class BookServiceImplTest {
         EXPECTED_1984_BOOK_DTO.setDescription(DESCRIPTION_1984);
         EXPECTED_1984_BOOK_DTO.setCoverImage(COVER_IMAGE_1984);
 
-        EXPECTED_GATSBY_AFTER_UPDATE.setId(GATSBY_ID);
         EXPECTED_GATSBY_AFTER_UPDATE.setTitle(SOME_TITLE);
         EXPECTED_GATSBY_AFTER_UPDATE.setAuthor(SOME_AUTHOR);
         EXPECTED_GATSBY_AFTER_UPDATE.setIsbn(SOME_ISBN);
@@ -353,7 +353,35 @@ class BookServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findById_IsAbleToFindExistingBook_Success() {
+        when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+        when(bookMapper.toDto(EXPECTED_GATSBY_BOOK)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
+        BookDto byGatsbyId = bookService.findById(GATSBY_ID);
+        assertEquals(EXPECTED_GATSBY_BOOK_DTO, byGatsbyId);
+    }
+
+    @Test
+    void findById_IsNotAbleToFindBookByRandomId_Fail() {
+        String exceptionMessage = "Can't find book by id " + RANDOM_BOOK_ID;
+        when(bookRepository.findById(RANDOM_BOOK_ID))
+                .thenThrow(new EntityNotFoundException("Can't find book by id " + RANDOM_BOOK_ID));
+        Exception exception = assertThrows(EntityNotFoundException.class, () ->
+                bookService.findById(RANDOM_BOOK_ID));
+        assertEquals(exceptionMessage, exception.getMessage());
+    }
+
+    @Test
+    void update_CanUpdateBookWhenIsbnDoesNotExist_Success() {
+        when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+        when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn())).thenReturn(Optional.empty());
+        when(categoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(CATEGORY));
+        when(bookMapper.toUpdateModel(UPDATE_BOOK_DTO)).thenReturn(EXPECTED_GATSBY_AFTER_UPDATE);
+        when(bookRepository.save(EXPECTED_GATSBY_AFTER_UPDATE))
+                .thenReturn(EXPECTED_GATSBY_AFTER_UPDATE);
+        when(bookMapper.toDto(EXPECTED_GATSBY_AFTER_UPDATE))
+                .thenReturn(EXPECTED_GATSBY_AFTER_UPDATE_DTO);
+        BookDto actual = bookService.update(UPDATE_BOOK_DTO, GATSBY_ID, true);
+        assertEquals(EXPECTED_GATSBY_AFTER_UPDATE_DTO, actual);
     }
 
     @Test
@@ -382,7 +410,41 @@ class BookServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void update_CannotUpdateBookWhenCategoryIsNotPresentById_Fail() {
+        when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+        when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn())).thenReturn(Optional.empty());
+        String exceptionMessage = "Can't find category by id " + CATEGORY_ID;
+        when(categoryRepository.findById(CATEGORY_ID))
+                .thenThrow(new EntityNotFoundException(
+                        "Can't find category by id " + CATEGORY_ID));
+        Exception exception = assertThrows(EntityNotFoundException.class, () ->
+                bookService.update(UPDATE_BOOK_DTO, GATSBY_ID, true));
+        assertEquals(exceptionMessage, exception.getMessage());
+    }
+
+    @Test
+    void delete_IsAbleToDeleteBookById_Success() {
+        when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+        bookService.delete(GATSBY_ID);
+        verify(bookRepository).deleteById(GATSBY_ID);
+        String exceptionMessage = "Can't find and delete book by id " + GATSBY_ID;
+        when(bookRepository.findById(GATSBY_ID))
+                .thenThrow(new EntityNotFoundException(
+                        "Can't find and delete book by id " + GATSBY_ID));
+        Exception exception = assertThrows(EntityNotFoundException.class, () ->
+                bookService.delete(GATSBY_ID));
+        assertEquals(exceptionMessage, exception.getMessage());
+    }
+
+    @Test
+    void delete_IsNotAbleToDeleteBookByRandomId_Fail() {
+        String exceptionMessage = "Can't find and delete book by id " + RANDOM_BOOK_ID;
+        when(bookRepository.findById(RANDOM_BOOK_ID))
+                .thenThrow(new EntityNotFoundException(
+                        "Can't find and delete book by id " + RANDOM_BOOK_ID));
+        Exception exception = assertThrows(EntityNotFoundException.class, () ->
+                bookService.delete(RANDOM_BOOK_ID));
+        assertEquals(exceptionMessage, exception.getMessage());
     }
 
     @Test
