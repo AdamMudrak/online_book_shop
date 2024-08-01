@@ -51,8 +51,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isPresent()) {
             Optional<Category> categoryByName = categoryRepository.findByName(categoryDto.name());
             if (categoryByName.isPresent() && !categoryByName.get().getId().equals(id)) {
-                throw new ParameterAlreadyExistsException("Book with ISBN " + categoryDto.name()
-                        + " already exists in DB");
+                throw new ParameterAlreadyExistsException("Another category with name "
+                        + categoryDto.name() + " already exists in DB");
             }
             Category updatedCategory = categoryMapper.toUpdateModel(categoryDto);
             updatedCategory.setId(id);
