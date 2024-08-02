@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -145,6 +146,7 @@ class BookServiceImplTest {
                     BigDecimal.valueOf(CEILING_PRICE),
                     new String[]{SOME_TITLE},
                     new String[]{SOME_AUTHOR});
+    private static final int RANDOM_PAGE_NUMBER = 1000;
     private static final int PAGE_NUMBER = 0;
     private static final int PAGE_SIZE = 3;
 
@@ -261,6 +263,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a CreateDto of a book which is not in DB, successfully saves it")
     void save_IsAbleToSaveBookWhichIsNotInDb_Success() {
         when(bookMapper.toCreateModel(CREATE_NEW_BOOK_DTO))
                 .thenReturn(BOOK_FROM_DTO);
@@ -276,6 +279,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a CreateDto of a book which is already in DB by ISBN, can't save it")
     void save_IsNotAbleToSaveBookWhichIsInDb_Fail() {
         when(bookRepository.existsByIsbn(CREATE_EXISTING_1984_BOOK_DTO.getIsbn()))
                 .thenThrow(new ParameterAlreadyExistsException("Another book with ISBN "
@@ -293,6 +297,8 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a pageable of first(zero) page and page sized 3, "
+            + "successfully retrieves a list of 3 books from DB")
     void findAll_IsAbleToFindThreeBooksFromDb_Success() {
         Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
         List<Book> books = List.of(EXPECTED_GATSBY_BOOK, EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
@@ -316,8 +322,10 @@ class BookServiceImplTest {
     }
 
     @Test
-    void findAll_IsNotAbleToFindRandomBook_Fail() {
-        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    @DisplayName("Given a pageable of 1000th page and page sized 3, "
+            + "retrieves an empty list from DB")
+    void findAll_IsNotAbleToFindBooksOnRandomPage_Fail() {
+        Pageable pageable = PageRequest.of(RANDOM_PAGE_NUMBER, PAGE_SIZE);
         List<Book> books = List.of();
         Page<Book> bookPage = new PageImpl<>(books, pageable, 0);
 
@@ -332,6 +340,8 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a category id, if it is present in DB, "
+            + "successfully retrieves 3 books from DB having this same category")
     void findAllWithoutCategoryIds_IsAbleToFindThreeBooksFromDb_Success() {
         List<Book> books = List.of(EXPECTED_GATSBY_BOOK, EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
 
@@ -361,6 +371,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a random category id, throws an exception")
     void findAllWithoutCategoryIds_IsNotAbleToFindByRandomCategoryId_Fail() {
         when(categoryRepository.findById(RANDOM_CATEGORY_ID)).thenThrow(
                 new EntityNotFoundException("Can't find category by id " + RANDOM_CATEGORY_ID));
@@ -375,6 +386,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a book id, successfully retrieves the book by id from DB")
     void findById_IsAbleToFindExistingBook_Success() {
         when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         when(bookMapper.toDto(EXPECTED_GATSBY_BOOK)).thenReturn(EXPECTED_GATSBY_BOOK_DTO);
@@ -386,6 +398,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a random book id, throws an exception")
     void findById_IsNotAbleToFindBookByRandomId_Fail() {
         String exceptionMessage = "Can't find book by id " + RANDOM_BOOK_ID;
         when(bookRepository.findById(RANDOM_BOOK_ID))
@@ -398,6 +411,8 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given an UpdateDto, successfully updates the book in DB on condition that "
+            + "another book with the same ISBN is not already present")
     void update_CanUpdateBookWhenIsbnDoesNotExist_Success() {
         when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn())).thenReturn(Optional.empty());
@@ -419,6 +434,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a random book id, throws an exception")
     void update_CannotUpdateBookWhenIsNotPresentById_Fail() {
         String exceptionMessage = "Can't find and update book by id " + RANDOM_BOOK_ID;
         when(bookRepository.findById(RANDOM_BOOK_ID))
@@ -432,6 +448,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Throws an exception as another book with the same ISBN is already present")
     void update_CannotUpdateBookWhenAnotherIsPresentByIsbn_Fail() {
         String exceptionMessage = "Book with ISBN " + UPDATE_BOOK_DTO.getIsbn()
                 + " already exists in DB";
@@ -449,6 +466,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Throws an exception because category from UpdateDto is not present by id")
     void update_CannotUpdateBookWhenCategoryIsNotPresentById_Fail() {
         when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn())).thenReturn(Optional.empty());
@@ -466,6 +484,9 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Successfully deletes a book by id. For making sure the book is now gone, "
+            + "when findById is engaged, throws an exception because book is not present "
+            + "by id anymore")
     void delete_IsAbleToDeleteBookById_Success() {
         when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         bookService.delete(GATSBY_ID);
@@ -482,6 +503,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("When findById is engaged, throws an exception because book is not present by id")
     void delete_IsNotAbleToDeleteBookByRandomId_Fail() {
         String exceptionMessage = "Can't find and delete book by id " + RANDOM_BOOK_ID;
         when(bookRepository.findById(RANDOM_BOOK_ID))
@@ -496,6 +518,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given specs of books which are actually in DB, can find these books")
     void search_IsAbleToSearchBooksWithExistingSpecifications_Success() {
         prepareWhensForSearch();
 
@@ -523,6 +546,8 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Fail-check test - make sure doesn't find"
+            + " unwanted list of books by real specs of other books")
     void search_MakeSureIfOtherBooksListGivenThen_Fail() {
         prepareWhensForSearch();
 
@@ -551,6 +576,7 @@ class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given specs of books which are not in DB, find nothing")
     void search_IsNotAbleToSearchBooksWithNonExistingSpecifications_Fail() {
         prepareWhensForSearch();
 
