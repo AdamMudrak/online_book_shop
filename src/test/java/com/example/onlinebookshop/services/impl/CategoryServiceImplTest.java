@@ -17,6 +17,7 @@ import com.example.onlinebookshop.repositories.category.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,6 +63,7 @@ class CategoryServiceImplTest {
             EXISTING_CATEGORY_ID,
             EXISTING_CATEGORY_NAME,
             NEW_EXISTING_CATEGORY_DESCRIPTION);
+    private static final int RANDOM_PAGE_NUMBER = 1000;
     private static final int PAGE_NUMBER = 0;
     private static final int PAGE_SIZE = 3;
     @Mock
@@ -90,6 +92,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a CreateDto of a category which is not in DB, successfully saves it")
     void save_IsAbleToSaveCategoryWhichIsNotInDb_Success() {
         when(categoryMapper.toCreateModel(CREATE_CATEGORY_DTO)).thenReturn(NEW_CATEGORY);
         when(categoryMapper.toCategoryDto(categoryRepository.save(NEW_CATEGORY)))
@@ -103,6 +106,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a CreateDto of a category which is already in DB by name, can't save it")
     void save_IsNotAbleToSaveCategoryWhichIsInDb_Fail() {
         String expectedMessage = "Category with name "
                 + EXISTING_CATEGORY_NAME + " already exists in DB";
@@ -117,6 +121,8 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a pageable of first(zero) page and page sized 3, "
+            + "successfully retrieves a list of 2 categories from DB")
     void findAll_IsAbleToFindTwoCategoriesFromDb_Success() {
         Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
         List<Category> categories = List.of(NEW_CATEGORY, EXISTING_CATEGORY);
@@ -137,8 +143,10 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a pageable of 1000th page and page sized 3, "
+            + "retrieves an empty list from DB")
     void findAll_IsNotAbleToFindRandomCategory_Fail() {
-        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(RANDOM_PAGE_NUMBER, PAGE_SIZE);
         List<Category> categories = List.of();
         Page<Category> categoryPage = new PageImpl<>(categories, pageable, 0);
 
@@ -153,6 +161,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a category id, successfully retrieves the category by id from DB")
     void getById_IsAbleToFindExistingCategory_Success() {
         when(categoryRepository.findById(EXISTING_CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
@@ -165,6 +174,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given a random category id, throws an exception")
     void getById_IsNotAbleToFindCategoryByRandomId_Fail() {
         String exceptionMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
         when(categoryRepository.findById(RANDOM_CATEGORY_ID))
@@ -178,6 +188,8 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given an UpdateDto, successfully updates the category in DB on condition that "
+            + "it is already present by id")
     void update_CanUpdateCategoryWhenCategoryExistsById_Success() {
         when(categoryRepository.findById(EXISTING_CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
@@ -198,6 +210,8 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given an UpdateDto, throws an exception "
+            + " as it is not present in DB by id")
     void update_CannotUpdateCategoryWhenCategoryDoesNotExistById_Fail() {
         String exceptionMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
         when(categoryRepository.findById(RANDOM_CATEGORY_ID))
@@ -211,6 +225,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Throws an exception as another category with the same name is already present")
     void update_CannotUpdateCategoryWhenAnotherCategoryExistsByName_Fail() {
         String exceptionMessage = "Another category with name "
                 + EXISTING_CATEGORY_NAME + " already exists in DB";
@@ -228,6 +243,9 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Successfully deletes a category by id. For making sure the category is now gone, "
+            + "when findById is engaged, throws an exception because category is not present "
+            + "by id anymore")
     void deleteById_IsAbleToDeleteCategoryById_Success() {
         when(categoryRepository.findById(EXISTING_CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
@@ -245,6 +263,8 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("When findById is engaged, throws an exception because "
+            + "category is not present by id")
     void deleteById_IsNotAbleToDeleteCategoryById_Fail() {
         String exceptionMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
         when(categoryRepository.findById(RANDOM_CATEGORY_ID))
