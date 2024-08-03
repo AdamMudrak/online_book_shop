@@ -1,11 +1,11 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
-import com.example.onlinebookshop.dto.user.response.UserRegistrationResponseDto;
+import com.example.onlinebookshop.dtos.user.request.UserRegistrationRequestDto;
+import com.example.onlinebookshop.dtos.user.response.UserRegistrationResponseDto;
 import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.RegistrationException;
-import com.example.onlinebookshop.mapper.UserMapper;
+import com.example.onlinebookshop.mappers.UserMapper;
 import com.example.onlinebookshop.repositories.role.RoleRepository;
 import com.example.onlinebookshop.repositories.user.UserRepository;
 import com.example.onlinebookshop.services.ShoppingCartService;
