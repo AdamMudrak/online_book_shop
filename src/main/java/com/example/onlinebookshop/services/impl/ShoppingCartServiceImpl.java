@@ -1,18 +1,18 @@
 package com.example.onlinebookshop.services.impl;
 
-import static com.example.onlinebookshop.constants.dto.CartItemDtoConstants.QUANTITY_DESCRIPTION;
+import static com.example.onlinebookshop.constants.dtos.CartItemDtoConstants.QUANTITY_DESCRIPTION;
 
-import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
-import com.example.onlinebookshop.dto.cartitem.request.UpdateCartItemDto;
-import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
+import com.example.onlinebookshop.dtos.cartitem.request.CreateCartItemDto;
+import com.example.onlinebookshop.dtos.cartitem.request.UpdateCartItemDto;
+import com.example.onlinebookshop.dtos.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.CartItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.TooManyObjectsException;
-import com.example.onlinebookshop.mapper.CartItemMapper;
-import com.example.onlinebookshop.mapper.ShoppingCartMapper;
+import com.example.onlinebookshop.mappers.CartItemMapper;
+import com.example.onlinebookshop.mappers.ShoppingCartMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.cartitem.CartItemRepository;
 import com.example.onlinebookshop.repositories.shoppingcart.ShoppingCartRepository;

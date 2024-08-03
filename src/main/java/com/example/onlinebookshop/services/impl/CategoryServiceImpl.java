@@ -1,12 +1,12 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
-import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
-import com.example.onlinebookshop.dto.category.response.CategoryDto;
+import com.example.onlinebookshop.dtos.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dtos.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dtos.category.response.CategoryDto;
 import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
-import com.example.onlinebookshop.mapper.CategoryMapper;
+import com.example.onlinebookshop.mappers.CategoryMapper;
 import com.example.onlinebookshop.repositories.category.CategoryRepository;
 import com.example.onlinebookshop.services.CategoryService;
 import java.util.List;
