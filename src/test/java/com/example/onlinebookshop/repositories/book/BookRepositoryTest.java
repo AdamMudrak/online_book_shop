@@ -51,7 +51,7 @@ class BookRepositoryTest {
     private static final BigDecimal GATSBY_PRICE = BigDecimal.valueOf(12.99);
     private static final String GATSBY_DESCRIPTION = "A story of the fabulously wealthy Jay Gatsby "
             + "and his love for the beautiful Daisy Buchanan.";
-    private static final String GATSBY_COVER_IMAGE = "gatsby.jpg";
+    private static final String GATSBY_COVER_IMAGE = "https://example.com/gatsby.jpg";
 
     private static final long TKAM_ID = 2L;
     private static final String TKAM_TITLE = "To Kill a Mockingbird";
@@ -60,7 +60,7 @@ class BookRepositoryTest {
     private static final BigDecimal TKAM_PRICE = BigDecimal.valueOf(10.49);
     private static final String TKAM_DESCRIPTION = "A novel that explores the irrationality of "
             + "adult attitudes towards race and class in the Deep South of the 1930s.";
-    private static final String TKAM_COVER_IMAGE = "mockingbird.jpg";
+    private static final String TKAM_COVER_IMAGE = "https://example.com/mockingbird.jpg";
 
     private static final long ID_1984 = 3L;
     private static final String TITLE_1984 = "1984";
@@ -70,7 +70,7 @@ class BookRepositoryTest {
     private static final String DESCRIPTION_1984 = "A dystopian novel set in Airstrip One, "
             + "a province of the superstate Oceania, whose residents are victims of perpetual war, "
             + "omnipresent government surveillance, and public manipulation.";
-    private static final String COVER_IMAGE_1984 = "1984.jpg";
+    private static final String COVER_IMAGE_1984 = "https://example.com/1984.jpg";
 
     private static final Book[] EXPECTED_BOOKS =
             new Book[]{EXPECTED_BOOK_1, EXPECTED_BOOK_2, EXPECTED_BOOK_3};
