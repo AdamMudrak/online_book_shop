@@ -28,8 +28,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -117,8 +115,15 @@ public class BookControllerTest {
             "description size must be between 0 and 3000",
             "coverImage Invalid format filepath"
     );
-    private static final int PAGE_NUMBER = 0;
-    private static final int PAGE_SIZE = 3;
+    private static final int FIRST_PAGE_NUMBER = 0;
+    private static final int SECOND_PAGE_NUMBER = 1;
+    private static final int UNLIMITED_PAGE_SIZE = 3;
+    private static final int LIMITED_PAGE_SIZE = 2;
+    private static final String SORT_BY_TITLE_DESC = "title,DESC";
+    private static final String SORT_BY_PRICE_ASC = "price,ASC";
+    private static final String SORT = "sort";
+    private static final String PAGE = "page";
+    private static final String SIZE = "size";
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -367,10 +372,8 @@ public class BookControllerTest {
             PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
             PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @DisplayName("Get all books from DB")
-    public void getAll_IsAbleToGetThreeBooksFromDB_Success() throws Exception {
-        //TODO apply this pageable somehow
-        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    @DisplayName("Get all three books from DB")
+    public void getAll_IsAbleToGetAllThreeBooksFrom_Success() throws Exception {
         List<BookDto> expectedBookDtos = List.of(
                 EXPECTED_GATSBY_BOOK_DTO, EXPECTED_TKAM_BOOK_DTO, EXPECTED_1984_BOOK_DTO);
         MvcResult result = mockMvc.perform(
@@ -385,5 +388,85 @@ public class BookControllerTest {
                         .getTypeFactory()
                         .constructCollectionType(List.class, BookDto.class));
         assertEquals(expectedBookDtos, actualBookDtos);
+    }
+
+    @WithMockUser(username = "user")
+    @Test
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Get books from DB, sort by price,ASC")
+    public void getAll_IsAbleToGetThreeBooksFromDbSortByPriceAsc_Success() throws Exception {
+        List<BookDto> expectedBookDtos = List.of(
+                EXPECTED_1984_BOOK_DTO, EXPECTED_TKAM_BOOK_DTO, EXPECTED_GATSBY_BOOK_DTO);
+        MvcResult result = mockMvc.perform(
+                        get("/books")
+                        .queryParam(PAGE, FIRST_PAGE_NUMBER + "")
+                        .queryParam(SIZE, UNLIMITED_PAGE_SIZE + "")
+                        .queryParam(SORT, SORT_BY_PRICE_ASC)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andReturn();
+        List<BookDto> actualBookDtos = objectMapper.readValue(result
+                        .getResponse()
+                        .getContentAsString(),
+                objectMapper
+                        .getTypeFactory()
+                        .constructCollectionType(List.class, BookDto.class));
+        assertEquals(expectedBookDtos, actualBookDtos);
+    }
+
+    @WithMockUser(username = "user")
+    @Test
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Get books from DB, sort by title,DESC, page size limit 2")
+    public void getAll_IsAbleToGetTwoBooksFromDbSortByTitleDescLimitPageSizeToTwo_Success()
+            throws Exception {
+        List<BookDto> expectedBookDtosForFirstPage = List.of(
+                EXPECTED_TKAM_BOOK_DTO, EXPECTED_GATSBY_BOOK_DTO);
+        MvcResult resultForFirstPage = mockMvc.perform(
+                        get("/books")
+                                .queryParam(PAGE, FIRST_PAGE_NUMBER + "")
+                                .queryParam(SIZE, LIMITED_PAGE_SIZE + "")
+                                .queryParam(SORT, SORT_BY_TITLE_DESC)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        List<BookDto> actualBookDtos = objectMapper.readValue(resultForFirstPage
+                        .getResponse()
+                        .getContentAsString(),
+                objectMapper
+                        .getTypeFactory()
+                        .constructCollectionType(List.class, BookDto.class));
+        assertEquals(expectedBookDtosForFirstPage, actualBookDtos);
+
+        List<BookDto> expectedBookDtoForSecondPage = List.of(EXPECTED_1984_BOOK_DTO);
+        MvcResult resultForSecondPage = mockMvc.perform(
+                        get("/books")
+                                .queryParam(PAGE, SECOND_PAGE_NUMBER + "")
+                                .queryParam(SIZE, LIMITED_PAGE_SIZE + "")
+                                .queryParam(SORT, SORT_BY_TITLE_DESC)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        List<BookDto> actualBookDto = objectMapper.readValue(resultForSecondPage
+                        .getResponse()
+                        .getContentAsString(),
+                objectMapper
+                        .getTypeFactory()
+                        .constructCollectionType(List.class, BookDto.class));
+        assertEquals(expectedBookDtoForSecondPage, actualBookDto);
     }
 }
