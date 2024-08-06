@@ -4,14 +4,14 @@ import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_CATEGOR
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_CATEGORIES_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
-import static com.example.onlinebookshop.BookCategoryConstants.FIRST_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_COVER_IMAGE;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_DESCRIPTION;
@@ -65,9 +65,9 @@ class BookRepositoryTest {
 
     @BeforeAll
     static void initVars() {
-        CATEGORY.setId(FIRST_CATEGORY_ID);
-        CATEGORY.setName(CATEGORY_NAME);
-        CATEGORY.setDescription(CATEGORY_DESCRIPTION);
+        CATEGORY.setId(FICTION_CATEGORY_ID);
+        CATEGORY.setName(FICTION_CATEGORY_NAME);
+        CATEGORY.setDescription(FICTION_CATEGORY_DESCRIPTION);
 
         EXPECTED_BOOK_1.setId(GATSBY_ID);
         EXPECTED_BOOK_1.setTitle(GATSBY_TITLE);

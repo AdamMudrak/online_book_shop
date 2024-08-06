@@ -14,11 +14,18 @@ public class BookCategoryConstants {
     public static final String DELETE_CATEGORIES_SQL = "delete-categories.sql";
     public static final String DELETE_BOOKS_CATEGORIES_SQL = "delete-books-categories.sql";
     /**Test data for books and categories*/
-    public static final long FIRST_CATEGORY_ID = 1L;
     public static final String NON_EXISTING_CATEGORY_NAME = "I don't even exist";
-    public static final String CATEGORY_NAME = "Fiction";
-    public static final String CATEGORY_DESCRIPTION =
+    public static final long FICTION_CATEGORY_ID = 1L;
+    public static final String FICTION_CATEGORY_NAME = "Fiction";
+    public static final String FICTION_CATEGORY_DESCRIPTION =
             "Interesting books about imaginary though possible events";
+    public static final long SCIENCE_FICTION_CATEGORY_ID = 2L;
+    public static final String SCIENCE_FICTION_CATEGORY_NAME = "Science Fiction";
+    public static final String SCIENCE_FICTION_CATEGORY_DESCRIPTION =
+            "Interesting books about imaginary though possible events in the distant future";
+    public static final long NON_FICTION_CATEGORY_ID = 3L;
+    public static final String NON_FICTION_CATEGORY_NAME = "Non-fiction";
+    public static final String NON_FICTION_CATEGORY_DESCRIPTION = "Books about real events";
     public static final String ANOTHER_CATEGORY_NAME = "Horror";
     public static final String UPDATED_CATEGORY_NAME = "NEW Horror";
     public static final String ANOTHER_CATEGORY_DESCRIPTION = "Horror description";
@@ -59,7 +66,7 @@ public class BookCategoryConstants {
     public static final String SOME_DESCRIPTION = "Some description";
     public static final String SOME_COVER_IMAGE = "https://example.com/some_picture.jpg";
     /**ID*/
-    public static final long NEW_CATEGORY_ID = 2L;
+    public static final long NEW_CATEGORY_ID = 4L;
     public static final long DUPLICATE_OF_EXISTING_CATEGORY_ID = 3L;
     public static final long EXPECTED_BOOK_DTO_ID = 4L;
     public static final long RANDOM_ID = 1000L;
@@ -112,6 +119,8 @@ public class BookCategoryConstants {
     public static final int UNLIMITED_PAGE_SIZE = 3;
     public static final int LIMITED_PAGE_SIZE = 2;
     public static final String SORT_BY_TITLE_DESC = "title,DESC";
+    public static final String SORT_BY_NAME_DESC = "name,DESC";
+    public static final String SORT_BY_NAME_ASC = "name,ASC";
     public static final String SORT_BY_PRICE_ASC = "price,ASC";
     public static final String SORT = "sort";
     public static final String PAGE = "page";

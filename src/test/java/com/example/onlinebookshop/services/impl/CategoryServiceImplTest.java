@@ -2,10 +2,10 @@ package com.example.onlinebookshop.services.impl;
 
 import static com.example.onlinebookshop.BookCategoryConstants.ANOTHER_CATEGORY_DESCRIPTION;
 import static com.example.onlinebookshop.BookCategoryConstants.ANOTHER_CATEGORY_NAME;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.DUPLICATE_OF_EXISTING_CATEGORY_ID;
-import static com.example.onlinebookshop.BookCategoryConstants.FIRST_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.FIRST_PAGE_NUMBER;
 import static com.example.onlinebookshop.BookCategoryConstants.NEW_CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_ID;
@@ -48,7 +48,7 @@ class CategoryServiceImplTest {
     private static final Category EXISTING_CATEGORY_AFTER_UPDATE = new Category();
     private static final Category DUPLICATE_OF_EXISTING_CATEGORY = new Category();
     private static final CreateCategoryDto CREATE_CATEGORY_DTO =
-            new CreateCategoryDto(CATEGORY_NAME, CATEGORY_DESCRIPTION);
+            new CreateCategoryDto(FICTION_CATEGORY_NAME, FICTION_CATEGORY_DESCRIPTION);
     private static final CreateCategoryDto EXISTING_CREATE_CATEGORY_DTO =
             new CreateCategoryDto(ANOTHER_CATEGORY_NAME, ANOTHER_CATEGORY_DESCRIPTION);
     private static final UpdateCategoryDto UPDATE_CATEGORY_DTO = new UpdateCategoryDto(
@@ -56,14 +56,14 @@ class CategoryServiceImplTest {
             UPDATED_CATEGORY_DESCRIPTION);
     private static final CategoryDto NEW_CATEGORY_DTO = new CategoryDto(
             NEW_CATEGORY_ID,
-            CATEGORY_NAME,
-            CATEGORY_DESCRIPTION);
+            FICTION_CATEGORY_NAME,
+            FICTION_CATEGORY_DESCRIPTION);
     private static final CategoryDto EXISTING_CATEGORY_DTO = new CategoryDto(
-            FIRST_CATEGORY_ID,
+            FICTION_CATEGORY_ID,
             ANOTHER_CATEGORY_NAME,
             ANOTHER_CATEGORY_DESCRIPTION);
     private static final CategoryDto EXISTING_CATEGORY_DTO_AFTER_UPDATE = new CategoryDto(
-            FIRST_CATEGORY_ID,
+            FICTION_CATEGORY_ID,
             ANOTHER_CATEGORY_NAME,
             UPDATED_CATEGORY_DESCRIPTION);
     @Mock
@@ -76,10 +76,10 @@ class CategoryServiceImplTest {
     @BeforeAll
     static void initVars() {
         NEW_CATEGORY.setId(NEW_CATEGORY_ID);
-        NEW_CATEGORY.setName(CATEGORY_NAME);
-        NEW_CATEGORY.setDescription(CATEGORY_DESCRIPTION);
+        NEW_CATEGORY.setName(FICTION_CATEGORY_NAME);
+        NEW_CATEGORY.setDescription(FICTION_CATEGORY_DESCRIPTION);
 
-        EXISTING_CATEGORY.setId(FIRST_CATEGORY_ID);
+        EXISTING_CATEGORY.setId(FICTION_CATEGORY_ID);
         EXISTING_CATEGORY.setName(ANOTHER_CATEGORY_NAME);
         EXISTING_CATEGORY.setDescription(ANOTHER_CATEGORY_DESCRIPTION);
 
@@ -163,13 +163,13 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Given a category id, successfully retrieves the category by id from DB")
     void getById_IsAbleToFindExistingCategory_Success() {
-        when(categoryRepository.findById(FIRST_CATEGORY_ID))
+        when(categoryRepository.findById(FICTION_CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
         when(categoryMapper.toCategoryDto(EXISTING_CATEGORY)).thenReturn(EXISTING_CATEGORY_DTO);
-        CategoryDto byExistingCategoryId = categoryService.getById(FIRST_CATEGORY_ID);
+        CategoryDto byExistingCategoryId = categoryService.getById(FICTION_CATEGORY_ID);
         assertEquals(EXISTING_CATEGORY_DTO, byExistingCategoryId);
 
-        verify(categoryRepository, times(1)).findById(FIRST_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(FICTION_CATEGORY_ID);
         verify(categoryMapper, times(1)).toCategoryDto(EXISTING_CATEGORY);
     }
 
@@ -191,7 +191,7 @@ class CategoryServiceImplTest {
     @DisplayName("Given an UpdateDto, successfully updates the category in DB on condition that "
             + "it is already present by id")
     void update_CanUpdateCategoryWhenCategoryExistsById_Success() {
-        when(categoryRepository.findById(FIRST_CATEGORY_ID))
+        when(categoryRepository.findById(FICTION_CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
         when(categoryRepository.findByName(ANOTHER_CATEGORY_NAME))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
@@ -199,10 +199,10 @@ class CategoryServiceImplTest {
                 .thenReturn(EXISTING_CATEGORY_AFTER_UPDATE);
         when(categoryMapper.toCategoryDto(categoryRepository.save(EXISTING_CATEGORY_AFTER_UPDATE)))
                 .thenReturn(EXISTING_CATEGORY_DTO_AFTER_UPDATE);
-        CategoryDto actual = categoryService.update(UPDATE_CATEGORY_DTO, FIRST_CATEGORY_ID);
+        CategoryDto actual = categoryService.update(UPDATE_CATEGORY_DTO, FICTION_CATEGORY_ID);
         assertEquals(EXISTING_CATEGORY_DTO_AFTER_UPDATE, actual);
 
-        verify(categoryRepository, times(1)).findById(FIRST_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(FICTION_CATEGORY_ID);
         verify(categoryRepository, times(1)).findByName(ANOTHER_CATEGORY_NAME);
         verify(categoryMapper, times(1)).toUpdateModel(UPDATE_CATEGORY_DTO);
         verify(categoryMapper, times(1))
@@ -247,19 +247,19 @@ class CategoryServiceImplTest {
             + "when findById is engaged, throws an exception because category is not present "
             + "by id anymore")
     void deleteById_IsAbleToDeleteCategoryById_Success() {
-        when(categoryRepository.findById(FIRST_CATEGORY_ID))
+        when(categoryRepository.findById(FICTION_CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
-        categoryService.deleteById(FIRST_CATEGORY_ID);
-        String exceptionMessage = "Can't find category by id " + FIRST_CATEGORY_ID;
-        when(categoryRepository.findById(FIRST_CATEGORY_ID))
+        categoryService.deleteById(FICTION_CATEGORY_ID);
+        String exceptionMessage = "Can't find category by id " + FICTION_CATEGORY_ID;
+        when(categoryRepository.findById(FICTION_CATEGORY_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find category by id " + FIRST_CATEGORY_ID));
+                        "Can't find category by id " + FICTION_CATEGORY_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                categoryService.deleteById(FIRST_CATEGORY_ID));
+                categoryService.deleteById(FICTION_CATEGORY_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(2)).findById(FIRST_CATEGORY_ID);
-        verify(categoryRepository, times(1)).deleteById(FIRST_CATEGORY_ID);
+        verify(categoryRepository, times(2)).findById(FICTION_CATEGORY_ID);
+        verify(categoryRepository, times(1)).deleteById(FICTION_CATEGORY_ID);
     }
 
     @Test

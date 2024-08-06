@@ -1,12 +1,12 @@
 package com.example.onlinebookshop.services.impl;
 
 import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.CEILING_PRICE;
 import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
-import static com.example.onlinebookshop.BookCategoryConstants.FIRST_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.FIRST_PAGE_NUMBER;
 import static com.example.onlinebookshop.BookCategoryConstants.FLOOR_PRICE;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
@@ -155,9 +155,9 @@ class BookServiceImplTest {
 
     @BeforeAll
     static void initVars() {
-        CATEGORY.setId(FIRST_CATEGORY_ID);
-        CATEGORY.setName(CATEGORY_NAME);
-        CATEGORY.setDescription(CATEGORY_DESCRIPTION);
+        CATEGORY.setId(FICTION_CATEGORY_ID);
+        CATEGORY.setName(FICTION_CATEGORY_NAME);
+        CATEGORY.setDescription(FICTION_CATEGORY_DESCRIPTION);
 
         CREATE_NEW_BOOK_DTO.setTitle(SOME_TITLE);
         CREATE_NEW_BOOK_DTO.setAuthor(SOME_AUTHOR);
@@ -175,7 +175,7 @@ class BookServiceImplTest {
 
         UPDATE_BOOK_DTO.setTitle(SOME_TITLE);
         UPDATE_BOOK_DTO.setAuthor(SOME_AUTHOR);
-        UPDATE_BOOK_DTO.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
+        UPDATE_BOOK_DTO.setCategoryIds(Set.of(FICTION_CATEGORY_ID));
         UPDATE_BOOK_DTO.setIsbn(SOME_ISBN);
         UPDATE_BOOK_DTO.setPrice(SOME_PRICE);
         UPDATE_BOOK_DTO.setDescription(SOME_DESCRIPTION);
@@ -335,8 +335,8 @@ class BookServiceImplTest {
     void findAllWithoutCategoryIds_IsAbleToFindThreeBooksFromDb_Success() {
         List<Book> books = List.of(EXPECTED_GATSBY_BOOK, EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
 
-        when(categoryRepository.findById(FIRST_CATEGORY_ID)).thenReturn(Optional.of(CATEGORY));
-        when(bookRepository.findAllByCategoryId(FIRST_CATEGORY_ID)).thenReturn(books);
+        when(categoryRepository.findById(FICTION_CATEGORY_ID)).thenReturn(Optional.of(CATEGORY));
+        when(bookRepository.findAllByCategoryId(FICTION_CATEGORY_ID)).thenReturn(books);
         when(bookMapper.toDtoWithoutCategories(EXPECTED_GATSBY_BOOK))
                 .thenReturn(EXPECTED_GATSBY_BOOK_DTO_WITHOUT_CATEGORY_ID);
         when(bookMapper.toDtoWithoutCategories(EXPECTED_TKAM_BOOK))
@@ -349,12 +349,12 @@ class BookServiceImplTest {
                         EXPECTED_TKAM_BOOK_DTO_WITHOUT_CATEGORY_ID,
                         EXPECTED_1984_BOOK_DTO_WITHOUT_CATEGORY_ID);
         List<BookDtoWithoutCategoryIds> actualBookDtos =
-                bookService.findAllWithoutCategoryIds(FIRST_CATEGORY_ID);
+                bookService.findAllWithoutCategoryIds(FICTION_CATEGORY_ID);
 
         assertEquals(expectedBookDtos, actualBookDtos);
 
-        verify(categoryRepository, times(1)).findById(FIRST_CATEGORY_ID);
-        verify(bookRepository, times(1)).findAllByCategoryId(FIRST_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(FICTION_CATEGORY_ID);
+        verify(bookRepository, times(1)).findAllByCategoryId(FICTION_CATEGORY_ID);
         verify(bookMapper, times(1)).toDtoWithoutCategories(EXPECTED_GATSBY_BOOK);
         verify(bookMapper, times(1)).toDtoWithoutCategories(EXPECTED_TKAM_BOOK);
         verify(bookMapper, times(1)).toDtoWithoutCategories(EXPECTED_1984_BOOK);
@@ -406,7 +406,7 @@ class BookServiceImplTest {
     void update_CanUpdateBookWhenIsbnDoesNotExist_Success() {
         when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn())).thenReturn(Optional.empty());
-        when(categoryRepository.findById(FIRST_CATEGORY_ID)).thenReturn(Optional.of(CATEGORY));
+        when(categoryRepository.findById(FICTION_CATEGORY_ID)).thenReturn(Optional.of(CATEGORY));
         when(bookMapper.toUpdateModel(UPDATE_BOOK_DTO)).thenReturn(EXPECTED_GATSBY_AFTER_UPDATE);
         when(bookRepository.save(EXPECTED_GATSBY_AFTER_UPDATE))
                 .thenReturn(EXPECTED_GATSBY_AFTER_UPDATE);
@@ -417,7 +417,7 @@ class BookServiceImplTest {
 
         verify(bookRepository, times(1)).findById(GATSBY_ID);
         verify(bookRepository, times(1)).findBookByIsbn(UPDATE_BOOK_DTO.getIsbn());
-        verify(categoryRepository, times(1)).findById(FIRST_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(FICTION_CATEGORY_ID);
         verify(bookMapper, times(1)).toUpdateModel(UPDATE_BOOK_DTO);
         verify(bookRepository, times(1)).save(EXPECTED_GATSBY_AFTER_UPDATE);
         verify(bookMapper, times(1)).toDto(EXPECTED_GATSBY_AFTER_UPDATE);
@@ -460,17 +460,17 @@ class BookServiceImplTest {
     void update_CannotUpdateBookWhenCategoryIsNotPresentById_Fail() {
         when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn())).thenReturn(Optional.empty());
-        String exceptionMessage = "Can't find category by id " + FIRST_CATEGORY_ID;
-        when(categoryRepository.findById(FIRST_CATEGORY_ID))
+        String exceptionMessage = "Can't find category by id " + FICTION_CATEGORY_ID;
+        when(categoryRepository.findById(FICTION_CATEGORY_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find category by id " + FIRST_CATEGORY_ID));
+                        "Can't find category by id " + FICTION_CATEGORY_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 bookService.update(UPDATE_BOOK_DTO, GATSBY_ID, true));
         assertEquals(exceptionMessage, exception.getMessage());
 
         verify(bookRepository, times(1)).findById(GATSBY_ID);
         verify(bookRepository, times(1)).findBookByIsbn(UPDATE_BOOK_DTO.getIsbn());
-        verify(categoryRepository, times(1)).findById(FIRST_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(FICTION_CATEGORY_ID);
     }
 
     @Test

@@ -1,10 +1,10 @@
 package com.example.onlinebookshop.repositories.category;
 
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQL;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES_SQL;
-import static com.example.onlinebookshop.BookCategoryConstants.FIRST_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.NON_EXISTING_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.PATH_TO_SQL_SCRIPTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,9 +29,9 @@ public class CategoryRepositoryTest {
 
     @BeforeAll
     static void initVars() {
-        EXPECTED_CATEGORY.setId(FIRST_CATEGORY_ID);
-        EXPECTED_CATEGORY.setName(CATEGORY_NAME);
-        EXPECTED_CATEGORY.setDescription(CATEGORY_DESCRIPTION);
+        EXPECTED_CATEGORY.setId(FICTION_CATEGORY_ID);
+        EXPECTED_CATEGORY.setName(FICTION_CATEGORY_NAME);
+        EXPECTED_CATEGORY.setDescription(FICTION_CATEGORY_DESCRIPTION);
     }
 
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -41,8 +41,8 @@ public class CategoryRepositoryTest {
     @DisplayName("Given a name of an existing category, successfully retrieve it from DB")
     @Test
     void findByName_IsAbleToFindExistingCategoryByName_Success() {
-        if (categoryRepository.findByName(CATEGORY_NAME).isPresent()) {
-            Category actualCategory = categoryRepository.findByName(CATEGORY_NAME).get();
+        if (categoryRepository.findByName(FICTION_CATEGORY_NAME).isPresent()) {
+            Category actualCategory = categoryRepository.findByName(FICTION_CATEGORY_NAME).get();
             assertEquals(EXPECTED_CATEGORY, actualCategory);
         }
     }
@@ -64,7 +64,7 @@ public class CategoryRepositoryTest {
     @DisplayName("Given a name of an existing category, successfully make sure it exists in DB")
     @Test
     void existsByName_IsAbleToCheckIfExistingCategoryExistsByName_Success() {
-        assertTrue(categoryRepository.existsByName(CATEGORY_NAME));
+        assertTrue(categoryRepository.existsByName(FICTION_CATEGORY_NAME));
     }
 
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
