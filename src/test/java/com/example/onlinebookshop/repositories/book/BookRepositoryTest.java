@@ -26,9 +26,6 @@ import static com.example.onlinebookshop.BookCategoryConstants.PATH_TO_SQL_SCRIP
 import static com.example.onlinebookshop.BookCategoryConstants.PRICE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBNS;
-import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBN_1;
-import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBN_2;
-import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBN_3;
 import static com.example.onlinebookshop.BookCategoryConstants.TITLE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_AUTHOR;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_COVER_IMAGE;
@@ -41,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.example.onlinebookshop.BookCategoryConstants;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
 import java.util.List;
@@ -145,18 +143,18 @@ class BookRepositoryTest {
     @Test
     void findBookByIsbn_IsAbleToGetBooksByExistingIsbn_Success() {
         Book actualBook = new Book();
-        if (bookRepository.findBookByIsbn(TEST_ISBN_1).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(TEST_ISBN_1).get();
+        if (bookRepository.findBookByIsbn(BookCategoryConstants.GATSBY_ISBN).isPresent()) {
+            actualBook = bookRepository.findBookByIsbn(BookCategoryConstants.GATSBY_ISBN).get();
         }
         assertEquals(EXPECTED_BOOK_1, actualBook);
 
-        if (bookRepository.findBookByIsbn(TEST_ISBN_2).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(TEST_ISBN_2).get();
+        if (bookRepository.findBookByIsbn(BookCategoryConstants.TKAM_ISBN).isPresent()) {
+            actualBook = bookRepository.findBookByIsbn(BookCategoryConstants.TKAM_ISBN).get();
         }
         assertEquals(EXPECTED_BOOK_2, actualBook);
 
-        if (bookRepository.findBookByIsbn(TEST_ISBN_3).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(TEST_ISBN_3).get();
+        if (bookRepository.findBookByIsbn(BookCategoryConstants.ISBN_1984).isPresent()) {
+            actualBook = bookRepository.findBookByIsbn(BookCategoryConstants.ISBN_1984).get();
         }
         assertEquals(EXPECTED_BOOK_3, actualBook);
     }

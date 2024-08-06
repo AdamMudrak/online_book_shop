@@ -4,8 +4,11 @@ import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
 import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
+import static com.example.onlinebookshop.BookCategoryConstants.CEILING_PRICE;
 import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.FIRST_PAGE_NUMBER;
+import static com.example.onlinebookshop.BookCategoryConstants.FLOOR_PRICE;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_COVER_IMAGE;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_DESCRIPTION;
@@ -17,6 +20,7 @@ import static com.example.onlinebookshop.BookCategoryConstants.ID_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.ISBN_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.PRICE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_PAGE_NUMBER;
 import static com.example.onlinebookshop.BookCategoryConstants.SOME_AUTHOR;
 import static com.example.onlinebookshop.BookCategoryConstants.SOME_COVER_IMAGE;
 import static com.example.onlinebookshop.BookCategoryConstants.SOME_DESCRIPTION;
@@ -31,6 +35,7 @@ import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ISBN;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_PRICE;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_TITLE;
+import static com.example.onlinebookshop.BookCategoryConstants.UNLIMITED_PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -94,8 +99,6 @@ class BookServiceImplTest {
     private static final BookDto EXPECTED_1984_BOOK_DTO = new BookDto();
     private static final BookDto EXPECTED_GATSBY_AFTER_UPDATE_DTO = new BookDto();
 
-    private static final long RANDOM_BOOK_ID = 1000L;
-
     private static final BookDtoWithoutCategoryIds EXPECTED_GATSBY_BOOK_DTO_WITHOUT_CATEGORY_ID =
             new BookDtoWithoutCategoryIds(GATSBY_ID,
                     GATSBY_TITLE,
@@ -122,8 +125,7 @@ class BookServiceImplTest {
                     PRICE_1984,
                     DESCRIPTION_1984,
                     COVER_IMAGE_1984);
-    private static final int FLOOR_PRICE = 10;
-    private static final int CEILING_PRICE = 12;
+
     private static final BookSearchParametersDto REAL_BOOK_SEARCH_PARAMETERS_DTO =
             new BookSearchParametersDto(
                     BigDecimal.valueOf(FLOOR_PRICE),
@@ -137,9 +139,6 @@ class BookServiceImplTest {
                     BigDecimal.valueOf(CEILING_PRICE),
                     new String[]{SOME_TITLE},
                     new String[]{SOME_AUTHOR});
-    private static final int RANDOM_PAGE_NUMBER = 1000;
-    private static final int PAGE_NUMBER = 0;
-    private static final int PAGE_SIZE = 3;
 
     @Mock
     private BookRepository bookRepository;
@@ -291,7 +290,7 @@ class BookServiceImplTest {
     @DisplayName("Given a pageable of first(zero) page and page sized 3, "
             + "successfully retrieves a list of 3 books from DB")
     void findAll_IsAbleToFindThreeBooksFromDb_Success() {
-        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
         List<Book> books = List.of(EXPECTED_GATSBY_BOOK, EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 
@@ -316,7 +315,7 @@ class BookServiceImplTest {
     @DisplayName("Given a pageable of 1000th page and page sized 3, "
             + "retrieves an empty list from DB")
     void findAll_IsNotAbleToFindBooksOnRandomPage_Fail() {
-        Pageable pageable = PageRequest.of(RANDOM_PAGE_NUMBER, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(RANDOM_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
         List<Book> books = List.of();
         Page<Book> bookPage = new PageImpl<>(books, pageable, 0);
 
@@ -391,14 +390,14 @@ class BookServiceImplTest {
     @Test
     @DisplayName("Given a random book id, throws an exception")
     void findById_IsNotAbleToFindBookByRandomId_Fail() {
-        String exceptionMessage = "Can't find book by id " + RANDOM_BOOK_ID;
-        when(bookRepository.findById(RANDOM_BOOK_ID))
-                .thenThrow(new EntityNotFoundException("Can't find book by id " + RANDOM_BOOK_ID));
+        String exceptionMessage = "Can't find book by id " + RANDOM_ID;
+        when(bookRepository.findById(RANDOM_ID))
+                .thenThrow(new EntityNotFoundException("Can't find book by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                bookService.findById(RANDOM_BOOK_ID));
+                bookService.findById(RANDOM_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
+        verify(bookRepository, times(1)).findById(RANDOM_ID);
     }
 
     @Test
@@ -427,15 +426,15 @@ class BookServiceImplTest {
     @Test
     @DisplayName("Given a random book id, throws an exception")
     void update_CannotUpdateBookWhenIsNotPresentById_Fail() {
-        String exceptionMessage = "Can't find and update book by id " + RANDOM_BOOK_ID;
-        when(bookRepository.findById(RANDOM_BOOK_ID))
+        String exceptionMessage = "Can't find and update book by id " + RANDOM_ID;
+        when(bookRepository.findById(RANDOM_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find and update book by id " + RANDOM_BOOK_ID));
+                        "Can't find and update book by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                bookService.update(UPDATE_BOOK_DTO, RANDOM_BOOK_ID, true));
+                bookService.update(UPDATE_BOOK_DTO, RANDOM_ID, true));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
+        verify(bookRepository, times(1)).findById(RANDOM_ID);
     }
 
     @Test
@@ -443,16 +442,16 @@ class BookServiceImplTest {
     void update_CannotUpdateBookWhenAnotherIsPresentByIsbn_Fail() {
         String exceptionMessage = "Book with ISBN " + UPDATE_BOOK_DTO.getIsbn()
                 + " already exists in DB";
-        when(bookRepository.findById(RANDOM_BOOK_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+        when(bookRepository.findById(RANDOM_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
         when(bookRepository.findBookByIsbn(UPDATE_BOOK_DTO.getIsbn()))
                 .thenThrow(new ParameterAlreadyExistsException(
                         "Book with ISBN " + UPDATE_BOOK_DTO.getIsbn()
                                 + " already exists in DB"));
         Exception exception = assertThrows(ParameterAlreadyExistsException.class, () ->
-                bookService.update(UPDATE_BOOK_DTO, RANDOM_BOOK_ID, true));
+                bookService.update(UPDATE_BOOK_DTO, RANDOM_ID, true));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
+        verify(bookRepository, times(1)).findById(RANDOM_ID);
         verify(bookRepository, times(1)).findBookByIsbn(UPDATE_BOOK_DTO.getIsbn());
     }
 
@@ -496,16 +495,16 @@ class BookServiceImplTest {
     @Test
     @DisplayName("When findById is engaged, throws an exception because book is not present by id")
     void delete_IsNotAbleToDeleteBookByRandomId_Fail() {
-        String exceptionMessage = "Can't find and delete book by id " + RANDOM_BOOK_ID;
-        when(bookRepository.findById(RANDOM_BOOK_ID))
+        String exceptionMessage = "Can't find and delete book by id " + RANDOM_ID;
+        when(bookRepository.findById(RANDOM_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find and delete book by id " + RANDOM_BOOK_ID));
+                        "Can't find and delete book by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                bookService.delete(RANDOM_BOOK_ID));
+                bookService.delete(RANDOM_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(bookRepository, times(1)).findById(RANDOM_BOOK_ID);
-        verify(bookRepository, times(0)).deleteById(RANDOM_BOOK_ID);
+        verify(bookRepository, times(1)).findById(RANDOM_ID);
+        verify(bookRepository, times(0)).deleteById(RANDOM_ID);
     }
 
     @Test

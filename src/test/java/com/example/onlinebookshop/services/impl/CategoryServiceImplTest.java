@@ -1,5 +1,17 @@
 package com.example.onlinebookshop.services.impl;
 
+import static com.example.onlinebookshop.BookCategoryConstants.ANOTHER_CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.ANOTHER_CATEGORY_NAME;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
+import static com.example.onlinebookshop.BookCategoryConstants.DUPLICATE_OF_EXISTING_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FIRST_PAGE_NUMBER;
+import static com.example.onlinebookshop.BookCategoryConstants.NEW_CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.NEW_CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_PAGE_NUMBER;
+import static com.example.onlinebookshop.BookCategoryConstants.UNLIMITED_PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
@@ -30,42 +42,30 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
-    private static final long EXISTING_CATEGORY_ID = 1L;
-    private static final long NEW_CATEGORY_ID = 2L;
-    private static final long DUPLICATE_OF_EXISTING_CATEGORY_ID = 3L;
-    private static final long RANDOM_CATEGORY_ID = 1000L;
-    private static final String NEW_CATEGORY_NAME = "Fiction";
-    private static final String NEW_CATEGORY_DESCRIPTION =
-            "Interesting books about imaginary though possible events";
-    private static final String EXISTING_CATEGORY_NAME = "Horror";
-    private static final String EXISTING_CATEGORY_DESCRIPTION = "Horror description";
-    private static final String NEW_EXISTING_CATEGORY_DESCRIPTION = "NEW Horror description";
-    private static final CreateCategoryDto CREATE_CATEGORY_DTO =
-            new CreateCategoryDto(NEW_CATEGORY_NAME, NEW_CATEGORY_DESCRIPTION);
-    private static final CreateCategoryDto EXISTING_CREATE_CATEGORY_DTO =
-            new CreateCategoryDto(EXISTING_CATEGORY_NAME, EXISTING_CATEGORY_DESCRIPTION);
+
     private static final Category NEW_CATEGORY = new Category();
     private static final Category EXISTING_CATEGORY = new Category();
     private static final Category EXISTING_CATEGORY_AFTER_UPDATE = new Category();
     private static final Category DUPLICATE_OF_EXISTING_CATEGORY = new Category();
+    private static final CreateCategoryDto CREATE_CATEGORY_DTO =
+            new CreateCategoryDto(CATEGORY_NAME, CATEGORY_DESCRIPTION);
+    private static final CreateCategoryDto EXISTING_CREATE_CATEGORY_DTO =
+            new CreateCategoryDto(ANOTHER_CATEGORY_NAME, ANOTHER_CATEGORY_DESCRIPTION);
     private static final UpdateCategoryDto UPDATE_CATEGORY_DTO = new UpdateCategoryDto(
-            EXISTING_CATEGORY_NAME,
-            NEW_EXISTING_CATEGORY_DESCRIPTION);
+            ANOTHER_CATEGORY_NAME,
+            NEW_CATEGORY_DESCRIPTION);
     private static final CategoryDto NEW_CATEGORY_DTO = new CategoryDto(
             NEW_CATEGORY_ID,
-            NEW_CATEGORY_NAME,
-            NEW_CATEGORY_DESCRIPTION);
+            CATEGORY_NAME,
+            CATEGORY_DESCRIPTION);
     private static final CategoryDto EXISTING_CATEGORY_DTO = new CategoryDto(
-            EXISTING_CATEGORY_ID,
-            EXISTING_CATEGORY_NAME,
-            EXISTING_CATEGORY_DESCRIPTION);
+            CATEGORY_ID,
+            ANOTHER_CATEGORY_NAME,
+            ANOTHER_CATEGORY_DESCRIPTION);
     private static final CategoryDto EXISTING_CATEGORY_DTO_AFTER_UPDATE = new CategoryDto(
-            EXISTING_CATEGORY_ID,
-            EXISTING_CATEGORY_NAME,
-            NEW_EXISTING_CATEGORY_DESCRIPTION);
-    private static final int RANDOM_PAGE_NUMBER = 1000;
-    private static final int PAGE_NUMBER = 0;
-    private static final int PAGE_SIZE = 3;
+            CATEGORY_ID,
+            ANOTHER_CATEGORY_NAME,
+            NEW_CATEGORY_DESCRIPTION);
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
@@ -76,19 +76,19 @@ class CategoryServiceImplTest {
     @BeforeAll
     static void initVars() {
         NEW_CATEGORY.setId(NEW_CATEGORY_ID);
-        NEW_CATEGORY.setName(NEW_CATEGORY_NAME);
-        NEW_CATEGORY.setDescription(NEW_CATEGORY_DESCRIPTION);
+        NEW_CATEGORY.setName(CATEGORY_NAME);
+        NEW_CATEGORY.setDescription(CATEGORY_DESCRIPTION);
 
-        EXISTING_CATEGORY.setId(EXISTING_CATEGORY_ID);
-        EXISTING_CATEGORY.setName(EXISTING_CATEGORY_NAME);
-        EXISTING_CATEGORY.setDescription(EXISTING_CATEGORY_DESCRIPTION);
+        EXISTING_CATEGORY.setId(CATEGORY_ID);
+        EXISTING_CATEGORY.setName(ANOTHER_CATEGORY_NAME);
+        EXISTING_CATEGORY.setDescription(ANOTHER_CATEGORY_DESCRIPTION);
 
         DUPLICATE_OF_EXISTING_CATEGORY.setId(DUPLICATE_OF_EXISTING_CATEGORY_ID);
-        DUPLICATE_OF_EXISTING_CATEGORY.setName(EXISTING_CATEGORY_NAME);
-        DUPLICATE_OF_EXISTING_CATEGORY.setDescription(EXISTING_CATEGORY_DESCRIPTION);
+        DUPLICATE_OF_EXISTING_CATEGORY.setName(ANOTHER_CATEGORY_NAME);
+        DUPLICATE_OF_EXISTING_CATEGORY.setDescription(ANOTHER_CATEGORY_DESCRIPTION);
 
-        EXISTING_CATEGORY_AFTER_UPDATE.setName(EXISTING_CATEGORY_NAME);
-        EXISTING_CATEGORY_AFTER_UPDATE.setDescription(NEW_EXISTING_CATEGORY_DESCRIPTION);
+        EXISTING_CATEGORY_AFTER_UPDATE.setName(ANOTHER_CATEGORY_NAME);
+        EXISTING_CATEGORY_AFTER_UPDATE.setDescription(NEW_CATEGORY_DESCRIPTION);
     }
 
     @Test
@@ -109,22 +109,22 @@ class CategoryServiceImplTest {
     @DisplayName("Given a CreateDto of a category which is already in DB by name, can't save it")
     void save_IsNotAbleToSaveCategoryWhichIsInDb_Fail() {
         String expectedMessage = "Category with name "
-                + EXISTING_CATEGORY_NAME + " already exists in DB";
-        when(categoryRepository.existsByName(EXISTING_CATEGORY_NAME))
+                + ANOTHER_CATEGORY_NAME + " already exists in DB";
+        when(categoryRepository.existsByName(ANOTHER_CATEGORY_NAME))
                 .thenThrow(new ParameterAlreadyExistsException(
-                        "Category with name " + EXISTING_CATEGORY_NAME + " already exists in DB"));
+                        "Category with name " + ANOTHER_CATEGORY_NAME + " already exists in DB"));
         Exception exception = assertThrows(ParameterAlreadyExistsException.class,
                 () -> categoryService.save(EXISTING_CREATE_CATEGORY_DTO));
         assertEquals(expectedMessage, exception.getMessage());
 
-        verify(categoryRepository, times(1)).existsByName(EXISTING_CATEGORY_NAME);
+        verify(categoryRepository, times(1)).existsByName(ANOTHER_CATEGORY_NAME);
     }
 
     @Test
     @DisplayName("Given a pageable of first(zero) page and page sized 3, "
             + "successfully retrieves a list of 2 categories from DB")
     void findAll_IsAbleToFindTwoCategoriesFromDb_Success() {
-        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
         List<Category> categories = List.of(NEW_CATEGORY, EXISTING_CATEGORY);
         Page<Category> categoryPage = new PageImpl<>(categories, pageable, categories.size());
 
@@ -146,7 +146,7 @@ class CategoryServiceImplTest {
     @DisplayName("Given a pageable of 1000th page and page sized 3, "
             + "retrieves an empty list from DB")
     void findAll_IsNotAbleToFindRandomCategory_Fail() {
-        Pageable pageable = PageRequest.of(RANDOM_PAGE_NUMBER, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(RANDOM_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
         List<Category> categories = List.of();
         Page<Category> categoryPage = new PageImpl<>(categories, pageable, 0);
 
@@ -163,47 +163,47 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Given a category id, successfully retrieves the category by id from DB")
     void getById_IsAbleToFindExistingCategory_Success() {
-        when(categoryRepository.findById(EXISTING_CATEGORY_ID))
+        when(categoryRepository.findById(CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
         when(categoryMapper.toCategoryDto(EXISTING_CATEGORY)).thenReturn(EXISTING_CATEGORY_DTO);
-        CategoryDto byExistingCategoryId = categoryService.getById(EXISTING_CATEGORY_ID);
+        CategoryDto byExistingCategoryId = categoryService.getById(CATEGORY_ID);
         assertEquals(EXISTING_CATEGORY_DTO, byExistingCategoryId);
 
-        verify(categoryRepository, times(1)).findById(EXISTING_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(CATEGORY_ID);
         verify(categoryMapper, times(1)).toCategoryDto(EXISTING_CATEGORY);
     }
 
     @Test
     @DisplayName("Given a random category id, throws an exception")
     void getById_IsNotAbleToFindCategoryByRandomId_Fail() {
-        String exceptionMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
-        when(categoryRepository.findById(RANDOM_CATEGORY_ID))
+        String exceptionMessage = "Can't find category by id " + RANDOM_ID;
+        when(categoryRepository.findById(RANDOM_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find category by id " + RANDOM_CATEGORY_ID));
+                        "Can't find category by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                categoryService.getById(RANDOM_CATEGORY_ID));
+                categoryService.getById(RANDOM_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(1)).findById(RANDOM_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(RANDOM_ID);
     }
 
     @Test
     @DisplayName("Given an UpdateDto, successfully updates the category in DB on condition that "
             + "it is already present by id")
     void update_CanUpdateCategoryWhenCategoryExistsById_Success() {
-        when(categoryRepository.findById(EXISTING_CATEGORY_ID))
+        when(categoryRepository.findById(CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
-        when(categoryRepository.findByName(EXISTING_CATEGORY_NAME))
+        when(categoryRepository.findByName(ANOTHER_CATEGORY_NAME))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
         when(categoryMapper.toUpdateModel(UPDATE_CATEGORY_DTO))
                 .thenReturn(EXISTING_CATEGORY_AFTER_UPDATE);
         when(categoryMapper.toCategoryDto(categoryRepository.save(EXISTING_CATEGORY_AFTER_UPDATE)))
                 .thenReturn(EXISTING_CATEGORY_DTO_AFTER_UPDATE);
-        CategoryDto actual = categoryService.update(UPDATE_CATEGORY_DTO, EXISTING_CATEGORY_ID);
+        CategoryDto actual = categoryService.update(UPDATE_CATEGORY_DTO, CATEGORY_ID);
         assertEquals(EXISTING_CATEGORY_DTO_AFTER_UPDATE, actual);
 
-        verify(categoryRepository, times(1)).findById(EXISTING_CATEGORY_ID);
-        verify(categoryRepository, times(1)).findByName(EXISTING_CATEGORY_NAME);
+        verify(categoryRepository, times(1)).findById(CATEGORY_ID);
+        verify(categoryRepository, times(1)).findByName(ANOTHER_CATEGORY_NAME);
         verify(categoryMapper, times(1)).toUpdateModel(UPDATE_CATEGORY_DTO);
         verify(categoryMapper, times(1))
                 .toCategoryDto(categoryRepository.save(EXISTING_CATEGORY_AFTER_UPDATE));
@@ -213,33 +213,33 @@ class CategoryServiceImplTest {
     @DisplayName("Given an UpdateDto, throws an exception "
             + " as it is not present in DB by id")
     void update_CannotUpdateCategoryWhenCategoryDoesNotExistById_Fail() {
-        String exceptionMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
-        when(categoryRepository.findById(RANDOM_CATEGORY_ID))
+        String exceptionMessage = "Can't find category by id " + RANDOM_ID;
+        when(categoryRepository.findById(RANDOM_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find category by id " + RANDOM_CATEGORY_ID));
+                        "Can't find category by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                categoryService.update(UPDATE_CATEGORY_DTO, RANDOM_CATEGORY_ID));
+                categoryService.update(UPDATE_CATEGORY_DTO, RANDOM_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(1)).findById(RANDOM_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(RANDOM_ID);
     }
 
     @Test
     @DisplayName("Throws an exception as another category with the same name is already present")
     void update_CannotUpdateCategoryWhenAnotherCategoryExistsByName_Fail() {
         String exceptionMessage = "Another category with name "
-                + EXISTING_CATEGORY_NAME + " already exists in DB";
+                + ANOTHER_CATEGORY_NAME + " already exists in DB";
         when(categoryRepository.findById(DUPLICATE_OF_EXISTING_CATEGORY_ID))
                 .thenReturn(Optional.of(DUPLICATE_OF_EXISTING_CATEGORY));
-        when(categoryRepository.findByName(EXISTING_CATEGORY_NAME))
+        when(categoryRepository.findByName(ANOTHER_CATEGORY_NAME))
                 .thenThrow(new ParameterAlreadyExistsException("Another category with name "
-                        + EXISTING_CATEGORY_NAME + " already exists in DB"));
+                        + ANOTHER_CATEGORY_NAME + " already exists in DB"));
         Exception exception = assertThrows(ParameterAlreadyExistsException.class, () ->
                 categoryService.update(UPDATE_CATEGORY_DTO, DUPLICATE_OF_EXISTING_CATEGORY_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
         verify(categoryRepository, times(1)).findById(DUPLICATE_OF_EXISTING_CATEGORY_ID);
-        verify(categoryRepository, times(1)).findByName(EXISTING_CATEGORY_NAME);
+        verify(categoryRepository, times(1)).findByName(ANOTHER_CATEGORY_NAME);
     }
 
     @Test
@@ -247,34 +247,34 @@ class CategoryServiceImplTest {
             + "when findById is engaged, throws an exception because category is not present "
             + "by id anymore")
     void deleteById_IsAbleToDeleteCategoryById_Success() {
-        when(categoryRepository.findById(EXISTING_CATEGORY_ID))
+        when(categoryRepository.findById(CATEGORY_ID))
                 .thenReturn(Optional.of(EXISTING_CATEGORY));
-        categoryService.deleteById(EXISTING_CATEGORY_ID);
-        String exceptionMessage = "Can't find category by id " + EXISTING_CATEGORY_ID;
-        when(categoryRepository.findById(EXISTING_CATEGORY_ID))
+        categoryService.deleteById(CATEGORY_ID);
+        String exceptionMessage = "Can't find category by id " + CATEGORY_ID;
+        when(categoryRepository.findById(CATEGORY_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find category by id " + EXISTING_CATEGORY_ID));
+                        "Can't find category by id " + CATEGORY_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                categoryService.deleteById(EXISTING_CATEGORY_ID));
+                categoryService.deleteById(CATEGORY_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(2)).findById(EXISTING_CATEGORY_ID);
-        verify(categoryRepository, times(1)).deleteById(EXISTING_CATEGORY_ID);
+        verify(categoryRepository, times(2)).findById(CATEGORY_ID);
+        verify(categoryRepository, times(1)).deleteById(CATEGORY_ID);
     }
 
     @Test
     @DisplayName("When findById is engaged, throws an exception because "
             + "category is not present by id")
     void deleteById_IsNotAbleToDeleteCategoryById_Fail() {
-        String exceptionMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
-        when(categoryRepository.findById(RANDOM_CATEGORY_ID))
+        String exceptionMessage = "Can't find category by id " + RANDOM_ID;
+        when(categoryRepository.findById(RANDOM_ID))
                 .thenThrow(new EntityNotFoundException(
-                        "Can't find category by id " + RANDOM_CATEGORY_ID));
+                        "Can't find category by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                categoryService.deleteById(RANDOM_CATEGORY_ID));
+                categoryService.deleteById(RANDOM_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(1)).findById(RANDOM_CATEGORY_ID);
-        verify(categoryRepository, times(0)).deleteById(RANDOM_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(RANDOM_ID);
+        verify(categoryRepository, times(0)).deleteById(RANDOM_ID);
     }
 }

@@ -13,11 +13,16 @@ public class BookCategoryConstants {
     public static final String DELETE_BOOKS_SQL = "delete-books.sql";
     public static final String DELETE_CATEGORIES_SQL = "delete-categories.sql";
     public static final String DELETE_BOOKS_CATEGORIES_SQL = "delete-books-categories.sql";
-    /** Test data for books and categories*/
+    /**Test data for books and categories*/
     public static final long CATEGORY_ID = 1L;
+    public static final String NON_EXISTING_CATEGORY_NAME = "I don't even exist";
     public static final String CATEGORY_NAME = "Fiction";
     public static final String CATEGORY_DESCRIPTION =
             "Interesting books about imaginary though possible events";
+    public static final String ANOTHER_CATEGORY_NAME = "Horror";
+    public static final String ANOTHER_CATEGORY_DESCRIPTION = "Horror description";
+    public static final String NEW_CATEGORY_DESCRIPTION = "NEW Horror description";
+
     public static final long GATSBY_ID = 1L;
     public static final String GATSBY_TITLE = "The Great Gatsby";
     public static final String GATSBY_AUTHOR = "F. Scott Fitzgerald";
@@ -52,15 +57,20 @@ public class BookCategoryConstants {
     public static final BigDecimal SOME_PRICE = BigDecimal.valueOf(9.99);
     public static final String SOME_DESCRIPTION = "Some description";
     public static final String SOME_COVER_IMAGE = "https://example.com/some_picture.jpg";
-
-    public static final long RANDOM_ID = 1000L;
+    /**ID*/
+    public static final long NEW_CATEGORY_ID = 2L;
+    public static final long DUPLICATE_OF_EXISTING_CATEGORY_ID = 3L;
     public static final long EXPECTED_BOOK_DTO_ID = 4L;
-    public static final String TEST_ISBN_1 = "9780743273565";
-    public static final String TEST_ISBN_2 = "9780061120084";
-    public static final String TEST_ISBN_3 = "9780451524935";
-    public static final String[] TEST_ISBNS = new String[]{TEST_ISBN_1, TEST_ISBN_2, TEST_ISBN_3};
+    public static final long RANDOM_ID = 1000L;
+    /**ISBN*/
+    public static final String[] TEST_ISBNS = new String[]{GATSBY_ISBN, TKAM_ISBN, ISBN_1984};
     public static final String NON_EXISTING_ISBN = "0000000000000";
-
+    /**Data for connecting to Controller*/
+    public static final String BOOKS_URL = "/books";
+    public static final String USER_NAME = "user";
+    public static final String ADMIN_NAME = "admin";
+    public static final String ADMIN_ROLE = "ADMIN";
+    /**Bad request 400 error messages*/
     public static final String INVALID_FOR_NOT_BLANK = "";
     public static final String INVALID_ISBN_TOO_SHORT = "123456789";
     public static final String VALID_ISBN = "1234567890";
@@ -74,7 +84,8 @@ public class BookCategoryConstants {
             "This text contains more than 0 and less than 3000 characters.";
     public static final String INVALID_COVER_IMAGE_WITHOUT_HTTPS = "example.com/gatsby.jpg";
     public static final String VALID_COVER_IMAGE = "https://example.com/another_gatsby.jpg";
-    /**Bad request 400 error messages*/
+    public static final int FLOOR_PRICE = 10;
+    public static final int CEILING_PRICE = 12;
     public static final List<String> CREATE_ERRORS_LIST = List.of(
             "title must not be blank",
             "author must not be blank",
@@ -90,6 +101,7 @@ public class BookCategoryConstants {
             "coverImage Invalid format filepath"
     );
     /**Pageable imitation data*/
+    public static final int RANDOM_PAGE_NUMBER = 1000;
     public static final int FIRST_PAGE_NUMBER = 0;
     public static final int SECOND_PAGE_NUMBER = 1;
     public static final int UNLIMITED_PAGE_SIZE = 3;

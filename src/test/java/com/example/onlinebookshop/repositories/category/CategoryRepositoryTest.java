@@ -1,7 +1,11 @@
 package com.example.onlinebookshop.repositories.category;
 
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.NON_EXISTING_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.PATH_TO_SQL_SCRIPTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,20 +23,15 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CategoryRepositoryTest {
-    private static final String CATEGORY_NAME = "Fiction";
-    private static final String CATEGORY_DESCRIPTION =
-            "Interesting books about imaginary though possible events";
-    private static final String NON_EXISTING_CATEGORY_NAME = "I don't even exist";
-    private static Category expectedCategory;
+    private static final Category EXPECTED_CATEGORY = new Category();
     @Autowired
     private CategoryRepository categoryRepository;
 
     @BeforeAll
     static void initVars() {
-        expectedCategory = new Category();
-        expectedCategory.setId(1L);
-        expectedCategory.setName(CATEGORY_NAME);
-        expectedCategory.setDescription(CATEGORY_DESCRIPTION);
+        EXPECTED_CATEGORY.setId(CATEGORY_ID);
+        EXPECTED_CATEGORY.setName(CATEGORY_NAME);
+        EXPECTED_CATEGORY.setDescription(CATEGORY_DESCRIPTION);
     }
 
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -44,7 +43,7 @@ public class CategoryRepositoryTest {
     void findByName_IsAbleToFindExistingCategoryByName_Success() {
         if (categoryRepository.findByName(CATEGORY_NAME).isPresent()) {
             Category actualCategory = categoryRepository.findByName(CATEGORY_NAME).get();
-            assertEquals(expectedCategory, actualCategory);
+            assertEquals(EXPECTED_CATEGORY, actualCategory);
         }
     }
 

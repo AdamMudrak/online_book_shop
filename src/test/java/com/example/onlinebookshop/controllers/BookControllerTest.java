@@ -3,7 +3,10 @@ package com.example.onlinebookshop.controllers;
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_CATEGORIES_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.ADMIN_NAME;
+import static com.example.onlinebookshop.BookCategoryConstants.ADMIN_ROLE;
 import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.BOOKS_URL;
 import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.CREATE_ERRORS_LIST;
@@ -54,6 +57,7 @@ import static com.example.onlinebookshop.BookCategoryConstants.TKAM_PRICE;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_TITLE;
 import static com.example.onlinebookshop.BookCategoryConstants.UNLIMITED_PAGE_SIZE;
 import static com.example.onlinebookshop.BookCategoryConstants.UPDATE_ERRORS_LIST;
+import static com.example.onlinebookshop.BookCategoryConstants.USER_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.VALID_COVER_IMAGE;
 import static com.example.onlinebookshop.BookCategoryConstants.VALID_DESCRIPTION;
 import static com.example.onlinebookshop.BookCategoryConstants.VALID_ISBN;
@@ -189,7 +193,7 @@ public class BookControllerTest {
         EXPECTED_1984_BOOK_DTO.setCoverImage(COVER_IMAGE_1984);
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -203,7 +207,7 @@ public class BookControllerTest {
     public void createBook_IsAbleToSaveBookWhichIsNotInDB_Success() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(CREATE_NEW_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                            post("/books")
+                            post(BOOKS_URL)
                                     .content(jsonRequest)
                                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -213,7 +217,7 @@ public class BookControllerTest {
         assertEquals(EXPECTED_NEW_BOOK_DTO, actual);
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -227,7 +231,7 @@ public class BookControllerTest {
     public void createBook_IsNotAbleToSaveBookWhenCreateDtoIsInvalid_Fail() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(CREATE_INVALID_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                        post("/books")
+                        post(BOOKS_URL)
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -238,7 +242,7 @@ public class BookControllerTest {
         }
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -252,7 +256,7 @@ public class BookControllerTest {
     public void update_IsAbleToUpdateBookWhenUpdateDtoIsValid_Success() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(UPDATE_VALID_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                        put("/books/" + GATSBY_ID)
+                        put(BOOKS_URL + "/" + GATSBY_ID)
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -262,7 +266,7 @@ public class BookControllerTest {
         assertEquals(EXPECTED_BOOK_DTO_AFTER_UPDATE, actual);
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -276,7 +280,7 @@ public class BookControllerTest {
     public void update_IsNotAbleToUpdateBookWhenUpdateDtoIsInvalid_Fail() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(UPDATE_INVALID_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                        put("/books/" + GATSBY_ID)
+                        put(BOOKS_URL + "/" + GATSBY_ID)
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -287,7 +291,7 @@ public class BookControllerTest {
         }
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -301,13 +305,13 @@ public class BookControllerTest {
             + " then make sure that this book doesn't exist no more")
     public void delete_IsAbleToDeleteBookWhenBookExistsById_Success() throws Exception {
         mockMvc.perform(
-                        delete("/books/" + ID_1984)
+                        delete(BOOKS_URL + "/" + ID_1984)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
         String expectedExceptionMessage = "Can't find and delete book by id " + ID_1984;
         MvcResult result = mockMvc.perform(
-                        delete("/books/" + ID_1984)
+                        delete(BOOKS_URL + "/" + ID_1984)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -315,7 +319,7 @@ public class BookControllerTest {
         assertEquals(expectedExceptionMessage, actualExceptionMessage);
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -329,7 +333,7 @@ public class BookControllerTest {
     public void delete_IsNotAbleToDeleteBookWhenBookDoesNotExistById_Fail() throws Exception {
         String expectedExceptionMessage = "Can't find and delete book by id " + RANDOM_ID;
         MvcResult result = mockMvc.perform(
-                        delete("/books/" + RANDOM_ID)
+                        delete(BOOKS_URL + "/" + RANDOM_ID)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -337,7 +341,7 @@ public class BookControllerTest {
         assertEquals(expectedExceptionMessage, actualExceptionMessage);
     }
 
-    @WithMockUser(username = "user")
+    @WithMockUser(username = USER_NAME)
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -352,7 +356,7 @@ public class BookControllerTest {
         List<BookDto> expectedBookDtos = List.of(
                 EXPECTED_GATSBY_BOOK_DTO, EXPECTED_TKAM_BOOK_DTO, EXPECTED_1984_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                        get("/books")
+                        get(BOOKS_URL)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -365,7 +369,7 @@ public class BookControllerTest {
         assertEquals(expectedBookDtos, actualBookDtos);
     }
 
-    @WithMockUser(username = "user")
+    @WithMockUser(username = USER_NAME)
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -380,7 +384,7 @@ public class BookControllerTest {
         List<BookDto> expectedBookDtos = List.of(
                 EXPECTED_1984_BOOK_DTO, EXPECTED_TKAM_BOOK_DTO, EXPECTED_GATSBY_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                        get("/books")
+                        get(BOOKS_URL)
                         .queryParam(PAGE, FIRST_PAGE_NUMBER + "")
                         .queryParam(SIZE, UNLIMITED_PAGE_SIZE + "")
                         .queryParam(SORT, SORT_BY_PRICE_ASC)
@@ -396,7 +400,7 @@ public class BookControllerTest {
         assertEquals(expectedBookDtos, actualBookDtos);
     }
 
-    @WithMockUser(username = "user")
+    @WithMockUser(username = USER_NAME)
     @Test
     @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
             PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
@@ -412,7 +416,7 @@ public class BookControllerTest {
         List<BookDto> expectedBookDtosForFirstPage = List.of(
                 EXPECTED_TKAM_BOOK_DTO, EXPECTED_GATSBY_BOOK_DTO);
         MvcResult resultForFirstPage = mockMvc.perform(
-                        get("/books")
+                        get(BOOKS_URL)
                                 .queryParam(PAGE, FIRST_PAGE_NUMBER + "")
                                 .queryParam(SIZE, LIMITED_PAGE_SIZE + "")
                                 .queryParam(SORT, SORT_BY_TITLE_DESC)
@@ -429,7 +433,7 @@ public class BookControllerTest {
 
         List<BookDto> expectedBookDtoForSecondPage = List.of(EXPECTED_1984_BOOK_DTO);
         MvcResult resultForSecondPage = mockMvc.perform(
-                        get("/books")
+                        get(BOOKS_URL)
                                 .queryParam(PAGE, SECOND_PAGE_NUMBER + "")
                                 .queryParam(SIZE, LIMITED_PAGE_SIZE + "")
                                 .queryParam(SORT, SORT_BY_TITLE_DESC)
