@@ -14,14 +14,15 @@ public class BookCategoryConstants {
     public static final String DELETE_CATEGORIES_SQL = "delete-categories.sql";
     public static final String DELETE_BOOKS_CATEGORIES_SQL = "delete-books-categories.sql";
     /**Test data for books and categories*/
-    public static final long CATEGORY_ID = 1L;
+    public static final long FIRST_CATEGORY_ID = 1L;
     public static final String NON_EXISTING_CATEGORY_NAME = "I don't even exist";
     public static final String CATEGORY_NAME = "Fiction";
     public static final String CATEGORY_DESCRIPTION =
             "Interesting books about imaginary though possible events";
     public static final String ANOTHER_CATEGORY_NAME = "Horror";
+    public static final String UPDATED_CATEGORY_NAME = "NEW Horror";
     public static final String ANOTHER_CATEGORY_DESCRIPTION = "Horror description";
-    public static final String NEW_CATEGORY_DESCRIPTION = "NEW Horror description";
+    public static final String UPDATED_CATEGORY_DESCRIPTION = "NEW Horror description";
 
     public static final long GATSBY_ID = 1L;
     public static final String GATSBY_TITLE = "The Great Gatsby";
@@ -68,6 +69,7 @@ public class BookCategoryConstants {
     /**Data for connecting to Controller*/
     public static final String SPLITERATOR = "/";
     public static final String BOOKS_URL = "/books";
+    public static final String CATEGORIES_URL = "/categories";
     public static final String BOOKS_SEARCH_URL = "/search";
     public static final String USER_NAME = "user";
     public static final String ADMIN_NAME = "admin";
@@ -102,6 +104,7 @@ public class BookCategoryConstants {
             "description size must be between 0 and 3000",
             "coverImage Invalid format filepath"
     );
+    public static final String CATEGORY_DTO_ERROR = "name must not be blank";
     /**Pageable imitation data*/
     public static final int RANDOM_PAGE_NUMBER = 1000;
     public static final int FIRST_PAGE_NUMBER = 0;

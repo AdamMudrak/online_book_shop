@@ -2,9 +2,9 @@ package com.example.onlinebookshop.repositories.category;
 
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.FIRST_CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.NON_EXISTING_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.PATH_TO_SQL_SCRIPTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +29,7 @@ public class CategoryRepositoryTest {
 
     @BeforeAll
     static void initVars() {
-        EXPECTED_CATEGORY.setId(CATEGORY_ID);
+        EXPECTED_CATEGORY.setId(FIRST_CATEGORY_ID);
         EXPECTED_CATEGORY.setName(CATEGORY_NAME);
         EXPECTED_CATEGORY.setDescription(CATEGORY_DESCRIPTION);
     }

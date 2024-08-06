@@ -8,7 +8,6 @@ import static com.example.onlinebookshop.BookCategoryConstants.ADMIN_ROLE;
 import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.BOOKS_SEARCH_URL;
 import static com.example.onlinebookshop.BookCategoryConstants.BOOKS_URL;
-import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.CREATE_ERRORS_LIST;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_CATEGORIES_SQL;
@@ -17,6 +16,7 @@ import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES
 import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.EXPECTED_BOOK_DTO_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.EXPECTED_SIZE;
+import static com.example.onlinebookshop.BookCategoryConstants.FIRST_CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.FIRST_PAGE_NUMBER;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_COVER_IMAGE;
@@ -120,7 +120,7 @@ public class BookControllerTest {
                 .build();
         CREATE_NEW_BOOK_DTO.setTitle(SOME_TITLE);
         CREATE_NEW_BOOK_DTO.setAuthor(SOME_AUTHOR);
-        CREATE_NEW_BOOK_DTO.setCategoryIds(Set.of(CATEGORY_ID));
+        CREATE_NEW_BOOK_DTO.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
         CREATE_NEW_BOOK_DTO.setIsbn(SOME_ISBN);
         CREATE_NEW_BOOK_DTO.setPrice(SOME_PRICE);
         CREATE_NEW_BOOK_DTO.setDescription(SOME_DESCRIPTION);
@@ -130,7 +130,7 @@ public class BookControllerTest {
         EXPECTED_NEW_BOOK_DTO.setTitle(SOME_TITLE);
         EXPECTED_NEW_BOOK_DTO.setAuthor(SOME_AUTHOR);
         EXPECTED_NEW_BOOK_DTO.setIsbn(SOME_ISBN);
-        EXPECTED_NEW_BOOK_DTO.setCategoryIds(Set.of(CATEGORY_ID));
+        EXPECTED_NEW_BOOK_DTO.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
         EXPECTED_NEW_BOOK_DTO.setPrice(SOME_PRICE);
         EXPECTED_NEW_BOOK_DTO.setDescription(SOME_DESCRIPTION);
         EXPECTED_NEW_BOOK_DTO.setCoverImage(SOME_COVER_IMAGE);
@@ -138,7 +138,7 @@ public class BookControllerTest {
         CREATE_EXISTING_BOOK_DTO.setTitle(GATSBY_TITLE);
         CREATE_EXISTING_BOOK_DTO.setAuthor(GATSBY_AUTHOR);
         CREATE_EXISTING_BOOK_DTO.setIsbn(GATSBY_ISBN);
-        CREATE_EXISTING_BOOK_DTO.setCategoryIds(Set.of(CATEGORY_ID));
+        CREATE_EXISTING_BOOK_DTO.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
         CREATE_EXISTING_BOOK_DTO.setPrice(GATSBY_PRICE);
         CREATE_EXISTING_BOOK_DTO.setDescription(GATSBY_DESCRIPTION);
         CREATE_EXISTING_BOOK_DTO.setCoverImage(GATSBY_COVER_IMAGE);
@@ -146,7 +146,7 @@ public class BookControllerTest {
         EXPECTED_BOOK_DTO_AFTER_UPDATE.setId(GATSBY_ID);
         EXPECTED_BOOK_DTO_AFTER_UPDATE.setTitle(GATSBY_TITLE);
         EXPECTED_BOOK_DTO_AFTER_UPDATE.setAuthor(GATSBY_AUTHOR);
-        EXPECTED_BOOK_DTO_AFTER_UPDATE.setCategoryIds(Set.of(CATEGORY_ID));
+        EXPECTED_BOOK_DTO_AFTER_UPDATE.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
         EXPECTED_BOOK_DTO_AFTER_UPDATE.setIsbn(VALID_ISBN);
         EXPECTED_BOOK_DTO_AFTER_UPDATE.setPrice(VALID_PRICE);
         EXPECTED_BOOK_DTO_AFTER_UPDATE.setDescription(VALID_DESCRIPTION);
@@ -174,7 +174,7 @@ public class BookControllerTest {
         EXPECTED_GATSBY_BOOK_DTO.setId(GATSBY_ID);
         EXPECTED_GATSBY_BOOK_DTO.setTitle(GATSBY_TITLE);
         EXPECTED_GATSBY_BOOK_DTO.setAuthor(GATSBY_AUTHOR);
-        EXPECTED_GATSBY_BOOK_DTO.setCategoryIds(Set.of(CATEGORY_ID));
+        EXPECTED_GATSBY_BOOK_DTO.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
         EXPECTED_GATSBY_BOOK_DTO.setIsbn(GATSBY_ISBN);
         EXPECTED_GATSBY_BOOK_DTO.setPrice(GATSBY_PRICE);
         EXPECTED_GATSBY_BOOK_DTO.setDescription(GATSBY_DESCRIPTION);
@@ -183,7 +183,7 @@ public class BookControllerTest {
         EXPECTED_TKAM_BOOK_DTO.setId(TKAM_ID);
         EXPECTED_TKAM_BOOK_DTO.setTitle(TKAM_TITLE);
         EXPECTED_TKAM_BOOK_DTO.setAuthor(TKAM_AUTHOR);
-        EXPECTED_TKAM_BOOK_DTO.setCategoryIds(Set.of(CATEGORY_ID));
+        EXPECTED_TKAM_BOOK_DTO.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
         EXPECTED_TKAM_BOOK_DTO.setIsbn(TKAM_ISBN);
         EXPECTED_TKAM_BOOK_DTO.setPrice(TKAM_PRICE);
         EXPECTED_TKAM_BOOK_DTO.setDescription(TKAM_DESCRIPTION);
@@ -192,7 +192,7 @@ public class BookControllerTest {
         EXPECTED_1984_BOOK_DTO.setId(ID_1984);
         EXPECTED_1984_BOOK_DTO.setTitle(TITLE_1984);
         EXPECTED_1984_BOOK_DTO.setAuthor(AUTHOR_1984);
-        EXPECTED_1984_BOOK_DTO.setCategoryIds(Set.of(CATEGORY_ID));
+        EXPECTED_1984_BOOK_DTO.setCategoryIds(Set.of(FIRST_CATEGORY_ID));
         EXPECTED_1984_BOOK_DTO.setIsbn(ISBN_1984);
         EXPECTED_1984_BOOK_DTO.setPrice(PRICE_1984);
         EXPECTED_1984_BOOK_DTO.setDescription(DESCRIPTION_1984);
