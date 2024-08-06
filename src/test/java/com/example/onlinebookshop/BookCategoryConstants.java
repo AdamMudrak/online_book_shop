@@ -66,7 +66,9 @@ public class BookCategoryConstants {
     public static final String[] TEST_ISBNS = new String[]{GATSBY_ISBN, TKAM_ISBN, ISBN_1984};
     public static final String NON_EXISTING_ISBN = "0000000000000";
     /**Data for connecting to Controller*/
+    public static final String SPLITERATOR = "/";
     public static final String BOOKS_URL = "/books";
+    public static final String BOOKS_SEARCH_URL = "/search";
     public static final String USER_NAME = "user";
     public static final String ADMIN_NAME = "admin";
     public static final String ADMIN_ROLE = "ADMIN";
@@ -111,4 +113,8 @@ public class BookCategoryConstants {
     public static final String SORT = "sort";
     public static final String PAGE = "page";
     public static final String SIZE = "size";
+    public static final String TITLES = "titles";
+    public static final String TITLES_LIST = "1984,To Kill a Mockingbird";
+    public static final String INVALID_PARAMS = "?titls=1984,To Kill a Mockingbird&price=5";
+    public static final int EXPECTED_SIZE = 2;
 }

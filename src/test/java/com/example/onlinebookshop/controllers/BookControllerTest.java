@@ -6,6 +6,7 @@ import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQ
 import static com.example.onlinebookshop.BookCategoryConstants.ADMIN_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.ADMIN_ROLE;
 import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.BOOKS_SEARCH_URL;
 import static com.example.onlinebookshop.BookCategoryConstants.BOOKS_URL;
 import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
 import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
@@ -15,6 +16,7 @@ import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.EXPECTED_BOOK_DTO_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.EXPECTED_SIZE;
 import static com.example.onlinebookshop.BookCategoryConstants.FIRST_PAGE_NUMBER;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
 import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_COVER_IMAGE;
@@ -29,6 +31,7 @@ import static com.example.onlinebookshop.BookCategoryConstants.INVALID_COVER_IMA
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_DESCRIPTION_TOO_LONG;
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_FOR_NOT_BLANK;
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_ISBN_TOO_SHORT;
+import static com.example.onlinebookshop.BookCategoryConstants.INVALID_PARAMS;
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_PRICE_NEGATIVE;
 import static com.example.onlinebookshop.BookCategoryConstants.ISBN_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.LIMITED_PAGE_SIZE;
@@ -47,6 +50,9 @@ import static com.example.onlinebookshop.BookCategoryConstants.SOME_TITLE;
 import static com.example.onlinebookshop.BookCategoryConstants.SORT;
 import static com.example.onlinebookshop.BookCategoryConstants.SORT_BY_PRICE_ASC;
 import static com.example.onlinebookshop.BookCategoryConstants.SORT_BY_TITLE_DESC;
+import static com.example.onlinebookshop.BookCategoryConstants.SPLITERATOR;
+import static com.example.onlinebookshop.BookCategoryConstants.TITLES;
+import static com.example.onlinebookshop.BookCategoryConstants.TITLES_LIST;
 import static com.example.onlinebookshop.BookCategoryConstants.TITLE_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_AUTHOR;
 import static com.example.onlinebookshop.BookCategoryConstants.TKAM_COVER_IMAGE;
@@ -256,7 +262,7 @@ public class BookControllerTest {
     public void update_IsAbleToUpdateBookWhenUpdateDtoIsValid_Success() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(UPDATE_VALID_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                        put(BOOKS_URL + "/" + GATSBY_ID)
+                        put(BOOKS_URL + SPLITERATOR + GATSBY_ID)
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -280,7 +286,7 @@ public class BookControllerTest {
     public void update_IsNotAbleToUpdateBookWhenUpdateDtoIsInvalid_Fail() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(UPDATE_INVALID_BOOK_DTO);
         MvcResult result = mockMvc.perform(
-                        put(BOOKS_URL + "/" + GATSBY_ID)
+                        put(BOOKS_URL + SPLITERATOR + GATSBY_ID)
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -305,13 +311,13 @@ public class BookControllerTest {
             + " then make sure that this book doesn't exist no more")
     public void delete_IsAbleToDeleteBookWhenBookExistsById_Success() throws Exception {
         mockMvc.perform(
-                        delete(BOOKS_URL + "/" + ID_1984)
+                        delete(BOOKS_URL + SPLITERATOR + ID_1984)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
         String expectedExceptionMessage = "Can't find and delete book by id " + ID_1984;
         MvcResult result = mockMvc.perform(
-                        delete(BOOKS_URL + "/" + ID_1984)
+                        delete(BOOKS_URL + SPLITERATOR + ID_1984)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -333,7 +339,7 @@ public class BookControllerTest {
     public void delete_IsNotAbleToDeleteBookWhenBookDoesNotExistById_Fail() throws Exception {
         String expectedExceptionMessage = "Can't find and delete book by id " + RANDOM_ID;
         MvcResult result = mockMvc.perform(
-                        delete(BOOKS_URL + "/" + RANDOM_ID)
+                        delete(BOOKS_URL + SPLITERATOR + RANDOM_ID)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -447,5 +453,100 @@ public class BookControllerTest {
                         .getTypeFactory()
                         .constructCollectionType(List.class, BookDto.class));
         assertEquals(expectedBookDtoForSecondPage, actualBookDto);
+    }
+
+    @WithMockUser(username = USER_NAME)
+    @Test
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Get book \"1984\" from DB by id")
+    public void getBookById_IsAbleToFindABookByExistingIdFromDb_Success() throws Exception {
+        MvcResult result = mockMvc.perform(
+                        get(BOOKS_URL + SPLITERATOR + ID_1984)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        BookDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(), BookDto.class);
+        assertEquals(EXPECTED_1984_BOOK_DTO, actual);
+    }
+
+    @WithMockUser(username = USER_NAME)
+    @Test
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @DisplayName("Get nothing from DB")
+    public void getBookById_IsNotAbleToFindABookByNonExistingIdFromDb_Fail() throws Exception {
+        String expectedExceptionMessage = "Can't find book by id " + RANDOM_ID;
+        MvcResult result = mockMvc.perform(
+                        get(BOOKS_URL + SPLITERATOR + RANDOM_ID)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+        String actualExceptionMessage = result.getResponse().getContentAsString();
+        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+    }
+
+    @WithMockUser(username = USER_NAME)
+    @Test
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void searchBooks_IsAbleToSearchBooks_Success() throws Exception {
+        MvcResult result = mockMvc.perform(
+                        get(BOOKS_URL + BOOKS_SEARCH_URL)
+                                .queryParam(TITLES, TITLES_LIST)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        List<BookDto> actualBookDtos = objectMapper.readValue(result
+                        .getResponse()
+                        .getContentAsString(),
+                objectMapper
+                        .getTypeFactory()
+                        .constructCollectionType(List.class, BookDto.class));
+        assertEquals(EXPECTED_SIZE, actualBookDtos.size());
+        assertTrue(actualBookDtos.contains(EXPECTED_1984_BOOK_DTO));
+        assertTrue(actualBookDtos.contains(EXPECTED_TKAM_BOOK_DTO));
+    }
+
+    @WithMockUser(username = USER_NAME)
+    @Test
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
+            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void searchBooks_IsAbleNotToSearchBooksWhenParamsAreInvalid_FailToFilter()
+            throws Exception {
+        String expectedExceptionMessage = "Can't build specification because "
+                + " all of the parameters names are typed wrongly";
+        MvcResult result = mockMvc.perform(
+                        get(BOOKS_URL + BOOKS_SEARCH_URL + INVALID_PARAMS)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        String actualExceptionMessage = result.getResponse().getContentAsString();
+        assertEquals(expectedExceptionMessage, actualExceptionMessage);
     }
 }
