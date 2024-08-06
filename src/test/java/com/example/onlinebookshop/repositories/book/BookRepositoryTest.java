@@ -1,19 +1,48 @@
 package com.example.onlinebookshop.repositories.book;
 
-import static com.example.onlinebookshop.TestConstants.ADD_BOOKS_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.ADD_BOOKS_SQL;
-import static com.example.onlinebookshop.TestConstants.ADD_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.DELETE_BOOKS_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.DELETE_BOOKS_SQL;
-import static com.example.onlinebookshop.TestConstants.DELETE_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.PATH_TO_SQL_SCRIPTS;
+import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
+import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_TITLE;
+import static com.example.onlinebookshop.BookCategoryConstants.ID_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.ISBN_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.NON_EXISTING_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.PATH_TO_SQL_SCRIPTS;
+import static com.example.onlinebookshop.BookCategoryConstants.PRICE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBNS;
+import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBN_1;
+import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBN_2;
+import static com.example.onlinebookshop.BookCategoryConstants.TEST_ISBN_3;
+import static com.example.onlinebookshop.BookCategoryConstants.TITLE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,54 +56,12 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
-    private static final String TEST_ISBN_1 = "9780743273565";
-    private static final String TEST_ISBN_2 = "9780061120084";
-    private static final String TEST_ISBN_3 = "9780451524935";
-    private static final String NON_EXISTING_ISBN = "0000000000000";
-    private static final long NON_EXISTING_CATEGORY_ID = 1000L;
-    private static final String[] TEST_ISBNS = new String[]{TEST_ISBN_1, TEST_ISBN_2, TEST_ISBN_3};
-
     private static final Category CATEGORY = new Category();
-    private static final long CATEGORY_ID = 1L;
-    private static final String CATEGORY_NAME = "Fiction";
-    private static final String CATEGORY_DESCRIPTION =
-            "Interesting books about imaginary though possible events";
-
     private static final Book EXPECTED_BOOK_1 = new Book();
     private static final Book EXPECTED_BOOK_2 = new Book();
     private static final Book EXPECTED_BOOK_3 = new Book();
-
-    private static final long GATSBY_ID = 1L;
-    private static final String GATSBY_TITLE = "The Great Gatsby";
-    private static final String GATSBY_AUTHOR = "F. Scott Fitzgerald";
-    private static final String GATSBY_ISBN = "9780743273565";
-    private static final BigDecimal GATSBY_PRICE = BigDecimal.valueOf(12.99);
-    private static final String GATSBY_DESCRIPTION = "A story of the fabulously wealthy Jay Gatsby "
-            + "and his love for the beautiful Daisy Buchanan.";
-    private static final String GATSBY_COVER_IMAGE = "https://example.com/gatsby.jpg";
-
-    private static final long TKAM_ID = 2L;
-    private static final String TKAM_TITLE = "To Kill a Mockingbird";
-    private static final String TKAM_AUTHOR = "Harper Lee";
-    private static final String TKAM_ISBN = "9780061120084";
-    private static final BigDecimal TKAM_PRICE = BigDecimal.valueOf(10.49);
-    private static final String TKAM_DESCRIPTION = "A novel that explores the irrationality of "
-            + "adult attitudes towards race and class in the Deep South of the 1930s.";
-    private static final String TKAM_COVER_IMAGE = "https://example.com/mockingbird.jpg";
-
-    private static final long ID_1984 = 3L;
-    private static final String TITLE_1984 = "1984";
-    private static final String AUTHOR_1984 = "George Orwell";
-    private static final String ISBN_1984 = "9780451524935";
-    private static final BigDecimal PRICE_1984 = BigDecimal.valueOf(9.99);
-    private static final String DESCRIPTION_1984 = "A dystopian novel set in Airstrip One, "
-            + "a province of the superstate Oceania, whose residents are victims of perpetual war, "
-            + "omnipresent government surveillance, and public manipulation.";
-    private static final String COVER_IMAGE_1984 = "https://example.com/1984.jpg";
-
     private static final Book[] EXPECTED_BOOKS =
             new Book[]{EXPECTED_BOOK_1, EXPECTED_BOOK_2, EXPECTED_BOOK_3};
-
     @Autowired
     private BookRepository bookRepository;
 
@@ -147,7 +134,7 @@ class BookRepositoryTest {
     @DisplayName("Given an id of a non-existing category, retrieve an empty list")
     @Test
     void findAllByCategoryId_IsNotAbleToFindBooksByNonExistingCategoryId_Fail() {
-        assertTrue(bookRepository.findAllByCategoryId(NON_EXISTING_CATEGORY_ID).isEmpty());
+        assertTrue(bookRepository.findAllByCategoryId(RANDOM_ID).isEmpty());
     }
 
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,

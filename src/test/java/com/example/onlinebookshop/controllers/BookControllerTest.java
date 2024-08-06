@@ -1,12 +1,63 @@
 package com.example.onlinebookshop.controllers;
 
-import static com.example.onlinebookshop.TestConstants.ADD_BOOKS_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.ADD_BOOKS_SQL;
-import static com.example.onlinebookshop.TestConstants.ADD_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.DELETE_BOOKS_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.DELETE_BOOKS_SQL;
-import static com.example.onlinebookshop.TestConstants.DELETE_CATEGORIES_SQL;
-import static com.example.onlinebookshop.TestConstants.PATH_TO_SQL_SCRIPTS;
+import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.ADD_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.CREATE_ERRORS_LIST;
+import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.DELETE_BOOKS_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.DELETE_CATEGORIES_SQL;
+import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.EXPECTED_BOOK_DTO_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.FIRST_PAGE_NUMBER;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_TITLE;
+import static com.example.onlinebookshop.BookCategoryConstants.ID_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.INVALID_CATEGORY_ID_DOES_NOT_EXIST;
+import static com.example.onlinebookshop.BookCategoryConstants.INVALID_COVER_IMAGE_WITHOUT_HTTPS;
+import static com.example.onlinebookshop.BookCategoryConstants.INVALID_DESCRIPTION_TOO_LONG;
+import static com.example.onlinebookshop.BookCategoryConstants.INVALID_FOR_NOT_BLANK;
+import static com.example.onlinebookshop.BookCategoryConstants.INVALID_ISBN_TOO_SHORT;
+import static com.example.onlinebookshop.BookCategoryConstants.INVALID_PRICE_NEGATIVE;
+import static com.example.onlinebookshop.BookCategoryConstants.ISBN_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.LIMITED_PAGE_SIZE;
+import static com.example.onlinebookshop.BookCategoryConstants.PAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.PATH_TO_SQL_SCRIPTS;
+import static com.example.onlinebookshop.BookCategoryConstants.PRICE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.SECOND_PAGE_NUMBER;
+import static com.example.onlinebookshop.BookCategoryConstants.SIZE;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_TITLE;
+import static com.example.onlinebookshop.BookCategoryConstants.SORT;
+import static com.example.onlinebookshop.BookCategoryConstants.SORT_BY_PRICE_ASC;
+import static com.example.onlinebookshop.BookCategoryConstants.SORT_BY_TITLE_DESC;
+import static com.example.onlinebookshop.BookCategoryConstants.TITLE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_TITLE;
+import static com.example.onlinebookshop.BookCategoryConstants.UNLIMITED_PAGE_SIZE;
+import static com.example.onlinebookshop.BookCategoryConstants.UPDATE_ERRORS_LIST;
+import static com.example.onlinebookshop.BookCategoryConstants.VALID_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.VALID_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.VALID_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.VALID_PRICE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -20,7 +71,6 @@ import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
 import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
@@ -49,81 +99,6 @@ public class BookControllerTest {
     private static final BookDto EXPECTED_BOOK_DTO_AFTER_UPDATE = new BookDto();
     private static final BookDto EXPECTED_TKAM_BOOK_DTO = new BookDto();
     private static final BookDto EXPECTED_1984_BOOK_DTO = new BookDto();
-    private static final long EXPECTED_BOOK_DTO_ID = 4L;
-    private static final long CATEGORY_ID = 1L;
-    private static final String SOME_TITLE = "Some book";
-    private static final String SOME_AUTHOR = "Some author";
-    private static final String SOME_ISBN = "0000000000000";
-    private static final BigDecimal SOME_PRICE = BigDecimal.valueOf(9.99);
-    private static final String SOME_DESCRIPTION = "Some description";
-    private static final String SOME_COVER_IMAGE = "https://example.com/updated-cover-image.jpg";
-
-    private static final long RANDOM_ID = 1000L;
-
-    private static final long GATSBY_ID = 1L;
-    private static final String GATSBY_TITLE = "The Great Gatsby";
-    private static final String GATSBY_AUTHOR = "F. Scott Fitzgerald";
-    private static final String GATSBY_ISBN = "9780743273565";
-    private static final BigDecimal GATSBY_PRICE = BigDecimal.valueOf(12.99);
-    private static final String GATSBY_DESCRIPTION = "A story of the fabulously wealthy Jay Gatsby "
-            + "and his love for the beautiful Daisy Buchanan.";
-    private static final String GATSBY_COVER_IMAGE = "https://example.com/gatsby.jpg";
-
-    private static final long TKAM_ID = 2L;
-    private static final String TKAM_TITLE = "To Kill a Mockingbird";
-    private static final String TKAM_AUTHOR = "Harper Lee";
-    private static final String TKAM_ISBN = "9780061120084";
-    private static final BigDecimal TKAM_PRICE = BigDecimal.valueOf(10.49);
-    private static final String TKAM_DESCRIPTION = "A novel that explores the irrationality of "
-            + "adult attitudes towards race and class in the Deep South of the 1930s.";
-    private static final String TKAM_COVER_IMAGE = "https://example.com/mockingbird.jpg";
-
-    private static final long ID_1984 = 3L;
-    private static final String TITLE_1984 = "1984";
-    private static final String AUTHOR_1984 = "George Orwell";
-    private static final String ISBN_1984 = "9780451524935";
-    private static final BigDecimal PRICE_1984 = BigDecimal.valueOf(9.99);
-    private static final String DESCRIPTION_1984 = "A dystopian novel set in Airstrip One, "
-            + "a province of the superstate Oceania, whose residents are victims of perpetual war, "
-            + "omnipresent government surveillance, and public manipulation.";
-    private static final String COVER_IMAGE_1984 = "https://example.com/1984.jpg";
-
-    private static final String INVALID_FOR_NOT_BLANK = "";
-    private static final String INVALID_ISBN_TOO_SHORT = "123456789";
-    private static final String VALID_ISBN = "1234567890";
-    private static final long INVALID_CATEGORY_ID_DOES_NOT_EXIST = 2L;
-    private static final BigDecimal VALID_PRICE = BigDecimal.valueOf(1);
-    private static final BigDecimal INVALID_PRICE_NEGATIVE = BigDecimal.valueOf(-1);
-    private static final int REPEAT_DESCRIPTION_COUNT = 100;
-    private static final String INVALID_DESCRIPTION =
-            "This text contains more than 300 characters.".repeat(REPEAT_DESCRIPTION_COUNT);
-    private static final String VALID_DESCRIPTION =
-            "This text contains more than 0 and less than 300 characters.";
-    private static final String INVALID_COVER_IMAGE_WITHOUT_HTTPS = "example.com/gatsby.jpg";
-    private static final String VALID_COVER_IMAGE = "https://example.com/another_gatsby.jpg";
-    private static final List<String> CREATE_ERRORS_LIST = List.of(
-            "title must not be blank",
-            "author must not be blank",
-            "isbn size must be between 10 and 17",
-            "price must be greater than 0",
-            "description size must be between 0 and 3000",
-            "coverImage Invalid format filepath"
-           );
-    private static final List<String> UPDATE_ERRORS_LIST = List.of(
-            "isbn size must be between 10 and 17",
-            "price must be greater than 0",
-            "description size must be between 0 and 3000",
-            "coverImage Invalid format filepath"
-    );
-    private static final int FIRST_PAGE_NUMBER = 0;
-    private static final int SECOND_PAGE_NUMBER = 1;
-    private static final int UNLIMITED_PAGE_SIZE = 3;
-    private static final int LIMITED_PAGE_SIZE = 2;
-    private static final String SORT_BY_TITLE_DESC = "title,DESC";
-    private static final String SORT_BY_PRICE_ASC = "price,ASC";
-    private static final String SORT = "sort";
-    private static final String PAGE = "page";
-    private static final String SIZE = "size";
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -173,7 +148,7 @@ public class BookControllerTest {
         CREATE_INVALID_BOOK_DTO.setCategoryIds(Set.of(INVALID_CATEGORY_ID_DOES_NOT_EXIST));
         CREATE_INVALID_BOOK_DTO.setPrice(INVALID_PRICE_NEGATIVE);
         CREATE_INVALID_BOOK_DTO
-                .setDescription(INVALID_DESCRIPTION);
+                .setDescription(INVALID_DESCRIPTION_TOO_LONG);
         CREATE_INVALID_BOOK_DTO.setCoverImage(INVALID_COVER_IMAGE_WITHOUT_HTTPS);
 
         UPDATE_VALID_BOOK_DTO.setIsbn(VALID_ISBN);
@@ -183,7 +158,7 @@ public class BookControllerTest {
 
         UPDATE_INVALID_BOOK_DTO.setIsbn(INVALID_ISBN_TOO_SHORT);
         UPDATE_INVALID_BOOK_DTO.setPrice(INVALID_PRICE_NEGATIVE);
-        UPDATE_INVALID_BOOK_DTO.setDescription(INVALID_DESCRIPTION);
+        UPDATE_INVALID_BOOK_DTO.setDescription(INVALID_DESCRIPTION_TOO_LONG);
         UPDATE_INVALID_BOOK_DTO.setCoverImage(INVALID_COVER_IMAGE_WITHOUT_HTTPS);
 
         EXPECTED_GATSBY_BOOK_DTO.setId(GATSBY_ID);

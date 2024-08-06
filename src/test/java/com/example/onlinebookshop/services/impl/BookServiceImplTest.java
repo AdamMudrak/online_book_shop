@@ -1,5 +1,36 @@
 package com.example.onlinebookshop.services.impl;
 
+import static com.example.onlinebookshop.BookCategoryConstants.AUTHOR_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.CATEGORY_NAME;
+import static com.example.onlinebookshop.BookCategoryConstants.COVER_IMAGE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.DESCRIPTION_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.GATSBY_TITLE;
+import static com.example.onlinebookshop.BookCategoryConstants.ID_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.ISBN_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.PRICE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.RANDOM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.SOME_TITLE;
+import static com.example.onlinebookshop.BookCategoryConstants.TITLE_1984;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_AUTHOR;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_COVER_IMAGE;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_DESCRIPTION;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ID;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_ISBN;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_PRICE;
+import static com.example.onlinebookshop.BookCategoryConstants.TKAM_TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,47 +94,7 @@ class BookServiceImplTest {
     private static final BookDto EXPECTED_1984_BOOK_DTO = new BookDto();
     private static final BookDto EXPECTED_GATSBY_AFTER_UPDATE_DTO = new BookDto();
 
-    private static final long CATEGORY_ID = 1L;
-    private static final long RANDOM_CATEGORY_ID = 1000L;
-    private static final String CATEGORY_NAME = "Fiction";
-    private static final String CATEGORY_DESCRIPTION =
-            "Interesting books about imaginary though possible events";
-
-    private static final long GATSBY_ID = 1L;
-    private static final String GATSBY_TITLE = "The Great Gatsby";
-    private static final String GATSBY_AUTHOR = "F. Scott Fitzgerald";
-    private static final String GATSBY_ISBN = "9780743273565";
-    private static final BigDecimal GATSBY_PRICE = BigDecimal.valueOf(12.99);
-    private static final String GATSBY_DESCRIPTION = "A story of the fabulously wealthy Jay Gatsby "
-            + "and his love for the beautiful Daisy Buchanan.";
-    private static final String GATSBY_COVER_IMAGE = "https://example.com/gatsby.jpg";
-
-    private static final long TKAM_ID = 2L;
-    private static final String TKAM_TITLE = "To Kill a Mockingbird";
-    private static final String TKAM_AUTHOR = "Harper Lee";
-    private static final String TKAM_ISBN = "9780061120084";
-    private static final BigDecimal TKAM_PRICE = BigDecimal.valueOf(10.49);
-    private static final String TKAM_DESCRIPTION = "A novel that explores the irrationality of "
-            + "adult attitudes towards race and class in the Deep South of the 1930s.";
-    private static final String TKAM_COVER_IMAGE = "https://example.com/mockingbird.jpg";
-
-    private static final long ID_1984 = 3L;
-    private static final String TITLE_1984 = "1984";
-    private static final String AUTHOR_1984 = "George Orwell";
-    private static final String ISBN_1984 = "9780451524935";
-    private static final BigDecimal PRICE_1984 = BigDecimal.valueOf(9.99);
-    private static final String DESCRIPTION_1984 = "A dystopian novel set in Airstrip One, "
-            + "a province of the superstate Oceania, whose residents are victims of perpetual war, "
-            + "omnipresent government surveillance, and public manipulation.";
-    private static final String COVER_IMAGE_1984 = "https://example.com/1984.jpg";
-
     private static final long RANDOM_BOOK_ID = 1000L;
-    private static final String SOME_TITLE = "Some book";
-    private static final String SOME_AUTHOR = "Some author";
-    private static final String SOME_ISBN = "0000000000000";
-    private static final BigDecimal SOME_PRICE = BigDecimal.valueOf(9.99);
-    private static final String SOME_DESCRIPTION = "Some description";
-    private static final String SOME_COVER_IMAGE = "some_picture.jpg";
 
     private static final BookDtoWithoutCategoryIds EXPECTED_GATSBY_BOOK_DTO_WITHOUT_CATEGORY_ID =
             new BookDtoWithoutCategoryIds(GATSBY_ID,
@@ -373,16 +364,16 @@ class BookServiceImplTest {
     @Test
     @DisplayName("Given a random category id, throws an exception")
     void findAllWithoutCategoryIds_IsNotAbleToFindByRandomCategoryId_Fail() {
-        when(categoryRepository.findById(RANDOM_CATEGORY_ID)).thenThrow(
-                new EntityNotFoundException("Can't find category by id " + RANDOM_CATEGORY_ID));
+        when(categoryRepository.findById(RANDOM_ID)).thenThrow(
+                new EntityNotFoundException("Can't find category by id " + RANDOM_ID));
 
         Exception entityNotFoundException = assertThrows(EntityNotFoundException.class, () ->
-                bookService.findAllWithoutCategoryIds(RANDOM_CATEGORY_ID));
-        String expectedMessage = "Can't find category by id " + RANDOM_CATEGORY_ID;
+                bookService.findAllWithoutCategoryIds(RANDOM_ID));
+        String expectedMessage = "Can't find category by id " + RANDOM_ID;
 
         assertEquals(expectedMessage, entityNotFoundException.getMessage());
 
-        verify(categoryRepository, times(1)).findById(RANDOM_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findById(RANDOM_ID);
     }
 
     @Test
