@@ -69,10 +69,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
-import com.example.onlinebookshop.dtos.category.request.CreateCategoryDto;
-import com.example.onlinebookshop.dtos.category.request.UpdateCategoryDto;
-import com.example.onlinebookshop.dtos.category.response.CategoryDto;
+import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;

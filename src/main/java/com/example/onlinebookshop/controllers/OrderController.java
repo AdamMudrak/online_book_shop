@@ -2,11 +2,11 @@ package com.example.onlinebookshop.controllers;
 
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllers.OrderConstants;
-import com.example.onlinebookshop.constants.dtos.OrderDtoConstants;
-import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
-import com.example.onlinebookshop.dtos.order.request.UpdateOrderDto;
-import com.example.onlinebookshop.dtos.order.response.OrderDto;
-import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
+import com.example.onlinebookshop.constants.dto.OrderDtoConstants;
+import com.example.onlinebookshop.dto.order.request.CreateOrderDto;
+import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
+import com.example.onlinebookshop.dto.order.response.OrderDto;
+import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.OrderService;

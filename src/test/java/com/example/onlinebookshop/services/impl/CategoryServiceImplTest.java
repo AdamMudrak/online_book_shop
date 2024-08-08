@@ -18,9 +18,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.onlinebookshop.dtos.category.request.CreateCategoryDto;
-import com.example.onlinebookshop.dtos.category.request.UpdateCategoryDto;
-import com.example.onlinebookshop.dtos.category.response.CategoryDto;
+import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;

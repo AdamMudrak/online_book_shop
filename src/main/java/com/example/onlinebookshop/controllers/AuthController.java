@@ -2,10 +2,10 @@ package com.example.onlinebookshop.controllers;
 
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllers.AuthConstants;
-import com.example.onlinebookshop.dtos.user.request.UserLoginRequestDto;
-import com.example.onlinebookshop.dtos.user.request.UserRegistrationRequestDto;
-import com.example.onlinebookshop.dtos.user.response.UserLoginResponseDto;
-import com.example.onlinebookshop.dtos.user.response.UserRegistrationResponseDto;
+import com.example.onlinebookshop.dto.user.request.UserLoginRequestDto;
+import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
+import com.example.onlinebookshop.dto.user.response.UserLoginResponseDto;
+import com.example.onlinebookshop.dto.user.response.UserRegistrationResponseDto;
 import com.example.onlinebookshop.exceptions.RegistrationException;
 import com.example.onlinebookshop.security.AuthenticationService;
 import com.example.onlinebookshop.services.UserService;

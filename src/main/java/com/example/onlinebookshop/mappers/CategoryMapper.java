@@ -1,9 +1,9 @@
 package com.example.onlinebookshop.mappers;
 
 import com.example.onlinebookshop.config.MapperConfig;
-import com.example.onlinebookshop.dtos.category.request.CreateCategoryDto;
-import com.example.onlinebookshop.dtos.category.request.UpdateCategoryDto;
-import com.example.onlinebookshop.dtos.category.response.CategoryDto;
+import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.entities.Category;
 import org.mapstruct.Mapper;
 

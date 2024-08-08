@@ -1,10 +1,10 @@
 package com.example.onlinebookshop.mappers;
 
 import com.example.onlinebookshop.config.MapperConfig;
-import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
-import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
-import com.example.onlinebookshop.dtos.book.response.BookDto;
-import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dto.book.request.CreateBookDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
+import com.example.onlinebookshop.dto.book.response.BookDto;
+import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
 import java.util.Set;

@@ -1,9 +1,9 @@
 package com.example.onlinebookshop.services;
 
-import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
-import com.example.onlinebookshop.dtos.order.request.UpdateOrderDto;
-import com.example.onlinebookshop.dtos.order.response.OrderDto;
-import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
+import com.example.onlinebookshop.dto.order.request.CreateOrderDto;
+import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
+import com.example.onlinebookshop.dto.order.response.OrderDto;
+import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 

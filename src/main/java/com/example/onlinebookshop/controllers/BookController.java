@@ -2,10 +2,10 @@ package com.example.onlinebookshop.controllers;
 
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllers.BookConstants;
-import com.example.onlinebookshop.dtos.book.request.BookSearchParametersDto;
-import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
-import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
-import com.example.onlinebookshop.dtos.book.response.BookDto;
+import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
+import com.example.onlinebookshop.dto.book.request.CreateBookDto;
+import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
+import com.example.onlinebookshop.dto.book.response.BookDto;
 import com.example.onlinebookshop.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

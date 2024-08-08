@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.mappers;
 
 import com.example.onlinebookshop.config.MapperConfig;
-import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
+import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.OrderItem;
 import java.util.List;
 import java.util.Set;

@@ -1,8 +1,8 @@
 package com.example.onlinebookshop.services;
 
-import com.example.onlinebookshop.dtos.cartitem.request.CreateCartItemDto;
-import com.example.onlinebookshop.dtos.cartitem.request.UpdateCartItemDto;
-import com.example.onlinebookshop.dtos.shoppingcart.response.ShoppingCartDto;
+import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
+import com.example.onlinebookshop.dto.cartitem.request.UpdateCartItemDto;
+import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.User;
 
 public interface ShoppingCartService {

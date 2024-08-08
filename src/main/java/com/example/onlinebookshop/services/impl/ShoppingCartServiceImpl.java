@@ -1,10 +1,10 @@
 package com.example.onlinebookshop.services.impl;
 
-import static com.example.onlinebookshop.constants.dtos.CartItemDtoConstants.QUANTITY_DESCRIPTION;
+import static com.example.onlinebookshop.constants.dto.CartItemDtoConstants.QUANTITY_DESCRIPTION;
 
-import com.example.onlinebookshop.dtos.cartitem.request.CreateCartItemDto;
-import com.example.onlinebookshop.dtos.cartitem.request.UpdateCartItemDto;
-import com.example.onlinebookshop.dtos.shoppingcart.response.ShoppingCartDto;
+import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
+import com.example.onlinebookshop.dto.cartitem.request.UpdateCartItemDto;
+import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.CartItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
