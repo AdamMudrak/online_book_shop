@@ -2,7 +2,9 @@ package com.example.onlinebookshop;
 
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class BookCategoryConstants {
     /**Paths to sql files*/
     public static final String PATH_TO_SQL_SCRIPTS =
