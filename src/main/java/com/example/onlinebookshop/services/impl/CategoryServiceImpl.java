@@ -6,7 +6,7 @@ import com.example.onlinebookshop.dto.category.response.CategoryDto;
 import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
-import com.example.onlinebookshop.mapper.CategoryMapper;
+import com.example.onlinebookshop.mappers.CategoryMapper;
 import com.example.onlinebookshop.repositories.category.CategoryRepository;
 import com.example.onlinebookshop.services.CategoryService;
 import java.util.List;
@@ -51,8 +51,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isPresent()) {
             Optional<Category> categoryByName = categoryRepository.findByName(categoryDto.name());
             if (categoryByName.isPresent() && !categoryByName.get().getId().equals(id)) {
-                throw new ParameterAlreadyExistsException("Book with ISBN " + categoryDto.name()
-                        + " already exists in DB");
+                throw new ParameterAlreadyExistsException("Another category with name "
+                        + categoryDto.name() + " already exists in DB");
             }
             Category updatedCategory = categoryMapper.toUpdateModel(categoryDto);
             updatedCategory.setId(id);

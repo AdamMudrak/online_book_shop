@@ -75,6 +75,17 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 request);
     }
 
+    @ExceptionHandler(SpecificationBuilderException.class)
+    protected ResponseEntity<Object> handleSpecificationBuilderException(
+            Exception ex, WebRequest request) {
+        return handleExceptionInternal(
+                ex,
+                ex.getMessage(),
+                new HttpHeaders(),
+                BAD_REQUEST,
+                request);
+    }
+
     @ExceptionHandler(ParameterAlreadyExistsException.class)
     protected ResponseEntity<Object> handleParameterAlreadyExistsException(
             Exception ex, WebRequest request) {

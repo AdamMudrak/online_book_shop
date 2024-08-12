@@ -9,7 +9,7 @@ import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
-import com.example.onlinebookshop.mapper.BookMapper;
+import com.example.onlinebookshop.mappers.BookMapper;
 import com.example.onlinebookshop.repositories.book.BookRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
 import com.example.onlinebookshop.repositories.category.CategoryRepository;
@@ -81,6 +81,7 @@ public class BookServiceImpl implements BookService {
             if (!areCategoriesReplaced) {
                 addIdsFromDtoToDbBook(requestDto, book.get());
             }
+            updatePresentFields(book.get(), requestDto);
             return saveToDbAndGetSavedResult(requestDto, id);
         }
         throw new EntityNotFoundException("Can't find and update book by id " + id);
@@ -127,5 +128,32 @@ public class BookServiceImpl implements BookService {
         Book book = bookMapper.toUpdateModel(requestDto);
         book.setId(id);
         return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    private void updatePresentFields(Book book, UpdateBookDto requestDto) {
+        if (requestDto.getTitle() == null) {
+            requestDto.setTitle(book.getTitle());
+        }
+        if (requestDto.getAuthor() == null) {
+            requestDto.setAuthor(book.getAuthor());
+        }
+        if (requestDto.getCategoryIds() == null) {
+            requestDto.setCategoryIds(book.getCategories()
+                    .stream()
+                    .map(Category::getId)
+                    .collect(Collectors.toSet()));
+        }
+        if (requestDto.getIsbn() == null) {
+            requestDto.setIsbn(book.getIsbn());
+        }
+        if (requestDto.getPrice() == null) {
+            requestDto.setPrice(book.getPrice());
+        }
+        if (requestDto.getDescription() == null) {
+            requestDto.setDescription(book.getDescription());
+        }
+        if (requestDto.getCoverImage() == null) {
+            requestDto.setCoverImage(book.getCoverImage());
+        }
     }
 }
