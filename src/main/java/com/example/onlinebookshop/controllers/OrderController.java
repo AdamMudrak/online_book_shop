@@ -1,8 +1,7 @@
 package com.example.onlinebookshop.controllers;
 
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.constants.controllers.OrderConstants;
-import com.example.onlinebookshop.constants.dto.OrderDtoConstants;
+import com.example.onlinebookshop.constants.controllers.OrderControllerConstants;
 import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
 import com.example.onlinebookshop.dtos.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dtos.order.response.OrderDto;
@@ -33,21 +32,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.example.onlinebookshop.constants.Constants.STATUS_DTO_RULES;
+
 @Validated
 @RequiredArgsConstructor
 @RestController
-@Tag(name = OrderConstants.ORDER_API_NAME,
-        description = OrderConstants.ORDER_API_DESCRIPTION)
+@Tag(name = OrderControllerConstants.ORDER_API_NAME,
+        description = OrderControllerConstants.ORDER_API_DESCRIPTION)
 @RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = OrderConstants.GET_ALL_SUMMARY)
+    @Operation(summary = OrderControllerConstants.GET_ALL_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
     public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user,
-                        @Parameter(example = OrderConstants.PAGEABLE_EXAMPLE)Pageable pageable) {
+                        @Parameter(example = OrderControllerConstants.PAGEABLE_EXAMPLE)Pageable pageable) {
         if (userIsAdmin(user)) {
             return orderService.getOrders(pageable);
         }
@@ -55,8 +56,8 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = OrderConstants.ADD_ORDER_SUMMARY,
-            description = OrderConstants.ADD_ORDER_DESCRIPTION)
+    @Operation(summary = OrderControllerConstants.ADD_ORDER_SUMMARY,
+            description = OrderControllerConstants.ADD_ORDER_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_201,
                     description = Constants.SUCCESSFULLY_CREATED),
@@ -73,8 +74,8 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = OrderConstants.UPDATE_ORDER_SUMMARY,
-            description = OrderDtoConstants.STATUS_DTO_RULES)
+    @Operation(summary = OrderControllerConstants.UPDATE_ORDER_SUMMARY,
+            description = STATUS_DTO_RULES)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_UPDATED),
@@ -91,7 +92,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = OrderConstants.GET_ORDER_ITEMS_BY_ORDER_ID)
+    @Operation(summary = OrderControllerConstants.GET_ORDER_ITEMS_BY_ORDER_ID)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_UPDATED),
@@ -103,8 +104,8 @@ public class OrderController {
     public List<OrderItemDto> findOrderItemsByOrderId(
             @AuthenticationPrincipal User user,
             @PathVariable
-            @Parameter(name = OrderConstants.ORDER_ID,
-                description = OrderConstants.VALID_ID_DESCRIPTION,
+            @Parameter(name = OrderControllerConstants.ORDER_ID,
+                description = OrderControllerConstants.VALID_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long orderId) {
         if (userIsAdmin(user)) {
             return orderService.findOrderItemsByOrderId(orderId);
@@ -113,7 +114,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = OrderConstants.GET_ORDER_ITEM_BY_ORDER_ID_AND_ITEM_ID)
+    @Operation(summary = OrderControllerConstants.GET_ORDER_ITEM_BY_ORDER_ID_AND_ITEM_ID)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_UPDATED),
@@ -124,12 +125,12 @@ public class OrderController {
     public OrderItemDto findOrderItemsByOrderIdAndItemId(
             @AuthenticationPrincipal User user,
             @PathVariable
-            @Parameter(name = OrderConstants.ORDER_ID,
-                description = OrderConstants.VALID_ID_DESCRIPTION,
+            @Parameter(name = OrderControllerConstants.ORDER_ID,
+                description = OrderControllerConstants.VALID_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long orderId,
             @PathVariable
-            @Parameter(name = OrderConstants.ITEM_ID,
-                description = OrderConstants.VALID_ITEM_ID_DESCRIPTION,
+            @Parameter(name = OrderControllerConstants.ITEM_ID,
+                description = OrderControllerConstants.VALID_ITEM_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long itemId) {
         if (userIsAdmin(user)) {
             return orderService.findOrderItemsByOrderIdAndItemId(orderId, itemId);
@@ -138,7 +139,6 @@ public class OrderController {
     }
 
     private boolean userIsAdmin(User user) {
-        return user.getRoles().stream()
-                .anyMatch(role -> role.getName().equals(Role.RoleName.ROLE_ADMIN));
+        return user.getRole().getName().equals(Role.RoleName.ROLE_ADMIN);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.controllers;
 
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.constants.controllers.BookConstants;
+import com.example.onlinebookshop.constants.controllers.BookControllerConstants;
 import com.example.onlinebookshop.dtos.book.request.BookSearchParametersDto;
 import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
 import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
@@ -33,25 +33,25 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@Tag(name = BookConstants.BOOK_API_NAME,
-        description = BookConstants.BOOK_API_DESCRIPTION)
+@Tag(name = BookControllerConstants.BOOK_API_NAME,
+        description = BookControllerConstants.BOOK_API_DESCRIPTION)
 @RequestMapping(value = "/books")
 public class BookController {
     private final BookService bookService;
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = BookConstants.GET_ALL_SUMMARY,
-            description = BookConstants.GET_ALL_DESCRIPTION)
+    @Operation(summary = BookControllerConstants.GET_ALL_SUMMARY,
+            description = BookControllerConstants.GET_ALL_DESCRIPTION)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
     public List<BookDto> getAll(
-            @Parameter(example = BookConstants.PAGEABLE_EXAMPLE) Pageable pageable) {
+            @Parameter(example = BookControllerConstants.PAGEABLE_EXAMPLE) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = BookConstants.GET_BY_ID_SUMMARY,
-            description = BookConstants.GET_BY_ID_DESCRIPTION)
+    @Operation(summary = BookControllerConstants.GET_BY_ID_SUMMARY,
+            description = BookControllerConstants.GET_BY_ID_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_RETRIEVED),
@@ -60,14 +60,14 @@ public class BookController {
     })
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable @Parameter(name = Constants.ID,
-            description = BookConstants.VALID_ID_DESCRIPTION,
+            description = BookControllerConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         return bookService.findById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = BookConstants.SEARCH_BOOKS_SUMMARY,
-            description = BookConstants.SEARCH_BOOKS_DESCRIPTION)
+    @Operation(summary = BookControllerConstants.SEARCH_BOOKS_SUMMARY,
+            description = BookControllerConstants.SEARCH_BOOKS_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_RETRIEVED),
@@ -78,8 +78,8 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = BookConstants.CREATE_BOOK_SUMMARY,
-            description = BookConstants.CREATE_BOOK_DESCRIPTION)
+    @Operation(summary = BookControllerConstants.CREATE_BOOK_SUMMARY,
+            description = BookControllerConstants.CREATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_201,
                     description = Constants.SUCCESSFULLY_CREATED),
@@ -93,8 +93,8 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = BookConstants.UPDATE_BOOK_SUMMARY,
-            description = BookConstants.UPDATE_BOOK_DESCRIPTION)
+    @Operation(summary = BookControllerConstants.UPDATE_BOOK_SUMMARY,
+            description = BookControllerConstants.UPDATE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_UPDATED),
@@ -106,18 +106,18 @@ public class BookController {
     public BookDto updateBook(@RequestBody @Valid UpdateBookDto bookRequestDto,
                               @PathVariable @Parameter(
                                       name = Constants.ID,
-                                      description = BookConstants.VALID_ID_DESCRIPTION,
+                                      description = BookControllerConstants.VALID_ID_DESCRIPTION,
                                       example = Constants.ID_EXAMPLE) @Positive Long id,
                              @Parameter(
-                                     name = BookConstants.BOOLEAN,
-                                     description = BookConstants.BOOLEAN_DESCRIPTION)
+                                     name = BookControllerConstants.BOOLEAN,
+                                     description = BookControllerConstants.BOOLEAN_DESCRIPTION)
                                   boolean areCategoriesReplaced) {
         return bookService.update(bookRequestDto, id, areCategoriesReplaced);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = BookConstants.DELETE_BOOK_SUMMARY,
-            description = BookConstants.DELETE_BOOK_DESCRIPTION)
+    @Operation(summary = BookControllerConstants.DELETE_BOOK_SUMMARY,
+            description = BookControllerConstants.DELETE_BOOK_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_204,
                     description = Constants.CODE_204_DESCRIPTION),
@@ -127,7 +127,7 @@ public class BookController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Parameter(name = Constants.ID,
-            description = BookConstants.VALID_ID_DESCRIPTION,
+            description = BookControllerConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         bookService.delete(id);
     }

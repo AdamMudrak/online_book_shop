@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.constants.controllers;
 
-public class BookConstants {
+public class BookControllerConstants {
     public static final String BOOK_API_NAME = "Books API";
     public static final String BOOK_API_DESCRIPTION =
             "Here you'll find a comprehensive overview of how to create, read, update and delete "

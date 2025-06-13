@@ -6,7 +6,7 @@ import static com.example.onlinebookshop.constants.Constants.CODE_201;
 import static com.example.onlinebookshop.constants.Constants.CODE_400;
 import static com.example.onlinebookshop.constants.Constants.CODE_401;
 import static com.example.onlinebookshop.constants.Constants.INVALID_ENTITY_VALUE;
-import static com.example.onlinebookshop.constants.Constants.SUCCESSFULLY_REGISTERED;
+import static com.example.onlinebookshop.constants.controllers.AuthControllerConstants.SUCCESSFULLY_REGISTERED;
 import static com.example.onlinebookshop.constants.controllers.AuthControllerConstants.AUTH_API_DESCRIPTION;
 import static com.example.onlinebookshop.constants.controllers.AuthControllerConstants.AUTH_API_NAME;
 import static com.example.onlinebookshop.constants.controllers.AuthControllerConstants.CHANGE_PASSWORD_SUMMARY;

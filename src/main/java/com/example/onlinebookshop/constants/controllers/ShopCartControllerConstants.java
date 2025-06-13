@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.constants.controllers;
 
-public class ShopCartConstants {
+public class ShopCartControllerConstants {
     public static final String SHOPPING_CART_API_NAME = "Shopping cart API";
     public static final String SHOPPING_CART_API_DESCRIPTION =
             "Here you'll find a comprehensive overview of how to add, delete, update and look at "
