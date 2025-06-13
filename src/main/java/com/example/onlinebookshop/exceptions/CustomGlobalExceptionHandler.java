@@ -112,6 +112,30 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return getUnifiedResponse(ex, FORBIDDEN);
     }
 
+    @ExceptionHandler(SpecificationBuilderException.class)
+    protected ResponseEntity<Object> handleSpecificationBuilderException(
+            Exception ex) {
+        return getUnifiedResponse(ex, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ParameterAlreadyExistsException.class)
+    protected ResponseEntity<Object> handleParameterAlreadyExistsException(
+            Exception ex) {
+        return getUnifiedResponse(ex, CONFLICT);
+    }
+
+    @ExceptionHandler(TooManyObjectsException.class)
+    protected ResponseEntity<Object> handleTooManyObjectsException(
+            Exception ex) {
+        return getUnifiedResponse(ex, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderProcessingException.class)
+    protected ResponseEntity<Object> handleEmptyCartException(
+            Exception ex) {
+        return getUnifiedResponse(ex, BAD_REQUEST);
+    }
+
     private String getErrorMessage(ObjectError e) {
         if (e instanceof FieldError fieldError) {
             String field = fieldError.getField();
