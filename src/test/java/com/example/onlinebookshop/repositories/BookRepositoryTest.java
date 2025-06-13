@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.repositories.book;
+package com.example.onlinebookshop.repositories;
 
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_CATEGORIES_SQL;
 import static com.example.onlinebookshop.BookCategoryConstants.ADD_BOOKS_SQL;
@@ -41,7 +41,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.example.onlinebookshop.BookCategoryConstants;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
-import com.example.onlinebookshop.repositories.BookRepository;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
