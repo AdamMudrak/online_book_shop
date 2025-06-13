@@ -29,8 +29,9 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ParameterAlreadyExistsException("Category with name " + categoryDto.name()
                     + " already exists in DB");
         }
-        Category category = categoryMapper.toCreateModel(categoryDto);
-        return categoryMapper.toCategoryDto(categoryRepository.save(category));
+        return categoryMapper.toCategoryDto(
+                categoryRepository.save(
+                        categoryMapper.toCreateModel(categoryDto)));
     }
 
     @Override
@@ -42,34 +43,33 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find category by id " + id));
-        return categoryMapper.toCategoryDto(category);
+        return categoryMapper.toCategoryDto(
+                categoryRepository.findById(id).orElseThrow(
+                    () -> new EntityNotFoundException("Can't find category by id " + id)));
     }
 
     @Override
     public CategoryDto update(UpdateCategoryDto categoryDto, Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if (category.isPresent()) {
-            Optional<Category> categoryByName = categoryRepository.findByName(categoryDto.name());
-            if (categoryByName.isPresent() && !categoryByName.get().getId().equals(id)) {
-                throw new ParameterAlreadyExistsException("Another category with name "
-                        + categoryDto.name() + " already exists in DB");
-            }
-            Category updatedCategory = categoryMapper.toUpdateModel(categoryDto);
-            updatedCategory.setId(id);
-            return categoryMapper.toCategoryDto(categoryRepository.save(updatedCategory));
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find category by id " + id);
         }
-        throw new EntityNotFoundException("Can't find category by id " + id);
+        Optional<Long> categoryIdByName = categoryRepository.findIdByName(categoryDto.name());
+        if (categoryIdByName.isPresent()
+                && !categoryIdByName.get().equals(id)) {
+            throw new ParameterAlreadyExistsException("Another category with name "
+                    + categoryDto.name() + " already exists in DB");
+        }
+        Category updatedCategory = categoryMapper.toUpdateModel(categoryDto);
+        updatedCategory.setId(id);
+        return categoryMapper.toCategoryDto(categoryRepository.save(updatedCategory));
     }
 
     @Override
     public void deleteById(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if (category.isPresent()) {
+        if (categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
-            return;
+        } else {
+            throw new EntityNotFoundException("Can't find category by id " + id);
         }
-        throw new EntityNotFoundException("Can't find category by id " + id);
     }
 }
