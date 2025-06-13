@@ -43,6 +43,7 @@ import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
 import java.util.List;
 import java.util.Set;
+import com.example.onlinebookshop.repositories.BookRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
