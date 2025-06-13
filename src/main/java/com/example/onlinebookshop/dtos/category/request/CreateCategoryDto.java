@@ -1,6 +1,5 @@
 package com.example.onlinebookshop.dtos.category.request;
 
-import com.example.onlinebookshop.constants.dto.CategoryDtoConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -15,5 +14,5 @@ public record CreateCategoryDto(
 
         @Schema(name = "description",
         example = "Any text",
-        description ="Any text up to 512 chars including whitespaces")
+        description = "Any text up to 512 chars including whitespaces")
         String description){}
