@@ -1,7 +1,5 @@
 package com.example.onlinebookshop.services.impl;
 
-import static com.example.onlinebookshop.constants.dto.CartItemDtoConstants.QUANTITY_DESCRIPTION;
-
 import com.example.onlinebookshop.dtos.cartitem.request.CreateCartItemDto;
 import com.example.onlinebookshop.dtos.cartitem.request.UpdateCartItemDto;
 import com.example.onlinebookshop.dtos.shoppingcart.response.ShoppingCartDto;
@@ -57,7 +55,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     if (item.getQuantity() + createCartItemDto.quantity() <= 100) {
                         item.setQuantity(item.getQuantity() + createCartItemDto.quantity());
                     } else {
-                        throw new TooManyObjectsException(QUANTITY_DESCRIPTION);
+                        throw new TooManyObjectsException("Quantity is limited to a 100 "
+                                + "items per client. For more items, please contact "
+                                + "us by phone or email.");
                     }
                 },() -> addCartItemToCart(createCartItemDto, book, shoppingCart));
         shoppingCartRepository.save(shoppingCart);
