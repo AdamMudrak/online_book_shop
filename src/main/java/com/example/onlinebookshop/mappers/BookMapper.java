@@ -7,6 +7,7 @@ import com.example.onlinebookshop.dtos.book.response.BookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
@@ -18,6 +19,8 @@ import org.mapstruct.MappingTarget;
 public interface BookMapper {
     @Mapping(target = "categoryIds", ignore = true)
     BookDto toDto(Book book);
+
+    List<BookDto> toDtoList(List<Book> books);
 
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
@@ -50,4 +53,6 @@ public interface BookMapper {
     }
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
+
+    List<BookDtoWithoutCategoryIds> toDtoWithoutCategoriesList(List<Book> books);
 }

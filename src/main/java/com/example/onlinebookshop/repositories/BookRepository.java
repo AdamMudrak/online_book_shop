@@ -13,7 +13,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             + "WHERE categories.id = :categoryId")
     List<Book> findAllByCategoryId(Long categoryId);
 
-    Optional<Book> findBookByIsbn(String isbn);
+    Optional<Long> findBookIdByIsbn(String isbn);
 
     boolean existsByIsbn(String isbn);
 }
