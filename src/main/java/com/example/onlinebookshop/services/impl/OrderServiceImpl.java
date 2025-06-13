@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final DateTimeFormatter formatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -50,7 +51,6 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
-    @Transactional
     @Override
     public OrderDto addOrder(Long userId, CreateOrderDto createOrderDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);

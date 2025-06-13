@@ -14,6 +14,7 @@ import com.example.onlinebookshop.repositories.BookRepository;
 import com.example.onlinebookshop.repositories.CategoryRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
 import com.example.onlinebookshop.services.BookService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,8 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;

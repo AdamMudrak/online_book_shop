@@ -9,14 +9,16 @@ import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
 import com.example.onlinebookshop.mappers.CategoryMapper;
 import com.example.onlinebookshop.repositories.CategoryRepository;
 import com.example.onlinebookshop.services.CategoryService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;

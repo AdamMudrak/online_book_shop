@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartItemRepository cartItemRepository;
@@ -40,7 +41,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.findByUserId(userId));
     }
 
-    @Transactional
     @Override
     public ShoppingCartDto addBookToShoppingCart(Long userId,
                                                  CreateCartItemDto createCartItemDto) {
@@ -80,7 +80,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
-    @Transactional
     @Override
     public void deleteBookFromShoppingCart(Long userId, Long cartItemId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
