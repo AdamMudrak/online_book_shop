@@ -80,6 +80,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
 import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDto;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Set;
@@ -315,14 +316,14 @@ public class BookControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
-        String expectedExceptionMessage = "Can't find and delete book by id " + ID_1984;
         MvcResult result = mockMvc.perform(
                         delete(BOOKS_URL + SPLITERATOR + ID_1984)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Can't find and delete book by id " + ID_1984 + ".",
+                jsonNode.get("errors").asText());
     }
 
     @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
@@ -337,14 +338,14 @@ public class BookControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Given an invalid book ID, fails to delete book by ID")
     public void delete_IsNotAbleToDeleteBookWhenBookDoesNotExistById_Fail() throws Exception {
-        String expectedExceptionMessage = "Can't find and delete book by id " + RANDOM_ID;
         MvcResult result = mockMvc.perform(
                         delete(BOOKS_URL + SPLITERATOR + RANDOM_ID)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Can't find and delete book by id " + RANDOM_ID + ".",
+                jsonNode.get("errors").asText());
     }
 
     @WithMockUser(username = USER_NAME)
@@ -489,14 +490,14 @@ public class BookControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Get nothing from DB")
     public void getBookById_IsNotAbleToFindABookByNonExistingIdFromDb_Fail() throws Exception {
-        String expectedExceptionMessage = "Can't find book by id " + RANDOM_ID;
         MvcResult result = mockMvc.perform(
                         get(BOOKS_URL + SPLITERATOR + RANDOM_ID)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Can't find book by id " + RANDOM_ID + ".",
+                jsonNode.get("errors").asText());
     }
 
     @WithMockUser(username = USER_NAME)
@@ -539,14 +540,14 @@ public class BookControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void searchBooks_IsAbleNotToSearchBooksWhenParamsAreInvalid_FailToFilter()
             throws Exception {
-        String expectedExceptionMessage = "Can't build specification because "
-                + " all of the parameters names are typed wrongly";
         MvcResult result = mockMvc.perform(
                         get(BOOKS_URL + BOOKS_SEARCH_URL + INVALID_PARAMS)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Can't build specification because "
+                        + " all of the parameters names are typed wrongly.",
+                jsonNode.get("errors").asText());
     }
 }
