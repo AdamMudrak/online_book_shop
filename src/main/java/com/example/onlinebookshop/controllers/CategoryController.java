@@ -102,9 +102,9 @@ public class CategoryController {
     })
     @PutMapping("/{id}")
     public CategoryDto updateCategory(@RequestBody @Valid UpdateCategoryDto categoryDto,
-                                      @PathVariable @Parameter(name = Constants.ID,
-                                              description = CategoryControllerConstants.VALID_ID_DESCRIPTION,
-                                              example = Constants.ID_EXAMPLE) @Positive Long id) {
+                              @PathVariable @Parameter(name = Constants.ID,
+                              description = CategoryControllerConstants.VALID_ID_DESCRIPTION,
+                              example = Constants.ID_EXAMPLE) @Positive Long id) {
         return categoryService.update(categoryDto, id);
     }
 

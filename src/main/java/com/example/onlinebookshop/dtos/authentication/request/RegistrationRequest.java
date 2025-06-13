@@ -1,5 +1,7 @@
 package com.example.onlinebookshop.dtos.authentication.request;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.validation.emailandusername.Email;
 import com.example.onlinebookshop.validation.emailandusername.NotLikeEmail;
@@ -8,8 +10,6 @@ import com.example.onlinebookshop.validation.password.Password;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldRegisterMatch

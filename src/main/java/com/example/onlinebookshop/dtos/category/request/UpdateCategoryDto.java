@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record UpdateCategoryDto(
         @Schema(name = "name",
-        example =  "detective",
+        example = "detective",
         description = "Name of the category")
         @NotBlank String name,
 

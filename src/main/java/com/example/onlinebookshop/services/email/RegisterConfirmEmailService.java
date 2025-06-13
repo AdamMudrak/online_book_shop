@@ -1,14 +1,14 @@
 package com.example.onlinebookshop.services.email;
 
-import com.example.onlinebookshop.services.utils.EmailLinkParameterProvider;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import static com.example.onlinebookshop.constants.Constants.FIRST_POSITION;
 import static com.example.onlinebookshop.constants.Constants.SECOND_POSITION;
 import static com.example.onlinebookshop.constants.Constants.SPLITERATOR;
 import static com.example.onlinebookshop.constants.security.SecurityConstants.CONFIRM_REGISTRATION_BODY;
 import static com.example.onlinebookshop.constants.security.SecurityConstants.CONFIRM_REGISTRATION_SUBJECT;
+
+import com.example.onlinebookshop.services.utils.EmailLinkParameterProvider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 public class RegisterConfirmEmailService extends EmailService {

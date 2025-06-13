@@ -1,5 +1,17 @@
 package com.example.onlinebookshop.services.impl;
 
+import static com.example.onlinebookshop.constants.security.SecurityConstants.CHECK_YOUR_EMAIL;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.DIVIDER;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.LOGIN_SUCCESS;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.PASSWORD_SET_SUCCESSFULLY;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.RANDOM_PASSWORD_REQUIRED_CHARS;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.RANDOM_PASSWORD_STRENGTH;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.REGISTERED;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.REGISTERED_BUT_NOT_ACTIVATED;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.REGISTRATION_CONFIRMED;
+import static com.example.onlinebookshop.constants.security.SecurityConstants.SEND_LINK_TO_RESET_PASSWORD;
+import static com.example.onlinebookshop.constants.validation.ValidationConstants.COMPILED_EMAIL_PATTERN;
+
 import com.example.onlinebookshop.dtos.authentication.TokenBearerDto;
 import com.example.onlinebookshop.dtos.authentication.request.LoginRequest;
 import com.example.onlinebookshop.dtos.authentication.request.PasswordChangeRequest;
@@ -40,18 +52,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import static com.example.onlinebookshop.constants.security.SecurityConstants.CHECK_YOUR_EMAIL;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.DIVIDER;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.LOGIN_SUCCESS;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.PASSWORD_SET_SUCCESSFULLY;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.RANDOM_PASSWORD_REQUIRED_CHARS;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.RANDOM_PASSWORD_STRENGTH;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.REGISTERED;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.REGISTERED_BUT_NOT_ACTIVATED;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.REGISTRATION_CONFIRMED;
-import static com.example.onlinebookshop.constants.security.SecurityConstants.SEND_LINK_TO_RESET_PASSWORD;
-import static com.example.onlinebookshop.constants.validation.ValidationConstants.COMPILED_EMAIL_PATTERN;
 
 @Component
 @RequiredArgsConstructor

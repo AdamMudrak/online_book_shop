@@ -94,13 +94,13 @@ public class ShoppingCartController {
     @DeleteMapping("/cart-items/{cartItemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookFromShoppingCart(@AuthenticationPrincipal User user,
-                                           @PathVariable
-                                           @Parameter(
-                                           name = ShopCartControllerConstants.CART_ITEM_ID,
-                                           description = ShopCartControllerConstants.VALID_ID_DESCRIPTION,
-                                           example = Constants.ID_EXAMPLE)
-                                           @Positive
-                                           Long cartItemId) {
+                                   @PathVariable
+                                   @Parameter(
+                                   name = ShopCartControllerConstants.CART_ITEM_ID,
+                                   description = ShopCartControllerConstants.VALID_ID_DESCRIPTION,
+                                   example = Constants.ID_EXAMPLE)
+                                   @Positive
+                                   Long cartItemId) {
         shoppingCartService.deleteBookFromShoppingCart(user.getId(), cartItemId);
     }
 }

@@ -1,9 +1,9 @@
 package com.example.onlinebookshop.validation.password;
 
+import static com.example.onlinebookshop.constants.validation.ValidationConstants.COMPILED_PASSWORD_PATTERN;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import static com.example.onlinebookshop.constants.validation.ValidationConstants.COMPILED_PASSWORD_PATTERN;
 
 public class PasswordValidator implements ConstraintValidator<Password, String> {
 

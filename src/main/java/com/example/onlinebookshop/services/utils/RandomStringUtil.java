@@ -1,8 +1,8 @@
 package com.example.onlinebookshop.services.utils;
 
-import java.util.Random;
-
 import static com.example.onlinebookshop.constants.security.SecurityConstants.RANDOM_STRING_BASE;
+
+import java.util.Random;
 
 public class RandomStringUtil {
     public static String generateRandomString(int strength) {

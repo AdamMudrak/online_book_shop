@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Positive;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CreateCartItemDto(
-        @Schema(name =  "bookId", example = "1",
+        @Schema(name = "bookId", example = "1",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull
         @Positive

@@ -1,5 +1,7 @@
 package com.example.onlinebookshop.services.utils;
 
+import static com.example.onlinebookshop.constants.security.SecurityConstants.RANDOM_LINK_STRENGTH;
+
 import com.example.onlinebookshop.entities.ParamToken;
 import com.example.onlinebookshop.repositories.ParamTokenRepository;
 import com.example.onlinebookshop.security.jwtutils.abstr.JwtAbstractUtil;
@@ -9,8 +11,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-
-import static com.example.onlinebookshop.constants.security.SecurityConstants.RANDOM_LINK_STRENGTH;
 
 @Component
 @RequiredArgsConstructor

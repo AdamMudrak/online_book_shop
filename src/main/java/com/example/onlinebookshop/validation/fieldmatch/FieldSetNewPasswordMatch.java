@@ -1,14 +1,13 @@
 package com.example.onlinebookshop.validation.fieldmatch;
 
+import static com.example.onlinebookshop.constants.validation.ValidationConstants.NEW_PASSWORD_MISMATCH;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import static com.example.onlinebookshop.constants.validation.ValidationConstants.NEW_PASSWORD_MISMATCH;
 
 @Constraint(validatedBy = FieldSetNewPasswordMatchValidator.class)
 @Target(ElementType.TYPE)

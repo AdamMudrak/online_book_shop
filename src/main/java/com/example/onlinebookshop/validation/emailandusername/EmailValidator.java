@@ -1,9 +1,9 @@
 package com.example.onlinebookshop.validation.emailandusername;
 
+import static com.example.onlinebookshop.constants.validation.ValidationConstants.COMPILED_EMAIL_PATTERN;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import static com.example.onlinebookshop.constants.validation.ValidationConstants.COMPILED_EMAIL_PATTERN;
 
 public class EmailValidator implements ConstraintValidator<Email, String> {
 

@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Positive;
 public record UpdateCartItemDto(
         @Schema(name = "quantity",
                 example = "25",
-                description ="Quantity is limited to a 100 items per client. For more items, "
+                description = "Quantity is limited to a 100 items per client. For more items, "
                         + "please contact us by phone or email.",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull

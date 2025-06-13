@@ -1,5 +1,7 @@
 package com.example.onlinebookshop.security;
 
+import static com.example.onlinebookshop.constants.security.SecurityConstants.DIVIDER;
+
 import com.example.onlinebookshop.security.jwtutils.abstr.JwtAbstractUtil;
 import com.example.onlinebookshop.security.jwtutils.strategy.JwtStrategy;
 import com.example.onlinebookshop.security.jwtutils.strategy.JwtType;
@@ -8,6 +10,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,11 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.Arrays;
-
-import static com.example.onlinebookshop.constants.security.SecurityConstants.DIVIDER;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

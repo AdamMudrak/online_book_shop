@@ -1,11 +1,11 @@
 package com.example.onlinebookshop.dtos.authentication.request;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.example.onlinebookshop.constants.Constants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record LoginRequest(

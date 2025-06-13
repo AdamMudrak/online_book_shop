@@ -1,5 +1,7 @@
 package com.example.onlinebookshop.controllers;
 
+import static com.example.onlinebookshop.constants.Constants.STATUS_DTO_RULES;
+
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllers.OrderControllerConstants;
 import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
@@ -32,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.onlinebookshop.constants.Constants.STATUS_DTO_RULES;
-
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -48,7 +48,8 @@ public class OrderController {
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
     public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user,
-                        @Parameter(example = OrderControllerConstants.PAGEABLE_EXAMPLE)Pageable pageable) {
+                    @Parameter(example = OrderControllerConstants.PAGEABLE_EXAMPLE)
+                    Pageable pageable) {
         if (userIsAdmin(user)) {
             return orderService.getOrders(pageable);
         }
