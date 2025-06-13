@@ -36,6 +36,7 @@ import com.example.onlinebookshop.security.jwtutils.abstr.JwtAbstractUtil;
 import com.example.onlinebookshop.security.jwtutils.strategy.JwtStrategy;
 import com.example.onlinebookshop.security.jwtutils.strategy.JwtType;
 import com.example.onlinebookshop.services.AuthenticationService;
+import com.example.onlinebookshop.services.ShoppingCartService;
 import com.example.onlinebookshop.services.email.PasswordEmailService;
 import com.example.onlinebookshop.services.email.RegisterConfirmEmailService;
 import com.example.onlinebookshop.services.utils.ParamFromHttpRequestUtil;
@@ -57,6 +58,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
+    private final ShoppingCartService shoppingCartService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
@@ -158,7 +160,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userMapper.toUser(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.password()));
         assignBasicRole(user);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        shoppingCartService.createShoppingCart(savedUser);
         registerConfirmEmailService.sendRegisterConfirmEmail(user.getEmail());
         return new RegistrationResponse(REGISTERED);
     }
