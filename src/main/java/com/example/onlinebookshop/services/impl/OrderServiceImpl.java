@@ -1,9 +1,9 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.order.request.CreateOrderDto;
-import com.example.onlinebookshop.dto.order.request.UpdateOrderDto;
-import com.example.onlinebookshop.dto.order.response.OrderDto;
-import com.example.onlinebookshop.dto.orderitem.response.OrderItemDto;
+import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
+import com.example.onlinebookshop.dtos.order.request.UpdateOrderDto;
+import com.example.onlinebookshop.dtos.order.response.OrderDto;
+import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Order;
 import com.example.onlinebookshop.entities.Order.Status;
 import com.example.onlinebookshop.entities.OrderItem;
@@ -12,9 +12,9 @@ import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.OrderProcessingException;
 import com.example.onlinebookshop.mappers.OrderItemMapper;
 import com.example.onlinebookshop.mappers.OrderMapper;
-import com.example.onlinebookshop.repositories.order.OrderRepository;
-import com.example.onlinebookshop.repositories.orderitem.OrderItemRepository;
-import com.example.onlinebookshop.repositories.shoppingcart.ShoppingCartRepository;
+import com.example.onlinebookshop.repositories.OrderRepository;
+import com.example.onlinebookshop.repositories.OrderItemRepository;
+import com.example.onlinebookshop.repositories.ShoppingCartRepository;
 import com.example.onlinebookshop.services.OrderService;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;

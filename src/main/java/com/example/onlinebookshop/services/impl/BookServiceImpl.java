@@ -1,18 +1,18 @@
 package com.example.onlinebookshop.services.impl;
 
-import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
-import com.example.onlinebookshop.dto.book.request.CreateBookDto;
-import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
-import com.example.onlinebookshop.dto.book.response.BookDto;
-import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dtos.book.request.BookSearchParametersDto;
+import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
+import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
+import com.example.onlinebookshop.dtos.book.response.BookDto;
+import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
 import com.example.onlinebookshop.mappers.BookMapper;
-import com.example.onlinebookshop.repositories.book.BookRepository;
+import com.example.onlinebookshop.repositories.BookRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
-import com.example.onlinebookshop.repositories.category.CategoryRepository;
+import com.example.onlinebookshop.repositories.CategoryRepository;
 import com.example.onlinebookshop.services.BookService;
 import java.util.List;
 import java.util.Optional;

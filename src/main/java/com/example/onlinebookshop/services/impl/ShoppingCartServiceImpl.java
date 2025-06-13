@@ -2,9 +2,9 @@ package com.example.onlinebookshop.services.impl;
 
 import static com.example.onlinebookshop.constants.dto.CartItemDtoConstants.QUANTITY_DESCRIPTION;
 
-import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
-import com.example.onlinebookshop.dto.cartitem.request.UpdateCartItemDto;
-import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
+import com.example.onlinebookshop.dtos.cartitem.request.CreateCartItemDto;
+import com.example.onlinebookshop.dtos.cartitem.request.UpdateCartItemDto;
+import com.example.onlinebookshop.dtos.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.CartItem;
 import com.example.onlinebookshop.entities.ShoppingCart;
@@ -13,9 +13,9 @@ import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.TooManyObjectsException;
 import com.example.onlinebookshop.mappers.CartItemMapper;
 import com.example.onlinebookshop.mappers.ShoppingCartMapper;
-import com.example.onlinebookshop.repositories.book.BookRepository;
-import com.example.onlinebookshop.repositories.cartitem.CartItemRepository;
-import com.example.onlinebookshop.repositories.shoppingcart.ShoppingCartRepository;
+import com.example.onlinebookshop.repositories.BookRepository;
+import com.example.onlinebookshop.repositories.CartItemRepository;
+import com.example.onlinebookshop.repositories.ShoppingCartRepository;
 import com.example.onlinebookshop.services.ShoppingCartService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
