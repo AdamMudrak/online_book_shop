@@ -28,6 +28,7 @@
 		<springdoc-openapi-starter-webmvc-ui>2.1.0</springdoc-openapi-starter-webmvc-ui>
 		<jjwt.version>0.12.5</jjwt.version>
 		<testcontainers.version>1.19.8</testcontainers.version>
+		<resend.version>4.3.0</resend.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -127,6 +128,12 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.resend</groupId>
+			<artifactId>resend-java</artifactId>
+			<version>${resend.version}</version>
 		</dependency>
 	</dependencies>
 
