@@ -1,13 +1,13 @@
-package com.example.onlinebookshop.validation;
+package com.example.onlinebookshop.validation.fieldmatch;
 
-import com.example.onlinebookshop.dto.user.request.UserRegistrationRequestDto;
+import com.example.onlinebookshop.dtos.authentication.request.RegistrationRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class FieldMatchValidator implements ConstraintValidator<FieldMatch,
-        UserRegistrationRequestDto> {
+public class FieldRegisterMatchValidator implements ConstraintValidator<FieldRegisterMatch,
+        RegistrationRequest> {
     @Override
-    public boolean isValid(UserRegistrationRequestDto userRegistrationRequestDto,
+    public boolean isValid(RegistrationRequest userRegistrationRequestDto,
                            ConstraintValidatorContext constraintValidatorContext) {
         if (userRegistrationRequestDto.password() == null
                 || userRegistrationRequestDto.repeatPassword() == null) {

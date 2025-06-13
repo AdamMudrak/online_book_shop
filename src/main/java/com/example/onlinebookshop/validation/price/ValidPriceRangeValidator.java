@@ -1,6 +1,6 @@
-package com.example.onlinebookshop.validation;
+package com.example.onlinebookshop.validation.price;
 
-import com.example.onlinebookshop.dto.book.request.BookSearchParametersDto;
+import com.example.onlinebookshop.dtos.book.request.BookSearchParametersDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

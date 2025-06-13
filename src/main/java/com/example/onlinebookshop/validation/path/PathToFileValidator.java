@@ -1,4 +1,4 @@
-package com.example.onlinebookshop.validation;
+package com.example.onlinebookshop.validation.path;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
