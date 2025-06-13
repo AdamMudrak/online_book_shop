@@ -2,9 +2,9 @@ package com.example.onlinebookshop.controllers;
 
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllers.ShopCartConstants;
-import com.example.onlinebookshop.dto.cartitem.request.CreateCartItemDto;
-import com.example.onlinebookshop.dto.cartitem.request.UpdateCartItemDto;
-import com.example.onlinebookshop.dto.shoppingcart.response.ShoppingCartDto;
+import com.example.onlinebookshop.dtos.cartitem.request.CreateCartItemDto;
+import com.example.onlinebookshop.dtos.cartitem.request.UpdateCartItemDto;
+import com.example.onlinebookshop.dtos.shoppingcart.response.ShoppingCartDto;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
