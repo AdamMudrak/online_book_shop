@@ -38,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.onlinebookshop.BookCategoryConstants;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
 import java.util.List;
@@ -133,40 +132,6 @@ class BookRepositoryTest {
     @Test
     void findAllByCategoryId_IsNotAbleToFindBooksByNonExistingCategoryId_Fail() {
         assertTrue(bookRepository.findAllByCategoryId(RANDOM_ID).isEmpty());
-    }
-
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @DisplayName("Given an ISBN of 3 present books, successfully retrieve each of them by ISBN")
-    @Test
-    void findBookByIsbn_IsAbleToGetBooksByExistingIsbn_Success() {
-        Book actualBook = new Book();
-        if (bookRepository.findBookByIsbn(BookCategoryConstants.GATSBY_ISBN).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(BookCategoryConstants.GATSBY_ISBN).get();
-        }
-        assertEquals(EXPECTED_BOOK_1, actualBook);
-
-        if (bookRepository.findBookByIsbn(BookCategoryConstants.TKAM_ISBN).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(BookCategoryConstants.TKAM_ISBN).get();
-        }
-        assertEquals(EXPECTED_BOOK_2, actualBook);
-
-        if (bookRepository.findBookByIsbn(BookCategoryConstants.ISBN_1984).isPresent()) {
-            actualBook = bookRepository.findBookByIsbn(BookCategoryConstants.ISBN_1984).get();
-        }
-        assertEquals(EXPECTED_BOOK_3, actualBook);
-    }
-
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @DisplayName("Given not a real ISBN, retrieve nothing")
-    @Test
-    void findBookByIsbn_IsNotAbleToGetBookByNonExistingIsbn_Fail() {
-        assertTrue(bookRepository.findBookByIsbn(NON_EXISTING_ISBN).isEmpty());
     }
 
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,

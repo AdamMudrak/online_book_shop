@@ -18,7 +18,6 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -52,8 +51,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDtoWithoutCategoryIds> findAllWithoutCategoryIds(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if (category.isPresent()) {
+        if (categoryRepository.existsById(id)) {
             return bookMapper.toDtoWithoutCategoriesList(
                     bookRepository.findAllByCategoryId(id));
         }
@@ -74,16 +72,13 @@ public class BookServiceImpl implements BookService {
 
         Optional<Long> bookIdByIsbn = bookRepository.findBookIdByIsbn(requestDto.getIsbn());
         if (bookIdByIsbn.isPresent()
-                && bookIdByIsbn.get().equals(id)) {
+                && !bookIdByIsbn.get().equals(id)) {
             throw new ParameterAlreadyExistsException("Book with ISBN " + requestDto.getIsbn()
                     + " already exists in DB");
         }
         isCategoryIdPresentInDb(requestDto.getCategoryIds());
-        if (!areCategoriesReplaced) {
-            addIdsFromDtoToDbBook(requestDto, book);
-        }
-        book = bookMapper.toUpdateModel(requestDto);
-        book.setId(id);
+        addIdsFromDtoToDbBook(requestDto, book, areCategoriesReplaced);
+        updatePresentFields(requestDto, book);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -107,15 +102,42 @@ public class BookServiceImpl implements BookService {
     }
 
     private void isCategoryIdPresentInDb(Set<Long> categoryIds) {
-        categoryIds.forEach(id -> categoryRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Can't find category by id " + id)));
+        categoryIds.forEach(id -> {
+            if (!categoryRepository.existsById(id)) {
+                throw new EntityNotFoundException("Can't find category by id " + id);
+            }
+        });
     }
 
-    private void addIdsFromDtoToDbBook(UpdateBookDto requestDto, Book book) {
-        Set<Long> presentCategoriesIds = book.getCategories().stream()
-                .map(Category::getId)
-                .collect(Collectors.toSet());
-        presentCategoriesIds.addAll(requestDto.getCategoryIds());
-        requestDto.setCategoryIds(presentCategoriesIds);
+    private void addIdsFromDtoToDbBook(UpdateBookDto requestDto, Book book,
+                                       boolean areCategoriesReplaced) {
+        if (areCategoriesReplaced) {
+            book.getCategories().clear();
+        }
+        book.getCategories().addAll(
+                requestDto.getCategoryIds().stream()
+                        .map(Category::new)
+                        .toList());
+    }
+
+    private void updatePresentFields(UpdateBookDto requestDto, Book book) {
+        if (requestDto.getTitle() != null) {
+            book.setTitle(requestDto.getTitle());
+        }
+        if (requestDto.getAuthor() != null) {
+            book.setAuthor(requestDto.getAuthor());
+        }
+        if (requestDto.getIsbn() != null) {
+            book.setIsbn(requestDto.getIsbn());
+        }
+        if (requestDto.getPrice() != null) {
+            book.setPrice(requestDto.getPrice());
+        }
+        if (requestDto.getDescription() != null) {
+            book.setDescription(requestDto.getDescription());
+        }
+        if (requestDto.getCoverImage() != null) {
+            book.setCoverImage(requestDto.getCoverImage());
+        }
     }
 }
