@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.services.impl;
 
+import com.example.onlinebookshop.dtos.order.OrderStatusDto;
 import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
-import com.example.onlinebookshop.dtos.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dtos.order.response.OrderDto;
 import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Order;
@@ -79,12 +79,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto updateOrderStatus(Long orderId, UpdateOrderDto updateOrderDto) {
+    public OrderDto updateOrderStatus(Long orderId, OrderStatusDto statusDto) {
         Order orderById = orderRepository.findById(orderId)
                 .map(order -> {
-                    order.setStatus(Status.valueOf(updateOrderDto.status()
-                            .toUpperCase()
-                            .trim()));
+                    order.setStatus(
+                            Order.Status.valueOf(statusDto.name()));
                     return order;
                 })
                 .orElseThrow(() -> new EntityNotFoundException(

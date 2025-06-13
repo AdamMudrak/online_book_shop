@@ -4,8 +4,8 @@ import static com.example.onlinebookshop.constants.Constants.STATUS_DTO_RULES;
 
 import com.example.onlinebookshop.constants.Constants;
 import com.example.onlinebookshop.constants.controllers.OrderControllerConstants;
+import com.example.onlinebookshop.dtos.order.OrderStatusDto;
 import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
-import com.example.onlinebookshop.dtos.order.request.UpdateOrderDto;
 import com.example.onlinebookshop.dtos.order.response.OrderDto;
 import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Role;
@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -87,9 +88,8 @@ public class OrderController {
     @PatchMapping("/{orderId}")
     public OrderDto updateOrderStatus(@PathVariable Long orderId,
                                       @Valid
-                                      @RequestBody
-                                      UpdateOrderDto updateOrderDto) {
-        return orderService.updateOrderStatus(orderId, updateOrderDto);
+                                      @RequestParam OrderStatusDto statusDto) {
+        return orderService.updateOrderStatus(orderId, statusDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
