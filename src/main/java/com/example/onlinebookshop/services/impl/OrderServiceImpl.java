@@ -7,7 +7,9 @@ import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
 import com.example.onlinebookshop.entities.Order;
 import com.example.onlinebookshop.entities.Order.Status;
 import com.example.onlinebookshop.entities.OrderItem;
+import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.ShoppingCart;
+import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.OrderProcessingException;
 import com.example.onlinebookshop.mappers.OrderItemMapper;
@@ -38,25 +40,22 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    public List<OrderDto> getOrders(Pageable pageable) {
-        return orderRepository.findAll(pageable).stream()
-                .map(orderMapper::orderToOrderDto)
-                .toList();
-    }
-
-    @Override
-    public List<OrderDto> getOrdersByUserId(Long userId, Pageable pageable) {
-        return orderRepository.findAllByUserId(userId, pageable).stream()
-                .map(orderMapper::orderToOrderDto)
-                .toList();
+    public List<OrderDto> getOrders(User user, Pageable pageable) {
+        if (userIsAdmin(user)) {
+            return orderRepository.findAll(pageable).stream()
+                    .map(orderMapper::orderToOrderDto)
+                    .toList();
+        } else {
+            return orderRepository.findAllByUserId(user.getId(), pageable).stream()
+                    .map(orderMapper::orderToOrderDto)
+                    .toList();
+        }
     }
 
     @Override
     public OrderDto addOrder(Long userId, CreateOrderDto createOrderDto) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
-        if (shoppingCart == null) {
-            throw new EntityNotFoundException("Can't find shopping cart for user " + userId);
-        }
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find shopping cart for user " + userId));
         if (shoppingCart.getCartItems().isEmpty()) {
             throw new OrderProcessingException(
                     "To post an order, you should have at least 1 product in your cart");
@@ -94,41 +93,40 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderItemDto> findOrderItemsByOrderId(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Order with id: %d not found", orderId)
-                ));
-        return orderItemMapper.toOrderItemDtoList(order.getOrderItems());
+    public List<OrderItemDto> findOrderItemsByOrderId(User user, Long orderId) {
+        if (userIsAdmin(user)) {
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            String.format("Order with id: %d not found", orderId)
+                    ));
+            return orderItemMapper.toOrderItemDtoList(order.getOrderItems());
+        } else {
+            Order order = orderRepository.findByIdAndUserId(orderId, user.getId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            String.format("Order with id: %d not found for user: %d",
+                                    orderId, user.getId())));
+            return orderItemMapper.toOrderItemDtoList(order.getOrderItems());
+        }
     }
 
     @Override
-    public List<OrderItemDto> findOrderItemsByOrderId(Long userId, Long orderId) {
-        Order order = orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Order with id: %d not found for user: %d", orderId, userId)
-                ));
-        return orderItemMapper.toOrderItemDtoList(order.getOrderItems());
-    }
-
-    @Override
-    public OrderItemDto findOrderItemsByOrderIdAndItemId(Long orderId, Long itemId) {
-        OrderItem item = orderItemRepository.findByIdAndOrderId(itemId, orderId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Order item: %d not found in order: %d",
-                                itemId, orderId)
-                ));
-        return orderItemMapper.toOrderItemDto(item);
-    }
-
-    @Override
-    public OrderItemDto findOrderItemsByOrderIdAndItemId(Long userId, Long orderId, Long itemId) {
-        OrderItem item = orderItemRepository.findByIdAndOrderIdAndUserId(itemId, orderId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Order item: %d not found in order: %d for user: %d",
-                                itemId, orderId, userId)
-                ));
-        return orderItemMapper.toOrderItemDto(item);
+    public OrderItemDto findOrderItemByOrderIdAndItemId(User user, Long orderId, Long itemId) {
+        if (userIsAdmin(user)) {
+            OrderItem item = orderItemRepository.findByIdAndOrderId(itemId, orderId)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            String.format("Order item: %d not found in order: %d",
+                                    itemId, orderId)
+                    ));
+            return orderItemMapper.toOrderItemDto(item);
+        } else {
+            OrderItem item = orderItemRepository.findByIdAndOrderIdAndUserId(
+                    itemId, orderId, user.getId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            String.format("Order item: %d not found in order: %d for user: %d",
+                                    itemId, orderId, user.getId())
+                    ));
+            return orderItemMapper.toOrderItemDto(item);
+        }
     }
 
     private void setOrderItems(ShoppingCart shoppingCart, Order order) {
@@ -148,5 +146,9 @@ public class OrderServiceImpl implements OrderService {
         LocalDateTime now = LocalDateTime.now();
         String nowWithoutMilliseconds = now.format(formatter);
         order.setOrderTime(LocalDateTime.parse(nowWithoutMilliseconds));
+    }
+
+    private boolean userIsAdmin(User user) {
+        return user.getRole().getName().equals(Role.RoleName.ROLE_ADMIN);
     }
 }

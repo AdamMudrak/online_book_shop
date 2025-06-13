@@ -8,7 +8,6 @@ import com.example.onlinebookshop.dtos.order.OrderStatusDto;
 import com.example.onlinebookshop.dtos.order.request.CreateOrderDto;
 import com.example.onlinebookshop.dtos.order.response.OrderDto;
 import com.example.onlinebookshop.dtos.orderitem.response.OrderItemDto;
-import com.example.onlinebookshop.entities.Role;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,10 +50,7 @@ public class OrderController {
     public List<OrderDto> getOrdersByUserId(@AuthenticationPrincipal User user,
                     @Parameter(example = OrderControllerConstants.PAGEABLE_EXAMPLE)
                     Pageable pageable) {
-        if (userIsAdmin(user)) {
-            return orderService.getOrders(pageable);
-        }
-        return orderService.getOrdersByUserId(user.getId(), pageable);
+        return orderService.getOrders(user, pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -108,10 +104,7 @@ public class OrderController {
             @Parameter(name = OrderControllerConstants.ORDER_ID,
                 description = OrderControllerConstants.VALID_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long orderId) {
-        if (userIsAdmin(user)) {
-            return orderService.findOrderItemsByOrderId(orderId);
-        }
-        return orderService.findOrderItemsByOrderId(user.getId(), orderId);
+        return orderService.findOrderItemsByOrderId(user, orderId);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -133,13 +126,6 @@ public class OrderController {
             @Parameter(name = OrderControllerConstants.ITEM_ID,
                 description = OrderControllerConstants.VALID_ITEM_ID_DESCRIPTION,
                 example = Constants.ID_EXAMPLE) @Positive Long itemId) {
-        if (userIsAdmin(user)) {
-            return orderService.findOrderItemsByOrderIdAndItemId(orderId, itemId);
-        }
-        return orderService.findOrderItemsByOrderIdAndItemId(user.getId(), orderId, itemId);
-    }
-
-    private boolean userIsAdmin(User user) {
-        return user.getRole().getName().equals(Role.RoleName.ROLE_ADMIN);
+        return orderService.findOrderItemByOrderIdAndItemId(user, orderId, itemId);
     }
 }
