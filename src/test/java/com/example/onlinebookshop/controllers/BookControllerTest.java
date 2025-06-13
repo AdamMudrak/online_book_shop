@@ -77,9 +77,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.onlinebookshop.dto.book.request.CreateBookDto;
-import com.example.onlinebookshop.dto.book.request.UpdateBookDto;
-import com.example.onlinebookshop.dto.book.response.BookDto;
+import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
+import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
+import com.example.onlinebookshop.dtos.book.response.BookDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Set;
