@@ -1,6 +1,6 @@
 package com.example.onlinebookshop.dtos.user.request;
 
-import com.example.taskmanagementapp.validation.emailandusername.Email;
+import com.example.onlinebookshop.validation.emailandusername.Email;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 

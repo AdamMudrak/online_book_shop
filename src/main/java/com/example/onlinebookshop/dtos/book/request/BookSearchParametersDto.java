@@ -1,6 +1,5 @@
 package com.example.onlinebookshop.dtos.book.request;
 
-import com.example.onlinebookshop.constants.dto.BookDtoConstants;
 import com.example.onlinebookshop.validation.price.ValidPriceRange;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,20 +10,20 @@ import java.math.BigDecimal;
 @ValidPriceRange
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record BookSearchParametersDto(
-        @Schema(example = BookDtoConstants.FLOOR_PRICE,
-        description = BookDtoConstants.FLOOR_PRICE_DESCRIPTION)
+        @Schema(example = "799.99",
+        description = "Defines floor price")
         @Digits(integer = 17, fraction = 2)
         @Positive BigDecimal fromPrice,
 
-        @Schema(example = BookDtoConstants.CEILING_PRICE,
-        description = BookDtoConstants.CEILING_PRICE_DESCRIPTION)
+        @Schema(example = "1999.99",
+        description = "Defines ceiling price. Must always be greater than floor price")
         @Digits(integer = 17, fraction = 2)
         @Positive BigDecimal toPrice,
 
-        @Schema(example = BookDtoConstants.TITLE_EXAMPLE,
-        description = BookDtoConstants.TITLE_DESCRIPTION)
+        @Schema(example = "Harry Potter",
+        description = "Must be exactly equal to the title in DB. You can specify many titles")
         String[] titles,
 
-        @Schema(example = BookDtoConstants.AUTHOR_EXAMPLE,
-        description = BookDtoConstants.AUTHOR_DESCRIPTION)
+        @Schema(example = "J.K. Rowling",
+        description = "Must be exactly equal to the author in DB. You can specify many authors")
         String[] authors){}

@@ -7,12 +7,12 @@ import jakarta.validation.constraints.NotBlank;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record UpdateCategoryDto(
-        @Schema(name = CategoryDtoConstants.CATEGORY_NAME,
-        example = CategoryDtoConstants.CATEGORY_EXAMPLE,
-        description = CategoryDtoConstants.CATEGORY_NAME_DESCRIPTION)
+        @Schema(name = "name",
+        example =  "detective",
+        description = "Name of the category")
         @NotBlank String name,
 
-        @Schema(name = CategoryDtoConstants.CATEGORY_DESCRIPTION,
-        example = CategoryDtoConstants.CATEGORY_DESCRIPTION_EXPLANATION,
-        description = CategoryDtoConstants.CATEGORY_DESCRIPTION_EXPLANATION)
+        @Schema(name = "description",
+        example = "Any text",
+        description = "Any text up to 512 chars including whitespaces")
         String description){}

@@ -1,12 +1,11 @@
 package com.example.onlinebookshop.dtos.order.request;
 
-import com.example.onlinebookshop.constants.dto.UserDtoConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public record CreateOrderDto(
-        @Schema(name = UserDtoConstants.SHIPPING_ADDRESS,
-                example = UserDtoConstants.SHIPPING_ADDRESS_EXAMPLE)
+        @Schema(name = "shippingAddress",
+                example = "132, My Street, Kingston, New York 12401")
         @NotBlank
         String shippingAddress) {
 }
