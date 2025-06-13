@@ -3,11 +3,6 @@ package com.example.onlinebookshop.constants.validation;
 import java.util.regex.Pattern;
 
 public class ValidationConstants {
-    public static final String INVALID_DATE_FORMAT = ": invalid date format. Should be YYYY-MM-dd.";
-    public static final String END_DATE_EARLIER_THAN_START_DATE = ": invalid date. "
-            + "endDate can't be earlier than startDate";
-    public static final Pattern COMPILED_DATE_PATTERN = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
-
     public static final String INVALID_EMAIL = ": invalid email. Try again";
     public static final String INVALID_USERNAME = ": invalid username. Can't be like email";
     public static final Pattern COMPILED_EMAIL_PATTERN = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-"
