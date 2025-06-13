@@ -9,9 +9,8 @@ import com.example.onlinebookshop.dtos.user.response.UserProfileResponse;
 import com.example.onlinebookshop.entities.User;
 import com.example.onlinebookshop.exceptions.ForbiddenException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
     UserProfileResponse updateUserRole(Long authenticatedUserId,
