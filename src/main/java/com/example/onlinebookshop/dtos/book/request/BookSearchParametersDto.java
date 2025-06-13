@@ -1,7 +1,7 @@
 package com.example.onlinebookshop.dtos.book.request;
 
 import com.example.onlinebookshop.constants.dto.BookDtoConstants;
-import com.example.onlinebookshop.validation.ValidPriceRange;
+import com.example.onlinebookshop.validation.price.ValidPriceRange;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Digits;
