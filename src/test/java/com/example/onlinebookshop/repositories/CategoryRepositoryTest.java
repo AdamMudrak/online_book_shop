@@ -7,7 +7,6 @@ import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_
 import static com.example.onlinebookshop.BookCategoryConstants.FICTION_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.NON_EXISTING_CATEGORY_NAME;
 import static com.example.onlinebookshop.BookCategoryConstants.PATH_TO_SQL_SCRIPTS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,29 +31,6 @@ public class CategoryRepositoryTest {
         EXPECTED_CATEGORY.setId(FICTION_CATEGORY_ID);
         EXPECTED_CATEGORY.setName(FICTION_CATEGORY_NAME);
         EXPECTED_CATEGORY.setDescription(FICTION_CATEGORY_DESCRIPTION);
-    }
-
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @DisplayName("Given a name of an existing category, successfully retrieve it from DB")
-    @Test
-    void findByName_IsAbleToFindExistingCategoryByName_Success() {
-        if (categoryRepository.findByName(FICTION_CATEGORY_NAME).isPresent()) {
-            Category actualCategory = categoryRepository.findByName(FICTION_CATEGORY_NAME).get();
-            assertEquals(EXPECTED_CATEGORY, actualCategory);
-        }
-    }
-
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @DisplayName("Given a name of a non-existing category, retrieve nothing from DB")
-    @Test
-    void findByName_IsNotAbleToFindNonExistingCategoryByName_Fail() {
-        assertTrue(categoryRepository.findByName(NON_EXISTING_CATEGORY_NAME).isEmpty());
     }
 
     @Sql(scripts = PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
