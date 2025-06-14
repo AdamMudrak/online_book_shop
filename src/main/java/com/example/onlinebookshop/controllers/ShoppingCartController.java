@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = ShopCartControllerConstants.GET_ALL_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
@@ -46,7 +46,7 @@ public class ShoppingCartController {
         return shoppingCartService.getShoppingCartByUserId(user.getId());
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = ShopCartControllerConstants.ADD_ITEM_SUMMARY)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
@@ -60,7 +60,7 @@ public class ShoppingCartController {
         return shoppingCartService.addBookToShoppingCart(user.getId(), createCartItemDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = ShopCartControllerConstants.UPDATE_ITEM_SUMMARY)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
@@ -90,7 +90,7 @@ public class ShoppingCartController {
             @ApiResponse(responseCode = Constants.CODE_400,
                     description = Constants.INVALID_ID_DESCRIPTION)
     })
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/cart-items/{cartItemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookFromShoppingCart(@AuthenticationPrincipal User user,

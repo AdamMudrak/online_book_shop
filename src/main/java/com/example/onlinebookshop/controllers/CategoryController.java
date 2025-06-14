@@ -41,7 +41,6 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final BookService bookService;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = CategoryControllerConstants.GET_ALL_SUMMARY,
             description = CategoryControllerConstants.GET_ALL_DESCRIPTION)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
@@ -51,7 +50,6 @@ public class CategoryController {
         return categoryService.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = CategoryControllerConstants.GET_BY_ID_SUMMARY,
             description = CategoryControllerConstants.GET_BY_ID_DESCRIPTION)
     @ApiResponses(value = {
@@ -67,6 +65,11 @@ public class CategoryController {
         return categoryService.getById(id);
     }
 
+    @Operation(summary = CategoryControllerConstants.GET_ALL_BOOKS_BY_CATEGORY_ID_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = Constants.CODE_200,
+                    description = Constants.SUCCESSFULLY_RETRIEVED)
+    })
     @GetMapping("/{id}/books")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             @PathVariable @Parameter(name = Constants.ID,
@@ -75,7 +78,7 @@ public class CategoryController {
         return bookService.findAllWithoutCategoryIds(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = CategoryControllerConstants.CREATE_CATEGORY_SUMMARY,
             description = CategoryControllerConstants.CREATE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
@@ -90,7 +93,7 @@ public class CategoryController {
         return categoryService.save(categoryDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = CategoryControllerConstants.UPDATE_CATEGORY_SUMMARY,
             description = CategoryControllerConstants.UPDATE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
@@ -108,7 +111,7 @@ public class CategoryController {
         return categoryService.update(categoryDto, id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = CategoryControllerConstants.DELETE_CATEGORY_SUMMARY,
             description = CategoryControllerConstants.DELETE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {

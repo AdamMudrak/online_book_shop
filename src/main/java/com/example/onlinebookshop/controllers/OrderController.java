@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
     private final OrderService orderService;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = OrderControllerConstants.GET_ALL_SUMMARY)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
@@ -53,7 +53,7 @@ public class OrderController {
         return orderService.getOrders(user, pageable);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = OrderControllerConstants.ADD_ORDER_SUMMARY,
             description = OrderControllerConstants.ADD_ORDER_DESCRIPTION)
     @ApiResponses(value = {
@@ -71,7 +71,7 @@ public class OrderController {
         return orderService.addOrder(user.getId(), createOrderDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = OrderControllerConstants.UPDATE_ORDER_SUMMARY,
             description = STATUS_DTO_RULES)
     @ApiResponses(value = {
@@ -88,7 +88,7 @@ public class OrderController {
         return orderService.updateOrderStatus(orderId, statusDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = OrderControllerConstants.GET_ORDER_ITEMS_BY_ORDER_ID)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
@@ -96,7 +96,6 @@ public class OrderController {
             @ApiResponse(responseCode = Constants.CODE_400,
                     description = Constants.INVALID_ID_DESCRIPTION)
     })
-
     @GetMapping("/{orderId}/items")
     public List<OrderItemDto> findOrderItemsByOrderId(
             @AuthenticationPrincipal User user,
@@ -107,7 +106,7 @@ public class OrderController {
         return orderService.findOrderItemsByOrderId(user, orderId);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = OrderControllerConstants.GET_ORDER_ITEM_BY_ORDER_ID_AND_ITEM_ID)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,

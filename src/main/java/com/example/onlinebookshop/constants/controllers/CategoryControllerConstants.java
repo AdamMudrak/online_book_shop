@@ -17,6 +17,9 @@ public class CategoryControllerConstants {
     public static final String CREATE_CATEGORY_DESCRIPTION =
             "Creates a new category according to the entity provided";
 
+    public static final String GET_ALL_BOOKS_BY_CATEGORY_ID_SUMMARY =
+            "Get all books by category id";
+
     public static final String UPDATE_CATEGORY_SUMMARY = "Update an existing category";
     public static final String UPDATE_CATEGORY_DESCRIPTION =
             "Updates an existing category according to the entity provided";
