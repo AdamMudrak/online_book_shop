@@ -225,13 +225,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    private TokenBearerDto getTokens(String email, String password) throws LoginException {
+    private TokenBearerDto getTokens(String username, String password) throws LoginException {
         final Authentication authentication;
         try {
             authentication = authenticationManager
                     .authenticate(
                             new UsernamePasswordAuthenticationToken(
-                                    email, password));
+                                    username, password));
 
         } catch (AuthenticationException authenticationException) {
             throw new LoginException("Either login or password is invalid");
