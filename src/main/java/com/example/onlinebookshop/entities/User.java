@@ -50,11 +50,6 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
     public boolean isEnabled() {
         return isEnabled;
     }
@@ -62,10 +57,5 @@ public class User implements UserDetails {
     @Override
     public boolean isAccountNonLocked() {
         return isAccountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
     }
 }

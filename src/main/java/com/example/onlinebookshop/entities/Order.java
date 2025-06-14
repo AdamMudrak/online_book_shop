@@ -46,7 +46,7 @@ public class Order {
     private String shippingAddress;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems = new HashSet<>();
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDeleted = false;
 
     public void addItemToOrder(OrderItem orderItem) {

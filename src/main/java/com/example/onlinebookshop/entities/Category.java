@@ -30,7 +30,7 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
     private String description;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDeleted = false;
 
     public Category(Long id) {
