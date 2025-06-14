@@ -447,18 +447,18 @@ class BookServiceImplTest {
     @Test
     @DisplayName("Throws an exception as another book with the same ISBN is already present")
     void update_CannotUpdateBookWhenAnotherIsPresentByIsbn_Fail() {
-        UPDATE_BOOK_DTO.setIsbn(EXPECTED_GATSBY_BOOK.getIsbn());
+        UPDATE_BOOK_DTO.setIsbn(EXPECTED_TKAM_BOOK.getIsbn());
 
         String exceptionMessage = "Book with ISBN " + UPDATE_BOOK_DTO.getIsbn()
                 + " already exists in DB";
-        when(bookRepository.findById(GATSBY_ID)).thenReturn(Optional.of(EXPECTED_GATSBY_BOOK));
+        when(bookRepository.findById(TKAM_ID)).thenReturn(Optional.of(EXPECTED_TKAM_BOOK));
         when(bookRepository.findBookIdByIsbn(UPDATE_BOOK_DTO.getIsbn()))
                 .thenReturn(Optional.of(EXPECTED_GATSBY_BOOK.getId()));
         Exception exception = assertThrows(ParameterAlreadyExistsException.class, () ->
-                bookService.update(UPDATE_BOOK_DTO, GATSBY_ID, true));
+                bookService.update(UPDATE_BOOK_DTO, TKAM_ID, true));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(bookRepository, times(1)).findById(GATSBY_ID);
+        verify(bookRepository, times(1)).findById(TKAM_ID);
         verify(bookRepository, times(1)).findBookIdByIsbn(UPDATE_BOOK_DTO.getIsbn());
 
         UPDATE_BOOK_DTO.setIsbn(SOME_ISBN);
