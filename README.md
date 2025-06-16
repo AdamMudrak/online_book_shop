@@ -197,6 +197,7 @@ Not ready for setting up my application locally yet? Then explore [Landing](http
     ```
     ```sh
       #run application using .env.sample
+      #for tests to run successfully, start Docker Desktop!
       docker run -p 8080:8080 --env-file .env.sample online_book_shop
     ```
 
