@@ -41,6 +41,7 @@
 		<springdoc-openapi-starter-webmvc-ui>2.8.6</springdoc-openapi-starter-webmvc-ui>
 		<resend.version>4.3.0</resend.version>
 		<jjwt.version>0.12.5</jjwt.version>
+		<testcontainers.version>1.21.1</testcontainers.version>
 	</properties>
 
 	<dependencies>
@@ -121,7 +122,6 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc-openapi-starter-webmvc-ui}</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>com.resend</groupId>
