@@ -52,6 +52,8 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers(
                                         antMatcher("/auth/**"),
+                                        antMatcher("/books/**"),
+                                        antMatcher("/categories/**"),
                                         antMatcher("/swagger-ui/**"),
                                         antMatcher("/v3/api-docs/**"),
                                         antMatcher("/errors"),
