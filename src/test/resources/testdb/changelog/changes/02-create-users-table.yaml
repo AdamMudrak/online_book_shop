@@ -14,8 +14,8 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: email
-                  type: varchar(255)
+                  name: username
+                  type: varchar(64)
                   constraints:
                     nullable: false
                     unique: true
@@ -25,15 +25,32 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: first_name
-                  type: varchar(255)
+                  name: email
+                  type: varchar(64)
                   constraints:
                     nullable: false
+                    unique: true
+              - column:
+                  name: first_name
+                  type: varchar(64)
               - column:
                   name: last_name
-                  type: varchar(255)
+                  type: varchar(64)
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_role_id
+                    references: roles(id)
+              - column:
+                  name: is_enabled
+                  type: boolean
+                  defaultValueBoolean: false
                   constraints:
                     nullable: false
               - column:
-                  name: shipping_address
-                  type: varchar(255)
+                  name: is_account_non_locked
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

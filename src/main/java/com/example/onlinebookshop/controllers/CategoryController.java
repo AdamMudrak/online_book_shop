@@ -1,11 +1,11 @@
 package com.example.onlinebookshop.controllers;
 
 import com.example.onlinebookshop.constants.Constants;
-import com.example.onlinebookshop.constants.controllers.CategoryConstants;
-import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
-import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
-import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
-import com.example.onlinebookshop.dto.category.response.CategoryDto;
+import com.example.onlinebookshop.constants.controllers.CategoryControllerConstants;
+import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dtos.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dtos.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dtos.category.response.CategoryDto;
 import com.example.onlinebookshop.services.BookService;
 import com.example.onlinebookshop.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,26 +34,24 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@Tag(name = CategoryConstants.CATEGORY_API_NAME,
-        description = CategoryConstants.CATEGORY_API_DESCRIPTION)
+@Tag(name = CategoryControllerConstants.CATEGORY_API_NAME,
+        description = CategoryControllerConstants.CATEGORY_API_DESCRIPTION)
 @RequestMapping(value = "/categories")
 public class CategoryController {
     private final CategoryService categoryService;
     private final BookService bookService;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = CategoryConstants.GET_ALL_SUMMARY,
-            description = CategoryConstants.GET_ALL_DESCRIPTION)
+    @Operation(summary = CategoryControllerConstants.GET_ALL_SUMMARY,
+            description = CategoryControllerConstants.GET_ALL_DESCRIPTION)
     @ApiResponse(responseCode = Constants.CODE_200, description = Constants.SUCCESSFULLY_RETRIEVED)
     @GetMapping
     public List<CategoryDto> getAll(
-            @Parameter(example = CategoryConstants.PAGEABLE_EXAMPLE) Pageable pageable) {
+            @Parameter(example = CategoryControllerConstants.PAGEABLE_EXAMPLE) Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = CategoryConstants.GET_BY_ID_SUMMARY,
-            description = CategoryConstants.GET_BY_ID_DESCRIPTION)
+    @Operation(summary = CategoryControllerConstants.GET_BY_ID_SUMMARY,
+            description = CategoryControllerConstants.GET_BY_ID_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_RETRIEVED),
@@ -62,22 +60,27 @@ public class CategoryController {
     })
     @GetMapping("/{id}")
     public CategoryDto getCategoryById(@PathVariable @Parameter(name = Constants.ID,
-            description = CategoryConstants.VALID_ID_DESCRIPTION,
+            description = CategoryControllerConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         return categoryService.getById(id);
     }
 
+    @Operation(summary = CategoryControllerConstants.GET_ALL_BOOKS_BY_CATEGORY_ID_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = Constants.CODE_200,
+                    description = Constants.SUCCESSFULLY_RETRIEVED)
+    })
     @GetMapping("/{id}/books")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             @PathVariable @Parameter(name = Constants.ID,
-            description = CategoryConstants.VALID_ID_DESCRIPTION,
+            description = CategoryControllerConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         return bookService.findAllWithoutCategoryIds(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = CategoryConstants.CREATE_CATEGORY_SUMMARY,
-            description = CategoryConstants.CREATE_CATEGORY_DESCRIPTION)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = CategoryControllerConstants.CREATE_CATEGORY_SUMMARY,
+            description = CategoryControllerConstants.CREATE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_201,
                     description = Constants.SUCCESSFULLY_CREATED),
@@ -90,9 +93,9 @@ public class CategoryController {
         return categoryService.save(categoryDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = CategoryConstants.UPDATE_CATEGORY_SUMMARY,
-            description = CategoryConstants.UPDATE_CATEGORY_DESCRIPTION)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = CategoryControllerConstants.UPDATE_CATEGORY_SUMMARY,
+            description = CategoryControllerConstants.UPDATE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_200,
                     description = Constants.SUCCESSFULLY_UPDATED),
@@ -102,15 +105,15 @@ public class CategoryController {
     })
     @PutMapping("/{id}")
     public CategoryDto updateCategory(@RequestBody @Valid UpdateCategoryDto categoryDto,
-                                      @PathVariable @Parameter(name = Constants.ID,
-                                              description = CategoryConstants.VALID_ID_DESCRIPTION,
-                                              example = Constants.ID_EXAMPLE) @Positive Long id) {
+                              @PathVariable @Parameter(name = Constants.ID,
+                              description = CategoryControllerConstants.VALID_ID_DESCRIPTION,
+                              example = Constants.ID_EXAMPLE) @Positive Long id) {
         return categoryService.update(categoryDto, id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = CategoryConstants.DELETE_CATEGORY_SUMMARY,
-            description = CategoryConstants.DELETE_CATEGORY_DESCRIPTION)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = CategoryControllerConstants.DELETE_CATEGORY_SUMMARY,
+            description = CategoryControllerConstants.DELETE_CATEGORY_DESCRIPTION)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.CODE_204,
                     description = Constants.CODE_204_DESCRIPTION),
@@ -120,7 +123,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable @Parameter(name = Constants.ID,
-            description = CategoryConstants.VALID_ID_DESCRIPTION,
+            description = CategoryControllerConstants.VALID_ID_DESCRIPTION,
             example = Constants.ID_EXAMPLE) @Positive Long id) {
         categoryService.deleteById(id);
     }

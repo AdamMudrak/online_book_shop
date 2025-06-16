@@ -69,10 +69,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.onlinebookshop.dto.book.response.BookDtoWithoutCategoryIds;
-import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
-import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
-import com.example.onlinebookshop.dto.category.response.CategoryDto;
+import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.dtos.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dtos.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dtos.category.response.CategoryDto;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
@@ -194,8 +195,6 @@ public class CategoryControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Given a CreateDto of a category with a name which is in DB, fails to save it")
     public void createCategory_IsNotAbleToSaveCategoryWhichIsInDbByName_Fail() throws Exception {
-        String expectedExceptionMessage = "Category with name " + FICTION_CATEGORY_NAME
-                + " already exists in DB";
         String jsonRequest = objectMapper.writeValueAsString(EXISTING_CREATE_CATEGORY_DTO);
         MvcResult result = mockMvc.perform(
                         post(CATEGORIES_URL)
@@ -203,8 +202,10 @@ public class CategoryControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Category with name " + FICTION_CATEGORY_NAME
+                        + " already exists in DB.",
+                jsonNode.get("errors").asText());
     }
 
     @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
@@ -279,14 +280,14 @@ public class CategoryControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
-        String expectedExceptionMessage = "Can't find category by id " + FICTION_CATEGORY_ID;
         MvcResult result = mockMvc.perform(
                         delete(CATEGORIES_URL + SPLITERATOR + FICTION_CATEGORY_ID)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Can't find category by id " + FICTION_CATEGORY_ID + ".",
+                jsonNode.get("errors").asText());
     }
 
     @WithMockUser(username = ADMIN_NAME, roles = {ADMIN_ROLE})
@@ -298,14 +299,14 @@ public class CategoryControllerTest {
     @DisplayName("Given an invalid category ID, fails to delete category by ID")
     public void delete_IsNotAbleToDeleteCategoryWhenCategoryDoesNotExistById_Fail()
             throws Exception {
-        String expectedExceptionMessage = "Can't find category by id " + RANDOM_ID;
         MvcResult result = mockMvc.perform(
                         delete(CATEGORIES_URL + SPLITERATOR + RANDOM_ID)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Can't find category by id " + RANDOM_ID + ".",
+                jsonNode.get("errors").asText());
     }
 
     @WithMockUser(username = USER_NAME)
@@ -334,14 +335,14 @@ public class CategoryControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Get nothing from DB")
     public void getById_IsNotAbleToFindACategoryByNonExistingIdFromDb_Fail() throws Exception {
-        String expectedExceptionMessage = "Can't find category by id " + RANDOM_ID;
         MvcResult result = mockMvc.perform(
                         get(CATEGORIES_URL + SPLITERATOR + RANDOM_ID)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        String actualExceptionMessage = result.getResponse().getContentAsString();
-        assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
+        assertEquals("Can't find category by id " + RANDOM_ID + ".",
+                jsonNode.get("errors").asText());
     }
 
     @WithMockUser(username = USER_NAME)

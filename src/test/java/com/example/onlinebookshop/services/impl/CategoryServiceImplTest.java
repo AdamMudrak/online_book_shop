@@ -18,14 +18,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.onlinebookshop.dto.category.request.CreateCategoryDto;
-import com.example.onlinebookshop.dto.category.request.UpdateCategoryDto;
-import com.example.onlinebookshop.dto.category.response.CategoryDto;
+import com.example.onlinebookshop.dtos.category.request.CreateCategoryDto;
+import com.example.onlinebookshop.dtos.category.request.UpdateCategoryDto;
+import com.example.onlinebookshop.dtos.category.response.CategoryDto;
 import com.example.onlinebookshop.entities.Category;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
 import com.example.onlinebookshop.mappers.CategoryMapper;
-import com.example.onlinebookshop.repositories.category.CategoryRepository;
+import com.example.onlinebookshop.repositories.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
@@ -191,10 +191,10 @@ class CategoryServiceImplTest {
     @DisplayName("Given an UpdateDto, successfully updates the category in DB on condition that "
             + "it is already present by id")
     void update_CanUpdateCategoryWhenCategoryExistsById_Success() {
-        when(categoryRepository.findById(FICTION_CATEGORY_ID))
-                .thenReturn(Optional.of(EXISTING_CATEGORY));
-        when(categoryRepository.findByName(ANOTHER_CATEGORY_NAME))
-                .thenReturn(Optional.of(EXISTING_CATEGORY));
+        when(categoryRepository.existsById(FICTION_CATEGORY_ID))
+                .thenReturn(true);
+        when(categoryRepository.findIdByName(ANOTHER_CATEGORY_NAME))
+                .thenReturn(Optional.of(FICTION_CATEGORY_ID));
         when(categoryMapper.toUpdateModel(UPDATE_CATEGORY_DTO))
                 .thenReturn(EXISTING_CATEGORY_AFTER_UPDATE);
         when(categoryMapper.toCategoryDto(categoryRepository.save(EXISTING_CATEGORY_AFTER_UPDATE)))
@@ -202,8 +202,8 @@ class CategoryServiceImplTest {
         CategoryDto actual = categoryService.update(UPDATE_CATEGORY_DTO, FICTION_CATEGORY_ID);
         assertEquals(EXISTING_CATEGORY_DTO_AFTER_UPDATE, actual);
 
-        verify(categoryRepository, times(1)).findById(FICTION_CATEGORY_ID);
-        verify(categoryRepository, times(1)).findByName(ANOTHER_CATEGORY_NAME);
+        verify(categoryRepository, times(1)).existsById(FICTION_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findIdByName(ANOTHER_CATEGORY_NAME);
         verify(categoryMapper, times(1)).toUpdateModel(UPDATE_CATEGORY_DTO);
         verify(categoryMapper, times(1))
                 .toCategoryDto(categoryRepository.save(EXISTING_CATEGORY_AFTER_UPDATE));
@@ -214,14 +214,14 @@ class CategoryServiceImplTest {
             + " as it is not present in DB by id")
     void update_CannotUpdateCategoryWhenCategoryDoesNotExistById_Fail() {
         String exceptionMessage = "Can't find category by id " + RANDOM_ID;
-        when(categoryRepository.findById(RANDOM_ID))
+        when(categoryRepository.existsById(RANDOM_ID))
                 .thenThrow(new EntityNotFoundException(
                         "Can't find category by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 categoryService.update(UPDATE_CATEGORY_DTO, RANDOM_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(1)).findById(RANDOM_ID);
+        verify(categoryRepository, times(1)).existsById(RANDOM_ID);
     }
 
     @Test
@@ -229,17 +229,16 @@ class CategoryServiceImplTest {
     void update_CannotUpdateCategoryWhenAnotherCategoryExistsByName_Fail() {
         String exceptionMessage = "Another category with name "
                 + ANOTHER_CATEGORY_NAME + " already exists in DB";
-        when(categoryRepository.findById(DUPLICATE_OF_EXISTING_CATEGORY_ID))
-                .thenReturn(Optional.of(DUPLICATE_OF_EXISTING_CATEGORY));
-        when(categoryRepository.findByName(ANOTHER_CATEGORY_NAME))
-                .thenThrow(new ParameterAlreadyExistsException("Another category with name "
-                        + ANOTHER_CATEGORY_NAME + " already exists in DB"));
+        when(categoryRepository.existsById(DUPLICATE_OF_EXISTING_CATEGORY_ID))
+                .thenReturn(true);
+        when(categoryRepository.findIdByName(ANOTHER_CATEGORY_NAME))
+                .thenReturn(Optional.of(FICTION_CATEGORY_ID));
         Exception exception = assertThrows(ParameterAlreadyExistsException.class, () ->
                 categoryService.update(UPDATE_CATEGORY_DTO, DUPLICATE_OF_EXISTING_CATEGORY_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(1)).findById(DUPLICATE_OF_EXISTING_CATEGORY_ID);
-        verify(categoryRepository, times(1)).findByName(ANOTHER_CATEGORY_NAME);
+        verify(categoryRepository, times(1)).existsById(DUPLICATE_OF_EXISTING_CATEGORY_ID);
+        verify(categoryRepository, times(1)).findIdByName(ANOTHER_CATEGORY_NAME);
     }
 
     @Test
@@ -247,18 +246,18 @@ class CategoryServiceImplTest {
             + "when findById is engaged, throws an exception because category is not present "
             + "by id anymore")
     void deleteById_IsAbleToDeleteCategoryById_Success() {
-        when(categoryRepository.findById(FICTION_CATEGORY_ID))
-                .thenReturn(Optional.of(EXISTING_CATEGORY));
+        when(categoryRepository.existsById(FICTION_CATEGORY_ID))
+                .thenReturn(true);
         categoryService.deleteById(FICTION_CATEGORY_ID);
         String exceptionMessage = "Can't find category by id " + FICTION_CATEGORY_ID;
-        when(categoryRepository.findById(FICTION_CATEGORY_ID))
+        when(categoryRepository.existsById(FICTION_CATEGORY_ID))
                 .thenThrow(new EntityNotFoundException(
                         "Can't find category by id " + FICTION_CATEGORY_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 categoryService.deleteById(FICTION_CATEGORY_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(2)).findById(FICTION_CATEGORY_ID);
+        verify(categoryRepository, times(2)).existsById(FICTION_CATEGORY_ID);
         verify(categoryRepository, times(1)).deleteById(FICTION_CATEGORY_ID);
     }
 
@@ -267,14 +266,14 @@ class CategoryServiceImplTest {
             + "category is not present by id")
     void deleteById_IsNotAbleToDeleteCategoryById_Fail() {
         String exceptionMessage = "Can't find category by id " + RANDOM_ID;
-        when(categoryRepository.findById(RANDOM_ID))
+        when(categoryRepository.existsById(RANDOM_ID))
                 .thenThrow(new EntityNotFoundException(
                         "Can't find category by id " + RANDOM_ID));
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 categoryService.deleteById(RANDOM_ID));
         assertEquals(exceptionMessage, exception.getMessage());
 
-        verify(categoryRepository, times(1)).findById(RANDOM_ID);
+        verify(categoryRepository, times(1)).existsById(RANDOM_ID);
         verify(categoryRepository, times(0)).deleteById(RANDOM_ID);
     }
 }

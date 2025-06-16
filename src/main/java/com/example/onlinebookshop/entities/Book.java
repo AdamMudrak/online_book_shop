@@ -50,7 +50,7 @@ public class Book {
     @Column(length = 3000)
     private String description;
     private String coverImage;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDeleted = false;
 
     public Book(Long id) {
