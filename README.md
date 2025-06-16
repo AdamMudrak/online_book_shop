@@ -27,39 +27,39 @@ lovers looking to explore new titles or revisit old favorites.
 
 ## Books API Controller
 
-- **GET**: `/books/{id}` - Get a book by id
-- **DELETE**: `/books/{id}` - Delete an existing book
-- **PUT**: `/books/{id}` - Update an existing book
-- **GET**: `/books/search` - Search book by params
-- **POST**: `/books` - Create a new book
-- **GET**: `/books` - Get all books optionally with pagination and sorting
+- **GET**: `/books/{id}` - Get a book by id.
+- **DELETE**: `/books/{id}` - Delete an existing book.
+- **PUT**: `/books/{id}` - Update an existing book.
+- **GET**: `/books/search` - Search book by params.
+- **POST**: `/books` - Create a new book.
+- **GET**: `/books` - Get all books optionally with pagination and sorting.
 - [BookController](src/main/java/com/example/onlinebookshop/controllers/BookController.java)
 
 ## Categories API Controller
 
-- **POST**: `/categories` - Create a new category
-- **GET**: `/categories` - Get all categories optionally with pagination and sorting
-- **GET**: `/categories/{id}/books` - Get all books by category id
-- **GET**: `/categories/{id}` - Get a category by id
-- **DELETE**: `/categories/{id}` - Delete an existing category
-- **PUT**: `/categories/{id}` - Update an existing category
+- **POST**: `/categories` - Create a new category.
+- **GET**: `/categories` - Get all categories optionally with pagination and sorting.
+- **GET**: `/categories/{id}/books` - Get all books by category id.
+- **GET**: `/categories/{id}` - Get a category by id.
+- **DELETE**: `/categories/{id}` - Delete an existing category.
+- **PUT**: `/categories/{id}` - Update an existing category.
 - [CategoryController](src/main/java/com/example/onlinebookshop/controllers/CategoryController.java)
 
 ## Shopping cart API Controller
 
-- **POST**: `/cart` - Add item to the shopping cart
-- **GET**: `/cart` - Get all items in the shopping cart
-- **DELETE**: `/cart/cart-items/{cartItemId}` - Delete item from the shopping cart
-- **PUT**: `/cart/cart-items/{cartItemId}` - Update item in the shopping cart
+- **POST**: `/cart` - Add item to the shopping cart.
+- **GET**: `/cart` - Get all items in the shopping cart.
+- **DELETE**: `/cart/cart-items/{cartItemId}` - Delete item from the shopping cart.
+- **PUT**: `/cart/cart-items/{cartItemId}` - Update item in the shopping cart.
 - [ShoppingCartController](src/main/java/com/example/onlinebookshop/controllers/ShoppingCartController.java)
 
 ## Orders API Controller
 
-- **GET**: `/orders/{orderId}/items/{itemId}` - Get an item by specific order id and item id
-- **PATCH**: `/orders/{orderId}` - Update the existing order status
-- **GET**: `/orders/{orderId}/items` - Get items by specific order id
-- **POST**: `/orders` - Add a new order
-- **GET**: `/orders` - Get all orders
+- **GET**: `/orders/{orderId}/items/{itemId}` - Get an item by specific order id and item id.
+- **PATCH**: `/orders/{orderId}` - Update the existing order status.
+- **GET**: `/orders/{orderId}/items` - Get items by specific order id.
+- **POST**: `/orders` - Add a new order.
+- **GET**: `/orders` - Get all orders.
 - [OrderController](src/main/java/com/example/onlinebookshop/controllers/OrderController.java)
 
 ### ⚠️Nota bene!
