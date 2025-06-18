@@ -102,7 +102,7 @@ and the **Spring framework** to ensure strong functionality, secure processes, a
 
 ## 🔐 Authentication and Authorization
 
-- **JWT (JJWT 0.12.5)** – Token-based authentication with runtime and API components.
+- **JWT (JJWT 0.12.6)** – Token-based authentication with runtime and API components.
 
 ## 📬 Communication and Notifications
 
