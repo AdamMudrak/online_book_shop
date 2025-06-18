@@ -108,7 +108,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public ResetLinkSentResponse confirmResetPassword(HttpServletRequest request) {
-        String token = paramFromHttpRequestUtil.parseRandomParameterAndToken(request);
+        String token = paramFromHttpRequestUtil.parseTokenFromParam(request);
 
         JwtAbstractUtil jwtAbstractUtil = jwtStrategy.getStrategy(JwtType.ACTION);
         try {
@@ -168,7 +168,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public RegistrationConfirmationResponse confirmRegistration(HttpServletRequest request) {
-        String token = paramFromHttpRequestUtil.parseRandomParameterAndToken(request);
+        String token = paramFromHttpRequestUtil.parseTokenFromParam(request);
         JwtAbstractUtil jwtAbstractUtil = jwtStrategy.getStrategy(JwtType.ACTION);
         String email = jwtAbstractUtil.getUsername(token);
         User user = userRepository.findByEmail(email).orElseThrow(

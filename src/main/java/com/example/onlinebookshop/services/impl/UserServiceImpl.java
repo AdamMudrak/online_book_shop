@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceImpl implements UserService {
     private final ChangeEmailService changeEmailService;
-    private final ParamFromHttpRequestUtil randomParamFromHttpRequestUtil;
+    private final ParamFromHttpRequestUtil paramFromHttpRequestUtil;
     private final JwtStrategy jwtStrategy;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -121,17 +121,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileResponse confirmEmailChange(HttpServletRequest httpServletRequest) {
-        String token = randomParamFromHttpRequestUtil
-                .parseRandomParameterAndToken(httpServletRequest);
+        String token = paramFromHttpRequestUtil
+                .parseTokenFromParam(httpServletRequest);
         JwtAbstractUtil jwtActionUtil = jwtStrategy.getStrategy(JwtType.ACTION);
         jwtActionUtil.isValidToken(token);
-        String newEmail = randomParamFromHttpRequestUtil.getNamedParameter(httpServletRequest,
+        String newEmail = paramFromHttpRequestUtil.getNamedParameter(httpServletRequest,
                 "newEmail");
-        if (!actionTokenRepository.existsByActionToken(token + newEmail)) {
+        if (!actionTokenRepository.existsByActionToken(newEmail)) {
             throw new EntityNotFoundException(
                     "No such request was found. You shouldn't change the url.");
         }
-        actionTokenRepository.deleteByActionToken(token + newEmail);
+        actionTokenRepository.deleteByActionToken(newEmail);
         String email = jwtActionUtil.getUsername(token);
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new EntityNotFoundException("User with email "
