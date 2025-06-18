@@ -42,13 +42,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getOrders(User user, Pageable pageable) {
         if (userIsAdmin(user)) {
-            return orderRepository.findAll(pageable).stream()
-                    .map(orderMapper::orderToOrderDto)
-                    .toList();
+            return orderMapper.ordersToOrderDtos(orderRepository.findAll(pageable).getContent());
         } else {
-            return orderRepository.findAllByUserId(user.getId(), pageable).stream()
-                    .map(orderMapper::orderToOrderDto)
-                    .toList();
+            return orderMapper.ordersToOrderDtos(orderRepository
+                    .findAllByUserId(user.getId(), pageable));
         }
     }
 

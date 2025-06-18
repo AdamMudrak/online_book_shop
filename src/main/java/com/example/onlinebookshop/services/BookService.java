@@ -5,6 +5,7 @@ import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
 import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
+import com.example.onlinebookshop.exceptions.ConflictException;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -21,5 +22,6 @@ public interface BookService {
 
     void delete(Long id);
 
-    List<BookDto> search(BookSearchParametersDto searchParameters);
+    List<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable)
+            throws ConflictException;
 }

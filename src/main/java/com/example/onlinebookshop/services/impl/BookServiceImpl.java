@@ -7,6 +7,7 @@ import com.example.onlinebookshop.dtos.book.response.BookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
+import com.example.onlinebookshop.exceptions.ConflictException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
 import com.example.onlinebookshop.mappers.BookMapper;
@@ -15,6 +16,7 @@ import com.example.onlinebookshop.repositories.CategoryRepository;
 import com.example.onlinebookshop.repositories.book.bookspecs.BookSpecificationBuilder;
 import com.example.onlinebookshop.services.BookService;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -93,12 +95,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+    public List<BookDto> search(BookSearchParametersDto searchParameters,
+                                Pageable pageable) throws ConflictException {
+        priceValidator(searchParameters);
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
-        return bookRepository.findAll(bookSpecification)
-                .stream()
-                .map(bookMapper::toDto)
-                .toList();
+        return bookMapper.toDtoList(
+                bookRepository.findAll(bookSpecification, pageable).getContent());
     }
 
     private void isCategoryIdPresentInDb(Set<Long> categoryIds) {
@@ -138,6 +140,18 @@ public class BookServiceImpl implements BookService {
         }
         if (requestDto.getCoverImage() != null) {
             book.setCoverImage(requestDto.getCoverImage());
+        }
+    }
+
+    private void priceValidator(BookSearchParametersDto bookSearchParametersDto)
+            throws ConflictException {
+        BigDecimal fromPrice = bookSearchParametersDto.fromPrice();
+        BigDecimal toPrice = bookSearchParametersDto.toPrice();
+        if (fromPrice != null && toPrice != null) {
+            if (bookSearchParametersDto.fromPrice()
+                    .compareTo(bookSearchParametersDto.toPrice()) > 0) {
+                throw new ConflictException("fromPrice can't be greater than toPrice");
+            }
         }
     }
 }
