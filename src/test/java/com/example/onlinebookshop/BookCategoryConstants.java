@@ -129,6 +129,5 @@ public class BookCategoryConstants {
     public static final String SIZE = "size";
     public static final String TITLES = "titles";
     public static final String TITLES_LIST = "1984,To Kill a Mockingbird";
-    public static final String INVALID_PARAMS = "?titls=1984,To Kill a Mockingbird&price=5";
     public static final int EXPECTED_SIZE = 2;
 }
