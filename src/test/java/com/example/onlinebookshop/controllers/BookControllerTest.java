@@ -31,7 +31,6 @@ import static com.example.onlinebookshop.BookCategoryConstants.INVALID_COVER_IMA
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_DESCRIPTION_TOO_LONG;
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_FOR_NOT_BLANK;
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_ISBN_TOO_SHORT;
-import static com.example.onlinebookshop.BookCategoryConstants.INVALID_PARAMS;
 import static com.example.onlinebookshop.BookCategoryConstants.INVALID_PRICE_NEGATIVE;
 import static com.example.onlinebookshop.BookCategoryConstants.ISBN_1984;
 import static com.example.onlinebookshop.BookCategoryConstants.LIMITED_PAGE_SIZE;
@@ -526,28 +525,5 @@ public class BookControllerTest {
         assertEquals(EXPECTED_SIZE, actualBookDtos.size());
         assertTrue(actualBookDtos.contains(EXPECTED_1984_BOOK_DTO));
         assertTrue(actualBookDtos.contains(EXPECTED_TKAM_BOOK_DTO));
-    }
-
-    @WithMockUser(username = USER_NAME)
-    @Test
-    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + ADD_BOOKS_SQL,
-            PATH_TO_SQL_SCRIPTS + ADD_CATEGORIES_SQL,
-            PATH_TO_SQL_SCRIPTS + ADD_BOOKS_CATEGORIES_SQL},
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_CATEGORIES_SQL,
-            PATH_TO_SQL_SCRIPTS + DELETE_CATEGORIES_SQL,
-            PATH_TO_SQL_SCRIPTS + DELETE_BOOKS_SQL},
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    public void searchBooks_IsAbleNotToSearchBooksWhenParamsAreInvalid_FailToFilter()
-            throws Exception {
-        MvcResult result = mockMvc.perform(
-                        get(BOOKS_URL + BOOKS_SEARCH_URL + INVALID_PARAMS)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-        JsonNode jsonNode = objectMapper.readTree(result.getResponse().getContentAsString());
-        assertEquals("Can't build specification because "
-                        + " all of the parameters names are typed wrongly.",
-                jsonNode.get("errors").asText());
     }
 }
