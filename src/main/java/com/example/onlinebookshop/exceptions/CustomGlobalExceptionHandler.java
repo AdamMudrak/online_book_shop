@@ -112,12 +112,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return getUnifiedResponse(ex, FORBIDDEN);
     }
 
-    @ExceptionHandler(SpecificationBuilderException.class)
-    protected ResponseEntity<Object> handleSpecificationBuilderException(
-            Exception ex) {
-        return getUnifiedResponse(ex, BAD_REQUEST);
-    }
-
     @ExceptionHandler(ParameterAlreadyExistsException.class)
     protected ResponseEntity<Object> handleParameterAlreadyExistsException(
             Exception ex) {
