@@ -6,6 +6,7 @@ import com.example.onlinebookshop.dtos.book.request.BookSearchParametersDto;
 import com.example.onlinebookshop.dtos.book.request.CreateBookDto;
 import com.example.onlinebookshop.dtos.book.request.UpdateBookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDto;
+import com.example.onlinebookshop.exceptions.ConflictException;
 import com.example.onlinebookshop.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,8 +73,14 @@ public class BookController {
                     description = Constants.SUCCESSFULLY_RETRIEVED),
     })
     @GetMapping("/search")
-    public List<BookDto> searchBooks(@Valid BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    public List<BookDto> searchBooks(@RequestParam(required = false) @Positive BigDecimal fromPrice,
+                 @RequestParam(required = false) @Positive BigDecimal toPrice,
+                 @RequestParam(required = false) String[] titles,
+                 @RequestParam(required = false) String[] authors,
+                 @Parameter(example = BookControllerConstants.PAGEABLE_EXAMPLE) Pageable pageable)
+            throws ConflictException {
+        return bookService.search(
+                new BookSearchParametersDto(fromPrice, toPrice, titles, authors), pageable);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
