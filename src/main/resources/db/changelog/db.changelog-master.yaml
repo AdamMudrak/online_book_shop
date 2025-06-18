@@ -8,34 +8,32 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/04-add-test-users.yaml
   - include:
-      file: db/changelog/changes/05-create-param-tokens-table.yaml
+      file: db/changelog/changes/05-create-action-tokens-table.yaml
   - include:
-      file: db/changelog/changes/06-create-action-tokens-table.yaml
+      file: db/changelog/changes/06-create-books-table.yaml
   - include:
-      file: db/changelog/changes/07-create-books-table.yaml
+      file: db/changelog/changes/07-populate-books-table.yaml
   - include:
-      file: db/changelog/changes/08-populate-books-table.yaml
+      file: db/changelog/changes/08-create-categories-table.yaml
   - include:
-      file: db/changelog/changes/09-create-categories-table.yaml
+      file: db/changelog/changes/09-populate-categories-table.yaml
   - include:
-      file: db/changelog/changes/10-populate-categories-table.yaml
+      file: db/changelog/changes/10-create-books-categories-table.yaml
   - include:
-      file: db/changelog/changes/11-create-books-categories-table.yaml
+      file: db/changelog/changes/11-populate-books-categories-table.yaml
   - include:
-      file: db/changelog/changes/12-populate-books-categories-table.yaml
+      file: db/changelog/changes/12-create-shopping-carts-table.yaml
   - include:
-      file: db/changelog/changes/13-create-shopping-carts-table.yaml
+      file: db/changelog/changes/13-create-cart-items-table.yaml
   - include:
-      file: db/changelog/changes/14-create-cart-items-table.yaml
+      file: db/changelog/changes/14-populate-shopping-carts.yaml
   - include:
-      file: db/changelog/changes/15-populate-shopping-carts.yaml
+      file: db/changelog/changes/15-populate-cart-items.yaml
   - include:
-      file: db/changelog/changes/16-populate-cart-items.yaml
+      file: db/changelog/changes/16-create-orders-table.yaml
   - include:
-      file: db/changelog/changes/17-create-orders-table.yaml
+      file: db/changelog/changes/17-create-order-items-table.yaml
   - include:
-      file: db/changelog/changes/18-create-order-items-table.yaml
+      file: db/changelog/changes/18-populate-orders-table.yaml
   - include:
-      file: db/changelog/changes/19-populate-orders-table.yaml
-  - include:
-      file: db/changelog/changes/20-populate-order-items-table.yaml
+      file: db/changelog/changes/19-populate-order-items-table.yaml
