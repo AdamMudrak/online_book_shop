@@ -126,11 +126,11 @@ class CategoryServiceImplTest {
     void findAll_IsAbleToFindTwoCategoriesFromDb_Success() {
         Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
         List<Category> categories = List.of(NEW_CATEGORY, EXISTING_CATEGORY);
+        List<CategoryDto> categoryDtos = List.of(NEW_CATEGORY_DTO, EXISTING_CATEGORY_DTO);
         Page<Category> categoryPage = new PageImpl<>(categories, pageable, categories.size());
 
         when(categoryRepository.findAll(pageable)).thenReturn(categoryPage);
-        when(categoryMapper.toCategoryDto(NEW_CATEGORY)).thenReturn(NEW_CATEGORY_DTO);
-        when(categoryMapper.toCategoryDto(EXISTING_CATEGORY)).thenReturn(EXISTING_CATEGORY_DTO);
+        when(categoryMapper.toCategoryDtoList(categoryPage.getContent())).thenReturn(categoryDtos);
 
         List<CategoryDto> expectedCategoryDtos = List.of(NEW_CATEGORY_DTO, EXISTING_CATEGORY_DTO);
         List<CategoryDto> actualCategoryDtos = categoryService.findAll(pageable);
@@ -138,8 +138,7 @@ class CategoryServiceImplTest {
         assertEquals(expectedCategoryDtos, actualCategoryDtos);
 
         verify(categoryRepository, times(1)).findAll(pageable);
-        verify(categoryMapper, times(1)).toCategoryDto(NEW_CATEGORY);
-        verify(categoryMapper, times(1)).toCategoryDto(EXISTING_CATEGORY);
+        verify(categoryMapper, times(1)).toCategoryDtoList(categoryPage.getContent());
     }
 
     @Test

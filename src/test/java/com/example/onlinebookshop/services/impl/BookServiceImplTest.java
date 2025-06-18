@@ -49,6 +49,7 @@ import com.example.onlinebookshop.dtos.book.response.BookDto;
 import com.example.onlinebookshop.dtos.book.response.BookDtoWithoutCategoryIds;
 import com.example.onlinebookshop.entities.Book;
 import com.example.onlinebookshop.entities.Category;
+import com.example.onlinebookshop.exceptions.ConflictException;
 import com.example.onlinebookshop.exceptions.EntityNotFoundException;
 import com.example.onlinebookshop.exceptions.ParameterAlreadyExistsException;
 import com.example.onlinebookshop.mappers.BookMapper;
@@ -519,81 +520,84 @@ class BookServiceImplTest {
 
     @Test
     @DisplayName("Given specs of books which are actually in DB, can find these books")
-    void search_IsAbleToSearchBooksWithExistingSpecifications_Success() {
+    void search_IsAbleToSearchBooksWithExistingSpecifications_Success() throws ConflictException {
         prepareWhensForSearch();
-
         Specification<Book> specification = getRealSpecification();
+        Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
+        List<Book> expectedBooks = List.of(EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
+        List<BookDto> expectedBookDtos = List.of(EXPECTED_TKAM_BOOK_DTO, EXPECTED_1984_BOOK_DTO);
+        Page<Book> bookPage = new PageImpl<>(expectedBooks, pageable, expectedBooks.size());
 
         when(bookSpecificationBuilder.build(REAL_BOOK_SEARCH_PARAMETERS_DTO))
                 .thenReturn(specification);
-        List<Book> expectedBooks = List.of(EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
+        when(bookRepository.findAll(specification, pageable))
+                .thenReturn(bookPage);
+        when(bookMapper.toDtoList(bookPage.getContent())).thenReturn(expectedBookDtos);
 
-        when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
-        when(bookMapper.toDto(EXPECTED_TKAM_BOOK)).thenReturn(EXPECTED_TKAM_BOOK_DTO);
-        when(bookMapper.toDto(EXPECTED_1984_BOOK)).thenReturn(EXPECTED_1984_BOOK_DTO);
-
-        List<BookDto> expectedBookDtos =
-                List.of(EXPECTED_TKAM_BOOK_DTO, EXPECTED_1984_BOOK_DTO);
-        List<BookDto> actualBookDtos = bookService.search(REAL_BOOK_SEARCH_PARAMETERS_DTO);
+        List<BookDto> actualBookDtos = bookService.search(
+                REAL_BOOK_SEARCH_PARAMETERS_DTO, pageable);
 
         assertEquals(expectedBookDtos, actualBookDtos);
 
         verify(bookSpecificationBuilder, times(1)).build(REAL_BOOK_SEARCH_PARAMETERS_DTO);
-        verify(bookRepository, times(1)).findAll(specification);
-        verify(bookMapper, times(1)).toDto(EXPECTED_TKAM_BOOK);
-        verify(bookMapper, times(1)).toDto(EXPECTED_1984_BOOK);
+        verify(bookRepository, times(1)).findAll(specification, pageable);
+        verify(bookMapper, times(1)).toDtoList(expectedBooks);
         verifyWhensForSearch();
     }
 
     @Test
     @DisplayName("Fail-check test - make sure doesn't find"
             + " unwanted list of books by real specs of other books")
-    void search_MakeSureIfOtherBooksListGivenThen_Fail() {
+    void search_MakeSureIfOtherBooksListGivenThen_Fail() throws ConflictException {
         prepareWhensForSearch();
-
         Specification<Book> specification = getRealSpecification();
+        Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
+        List<Book> expectedBooks = List.of(EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
+        List<BookDto> expectedBookDtos = List.of(EXPECTED_TKAM_BOOK_DTO, EXPECTED_1984_BOOK_DTO);
+        Page<Book> bookPage = new PageImpl<>(expectedBooks, pageable, expectedBooks.size());
 
         when(bookSpecificationBuilder.build(REAL_BOOK_SEARCH_PARAMETERS_DTO))
                 .thenReturn(specification);
-        List<Book> expectedBooks = List.of(EXPECTED_TKAM_BOOK, EXPECTED_1984_BOOK);
-
-        when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
-        when(bookMapper.toDto(EXPECTED_TKAM_BOOK)).thenReturn(EXPECTED_TKAM_BOOK_DTO);
-        when(bookMapper.toDto(EXPECTED_1984_BOOK)).thenReturn(EXPECTED_1984_BOOK_DTO);
+        when(bookRepository.findAll(specification, pageable))
+                .thenReturn(bookPage);
+        when(bookMapper.toDtoList(bookPage.getContent())).thenReturn(expectedBookDtos);
 
         List<BookDto> unexpectedBookDtos =
                 List.of(EXPECTED_GATSBY_BOOK_DTO, EXPECTED_TKAM_BOOK_DTO);
-        List<BookDto> actualBookDtos = bookService.search(REAL_BOOK_SEARCH_PARAMETERS_DTO);
+        List<BookDto> actualBookDtos = bookService.search(
+                REAL_BOOK_SEARCH_PARAMETERS_DTO, pageable);
 
         assertEquals(unexpectedBookDtos.size(), actualBookDtos.size());
         assertNotEquals(unexpectedBookDtos, actualBookDtos);
 
         verify(bookSpecificationBuilder, times(1)).build(REAL_BOOK_SEARCH_PARAMETERS_DTO);
-        verify(bookRepository, times(1)).findAll(specification);
-        verify(bookMapper, times(1)).toDto(EXPECTED_TKAM_BOOK);
-        verify(bookMapper, times(1)).toDto(EXPECTED_1984_BOOK);
+        verify(bookRepository, times(1)).findAll(specification, pageable);
+        verify(bookMapper, times(1)).toDtoList(expectedBooks);
         verifyWhensForSearch();
     }
 
     @Test
     @DisplayName("Given specs of books which are not in DB, find nothing")
-    void search_IsNotAbleToSearchBooksWithNonExistingSpecifications_Fail() {
+    void search_IsNotAbleToSearchBooksWithNonExistingSpecifications_Fail() throws ConflictException {
         prepareWhensForSearch();
-
         Specification<Book> specification = getRandomSpecification();
+        Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, UNLIMITED_PAGE_SIZE);
+        List<Book> expectedBooks = List.of();
+        Page<Book> bookPage = new PageImpl<>(expectedBooks, pageable, 0);
 
         when(bookSpecificationBuilder.build(RANDOM_BOOK_SEARCH_PARAMETERS_DTO))
                 .thenReturn(specification);
-        List<Book> expectedBooks = List.of();
+        when(bookRepository.findAll(specification, pageable))
+                .thenReturn(bookPage);
+        when(bookMapper.toDtoList(bookPage.getContent())).thenReturn(List.of());
 
-        when(bookRepository.findAll(specification)).thenReturn(expectedBooks);
-
-        List<BookDto> actualBookDtos = bookService.search(RANDOM_BOOK_SEARCH_PARAMETERS_DTO);
+        List<BookDto> actualBookDtos = bookService.search(
+                RANDOM_BOOK_SEARCH_PARAMETERS_DTO, pageable);
 
         assertTrue(actualBookDtos.isEmpty());
 
         verify(bookSpecificationBuilder, times(1)).build(RANDOM_BOOK_SEARCH_PARAMETERS_DTO);
-        verify(bookRepository, times(1)).findAll(specification);
+        verify(bookRepository, times(1)).findAll(specification, pageable);
         verifyWhensForSearch();
     }
 
