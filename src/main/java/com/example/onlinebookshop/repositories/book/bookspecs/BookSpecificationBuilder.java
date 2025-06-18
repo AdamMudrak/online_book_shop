@@ -2,7 +2,6 @@ package com.example.onlinebookshop.repositories.book.bookspecs;
 
 import com.example.onlinebookshop.dtos.book.request.BookSearchParametersDto;
 import com.example.onlinebookshop.entities.Book;
-import com.example.onlinebookshop.exceptions.SpecificationBuilderException;
 import com.example.onlinebookshop.repositories.specifications.SpecificationBuilder;
 import com.example.onlinebookshop.repositories.specifications.SpecificationProviderManager;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +20,7 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
                 && bookSearchParametersDto.authors() == null
                 && bookSearchParametersDto.fromPrice() == null
                 && bookSearchParametersDto.toPrice() == null) {
-            throw new SpecificationBuilderException("Can't build specification because "
-                    + " all of the parameters names are typed wrongly");
+            return specification;
         }
         if (bookSearchParametersDto.titles() != null
                 && bookSearchParametersDto.titles().length > 0) {
