@@ -71,6 +71,9 @@ jobs:
           trap 'rm -f "$key"' EXIT
           chmod 600 "$key"
 
+          HETZNER_HOST="$(printf '%s' "$HETZNER_HOST" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          HETZNER_PORT="$(printf '%s' "$HETZNER_PORT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
           image="$APP_NAME:$GITHUB_SHA"
           docker tag "$IMAGE_NAME:latest" "$image"
           {
