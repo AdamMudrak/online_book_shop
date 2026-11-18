@@ -65,6 +65,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
+          printf '%s\n' 'hetzner-portfolio ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMrovpL5gc3TM4fs2+cVTggnYomFUO+ex9st5t1GHlB5' > ~/.ssh/known_hosts
           chmod 700 ~/.ssh
           KEY_FILE="$HOME/.ssh/hetzner_deploy_key"
           printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$KEY_FILE"
@@ -79,7 +80,7 @@ jobs:
           TARGET="$(trim_value "$HETZNER_DEPLOY_PATH")"
 
           rsync -rlgoDzvc \
-            -e "ssh -p $PORT -i $KEY_FILE -o StrictHostKeyChecking=no" \
+            -e "ssh -p $PORT -i $KEY_FILE -o StrictHostKeyChecking=yes -o HostKeyAlias=hetzner-portfolio -o HostKeyAlgorithms=ssh-ed25519" \
             deploy/ \
             "root@$HOST:$TARGET"
 
@@ -109,6 +110,7 @@ jobs:
           done
 
           mkdir -p ~/.ssh
+          printf '%s\n' 'hetzner-portfolio ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMrovpL5gc3TM4fs2+cVTggnYomFUO+ex9st5t1GHlB5' > ~/.ssh/known_hosts
           chmod 700 ~/.ssh
           KEY_FILE="$HOME/.ssh/hetzner_deploy_key"
           printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$KEY_FILE"
@@ -160,6 +162,6 @@ jobs:
 
           ssh -p "$HETZNER_PORT" \
             -i "$KEY_FILE" \
-            -o StrictHostKeyChecking=no \
+            -o StrictHostKeyChecking=yes -o HostKeyAlias=hetzner-portfolio -o HostKeyAlgorithms=ssh-ed25519 \
             "root@$HETZNER_HOST" \
             'bash -s' < "$REMOTE_SCRIPT"
