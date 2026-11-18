@@ -151,7 +151,7 @@ jobs:
               -e RESEND_API_KEY="$RESEND_API_KEY" \
               -e MAIL="$MAIL" \
               -e SERVER_PATH="$SERVER_PATH" \
-              -p "$APP_PORT:$APP_PORT" \
+              -p "127.0.0.1:$APP_PORT:$APP_PORT" \
               "$IMAGE_NAME:latest"
 
             rm -f "$TARGET/$APP_NAME.tar"
