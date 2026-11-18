@@ -49,49 +49,12 @@ jobs:
         if: github.event_name == 'push'
         run: docker build -t "$IMAGE_NAME:latest" .
 
-      - name: Export Docker image
-        if: github.event_name == 'push'
-        run: |
-          mkdir -p deploy
-          docker save "$IMAGE_NAME:latest" -o "deploy/$APP_NAME.tar"
-
-      - name: Upload image to Hetzner
+      - name: Deploy application on Hetzner
         if: github.event_name == 'push'
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.HETZNER_APP_DEPLOY_KEY }}
           HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
           HETZNER_PORT: ${{ secrets.HETZNER_PORT || '22' }}
-          HETZNER_DEPLOY_PATH: ${{ secrets.HETZNER_DEPLOY_PATH }}
-        run: |
-          set -euo pipefail
-          mkdir -p ~/.ssh
-          printf '%s\n' 'hetzner-portfolio ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMrovpL5gc3TM4fs2+cVTggnYomFUO+ex9st5t1GHlB5' > ~/.ssh/known_hosts
-          chmod 700 ~/.ssh
-          KEY_FILE="$HOME/.ssh/hetzner_deploy_key"
-          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$KEY_FILE"
-          chmod 600 "$KEY_FILE"
-
-          trim_value() {
-            printf '%s' "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
-          }
-
-          HOST="$(trim_value "$HETZNER_HOST")"
-          PORT="$(trim_value "$HETZNER_PORT")"
-          TARGET="$(trim_value "$HETZNER_DEPLOY_PATH")"
-
-          rsync -rlgoDzvc \
-            -e "ssh -p $PORT -i $KEY_FILE -o StrictHostKeyChecking=yes -o HostKeyAlias=hetzner-portfolio -o HostKeyAlgorithms=ssh-ed25519" \
-            deploy/ \
-            "root@$HOST:$TARGET"
-
-      - name: Restart container on Hetzner
-        if: github.event_name == 'push'
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_KEY }}
-          HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
-          HETZNER_PORT: ${{ secrets.HETZNER_PORT || '22' }}
-          TARGET: ${{ secrets.HETZNER_DEPLOY_PATH }}
-          DOCKER_NETWORK: ${{ secrets.HETZNER_DOCKER_NETWORK }}
           SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
           SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
@@ -100,68 +63,20 @@ jobs:
           SERVER_PATH: https://legimus.adammudrak.pp.ua
         run: |
           set -euo pipefail
-          trim_value() {
-            printf '%s' "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
-          }
-
-          DEPLOY_VARS="APP_NAME IMAGE_NAME APP_PORT TARGET DOCKER_NETWORK SPRING_DATASOURCE_URL SPRING_DATASOURCE_USERNAME SPRING_DATASOURCE_PASSWORD SPRING_LIQUIBASE_CHANGE_LOG JWT_ACTION_EXPIRATION JWT_ACCESS_EXPIRATION JWT_REFRESH_EXPIRATION JWT_SECRET RESEND_API_KEY MAIL SERVER_PATH"
-          for var in HETZNER_HOST HETZNER_PORT $DEPLOY_VARS; do
-            printf -v "$var" '%s' "$(trim_value "${!var-}")"
-          done
-
+          umask 077
           mkdir -p ~/.ssh
           printf '%s\n' 'hetzner-portfolio ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMrovpL5gc3TM4fs2+cVTggnYomFUO+ex9st5t1GHlB5' > ~/.ssh/known_hosts
-          chmod 700 ~/.ssh
-          KEY_FILE="$HOME/.ssh/hetzner_deploy_key"
-          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$KEY_FILE"
-          chmod 600 "$KEY_FILE"
+          key="$HOME/.ssh/hetzner_deploy_key"
+          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$key"
+          trap 'rm -f "$key"' EXIT
+          chmod 600 "$key"
 
-          REMOTE_SCRIPT="$(mktemp)"
+          image="$APP_NAME:$GITHUB_SHA"
+          docker tag "$IMAGE_NAME:latest" "$image"
           {
-            echo 'set -e'
-            for var in $DEPLOY_VARS; do
-              printf 'export %s=%q\n' "$var" "${!var-}"
-            done
-            cat <<'REMOTE_SCRIPT_BODY'
-            docker load -i "$TARGET/$APP_NAME.tar"
-            docker rm -f "$APP_NAME" 2>/dev/null || true
-
-            ENV_FILE_ARG=""
-            if [ -f "$TARGET/.env" ]; then
-              ENV_FILE_ARG="--env-file $TARGET/.env"
-            fi
-
-            NETWORK_ARG=""
-            if [ -n "$DOCKER_NETWORK" ]; then
-              NETWORK_ARG="--network $DOCKER_NETWORK"
-            fi
-
-            docker run -d \
-              --name "$APP_NAME" \
-              --restart unless-stopped \
-              $ENV_FILE_ARG \
-              $NETWORK_ARG \
-              -e SERVER_PORT="$APP_PORT" \
-              -e SPRING_DATASOURCE_URL="$SPRING_DATASOURCE_URL" \
-              -e SPRING_DATASOURCE_USERNAME="$SPRING_DATASOURCE_USERNAME" \
-              -e SPRING_DATASOURCE_PASSWORD="$SPRING_DATASOURCE_PASSWORD" \
-              -e SPRING_LIQUIBASE_CHANGE_LOG="$SPRING_LIQUIBASE_CHANGE_LOG" \
-              -e JWT_ACTION_EXPIRATION="$JWT_ACTION_EXPIRATION" \
-              -e JWT_ACCESS_EXPIRATION="$JWT_ACCESS_EXPIRATION" \
-              -e JWT_REFRESH_EXPIRATION="$JWT_REFRESH_EXPIRATION" \
-              -e JWT_SECRET="$JWT_SECRET" \
-              -e RESEND_API_KEY="$RESEND_API_KEY" \
-              -e MAIL="$MAIL" \
-              -e SERVER_PATH="$SERVER_PATH" \
-              -p "127.0.0.1:$APP_PORT:$APP_PORT" \
-              "$IMAGE_NAME:latest"
-
-            rm -f "$TARGET/$APP_NAME.tar"
-          REMOTE_SCRIPT_BODY
-          } > "$REMOTE_SCRIPT"
-
-          ssh -p "$HETZNER_PORT" \
-            -i "$KEY_FILE" \
-            -o StrictHostKeyChecking=yes -o HostKeyAlias=hetzner-portfolio -o HostKeyAlgorithms=ssh-ed25519 \
-            "root@$HETZNER_HOST" \
-            'bash -s' < "$REMOTE_SCRIPT"
+            python3 -c 'import json, os, sys; print(json.dumps({key: os.environ[key].strip() for key in sys.argv[1:] if os.environ.get(key, "").strip()}))' SPRING_DATASOURCE_URL SPRING_DATASOURCE_USERNAME SPRING_DATASOURCE_PASSWORD SPRING_LIQUIBASE_CHANGE_LOG JWT_ACTION_EXPIRATION JWT_ACCESS_EXPIRATION JWT_REFRESH_EXPIRATION JWT_SECRET RESEND_API_KEY MAIL SERVER_PATH
+            docker save "$image"
+          } | ssh -T -p "$HETZNER_PORT" -i "$key" \
+            -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            -o HostKeyAlias=hetzner-portfolio -o HostKeyAlgorithms=ssh-ed25519 \
+            "root@$HETZNER_HOST" "deploy $GITHUB_SHA"
